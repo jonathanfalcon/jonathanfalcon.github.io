@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content'
+import { Icon } from 'astro-icon'
+import SectionHeading from './Generic/SectionHeading.astro'
+import Section from './Generic/Section.astro'
+import WorkItem from './Work/WorkItem.astro'
+import Button from './Generic/Button.astro'
+import { Animation } from './Generic/Animation'
+
+type Props = {
+    title: string
+    subtitle: string
+    work: string[]
+}
+
+const { title, subtitle, work } = Astro.props
+
+const featuredWork = await getCollection('work', ({ data }) => {
+    return work.includes(data.title)
+})
+---
+
+<Section fullscreen={true} maxWidth='max-w-7xl' padding='px-4'>
+    <SectionHeading heading={title} headingLevel='h2' textAlign='start'>
+        <Button
+            slot='customSubheading'
+            href='/work/'
+            color='slate'
+            outline={true}
+            size='xl'
+            element='a'
+            class='mt-2'
+        >
+            {subtitle} ->
+        </Button>
+    </SectionHeading>
+    <ul
+        class='grid max-w-7xl grid-cols-1 justify-items-center gap-10 md:grid-cols-2 lg:grid-cols-3'
+    >
+        {
+            featuredWork
+                .sort((a, b) => {
+                    return work.indexOf(a.data.title) - work.indexOf(b.data.title)
+                })
+                .map((work) => (
+                    <WorkItem
+                        frontmatter={work.data}
+                        slug={`/work/${work.slug}`}
+                        includeDetails={false}
+                        cardSize='max-w-md'
+                    />
+                ))
+        }
+    </ul>
+</Section>

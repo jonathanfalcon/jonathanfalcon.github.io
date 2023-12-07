@@ -1,0 +1,43 @@
+---
+import '@/assets/styles/base.css'
+
+import BreakpointOverlay from '@/utils/BreakpointOverlay.astro'
+
+import Header from '@/components/Header/Header.astro'
+import Footer from '@/components/Footer/Footer.astro'
+import { Seo } from '@/types/metadata/Seo'
+import Head from '@/components/Head/Head.astro'
+
+import { HTMLAttributes } from 'astro/types'
+
+type Props = {
+    class?: HTMLAttributes<'body'>['class']
+    seo: Seo
+    darkHeader?: boolean
+    mainWrapper?: boolean
+    firstItemPadding?: boolean
+}
+
+const { class: className, seo, darkHeader, mainWrapper = true, firstItemPadding = true } = Astro.props
+---
+
+<html lang='en' class='motion-safe:scroll-smooth'>
+    <Head seo={seo} />
+    <body
+        class=`font-body font-normal flex flex-col min-h-small-screen
+        ${className ?? 'bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50'}`
+    >
+        <Header darkHeader={darkHeader} />
+        <BreakpointOverlay />
+        {
+            mainWrapper ? (
+                <main class={firstItemPadding && '[&>:first-child]:md:pt-28 [&>:first-child]:pt-24'}>
+                    <slot />
+                </main>
+            ) : (
+                <slot />
+            )
+        }
+        <Footer />
+    </body>
+</html>

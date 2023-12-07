@@ -1,0 +1,35 @@
+---
+type Props = {
+    headings: Array<{ depth: number; slug: string; text: string }>
+}
+
+const { headings } = Astro.props
+---
+
+<ol class='py-6 rounded-lg bg-slate-800 mx-6 flex flex-col divide-y'>
+    {
+        headings.map((heading) => {
+            let styling
+
+            switch (heading.depth) {
+                case 3:
+                    styling = 'pl-10 pr-6'
+                    break
+                case 4:
+                    styling = 'pr-6 pl-14'
+                    break
+                default:
+                    styling = 'px-6'
+                    break
+            }
+
+            return (
+                <li class=`hover:bg-slate-500 py-2 ${styling}`>
+                    <a href=`#${heading.slug}`>
+                        {heading.text}
+                    </a>
+                </li>
+            )
+        })
+    }
+</ol>

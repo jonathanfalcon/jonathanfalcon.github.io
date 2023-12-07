@@ -1,3 +1,19 @@
 {
-  "extends": "astro/tsconfigs/strict"
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "allowJs": true,
+    "verbatimModuleSyntax": false,
+    "baseUrl": "/Users/jonathanfalcon/GitHub/jonathanfalcon.github.io",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@workImages/*": [
+        "src/assets/images/work/*"
+      ]
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  }
 }

@@ -1,0 +1,66 @@
+---
+import { Work } from '@/types/content/Work'
+import BlurhashPicture from '@/utils/blurhash/BlurhashPicture.astro'
+import blurHashImage from '@/utils/blurhash/blur'
+import { Icon } from 'astro-icon'
+
+type Props = {
+    frontmatter: Work
+    slug: string
+    includeDetails?: boolean
+    cardSize?: 'max-w-sm' | 'max-w-md' | 'max-w-lg'
+}
+
+const { frontmatter, slug, includeDetails = true, cardSize = 'max-w-lg' }: Props = Astro.props
+
+function limitStringLength(inputString: string, maxLength: number): string {
+    if (inputString.length <= maxLength) {
+        return inputString
+    }
+
+    // Find the last space within the limit
+    const lastSpaceIndex = inputString.lastIndexOf(' ', maxLength)
+
+    // If there is no space, just truncate the string
+    if (lastSpaceIndex === -1) {
+        return inputString.slice(0, maxLength) + '...'
+    }
+
+    // Otherwise, truncate at the last space
+    return inputString.slice(0, lastSpaceIndex) + '...'
+}
+---
+
+<li
+    class=`group relative flex ${cardSize} flex-col rounded-2xl transition-transform duration-300 focus-within:scale-105 hover:scale-105 bg-emerald-700 self-start`
+    style={frontmatter.image?.src && (await blurHashImage(frontmatter.image.src))}
+>
+    {
+        frontmatter.image?.src && (
+            <BlurhashPicture
+                src={frontmatter.image}
+                alt={frontmatter.title}
+                class='rounded-t-2xl'
+            />
+        )
+    }
+
+    <article
+        class='flex h-full flex-col gap-y-2 rounded-b-2xl bg-slate-100/80 p-5 transition-[backdrop-filter] duration-300 group-focus-within:backdrop-brightness-150 group-focus-within:backdrop-saturate-150 group-hover:backdrop-brightness-150 group-hover:backdrop-saturate-150 dark:bg-slate-900/80'
+    >
+        <h2 class='font-heading text-2xl font-black lg:text-3xl'>
+            <a class='after:absolute after:inset-0 focus:outline-none' href=`${slug}/`
+                >{frontmatter.title}</a
+            >
+        </h2>
+        <p class='mb-4 opacity-90 lg:text-lg'>{frontmatter.description}</p>
+        {
+            includeDetails && (
+                <span class='mt-auto flex w-fit items-center px-3 py-1.5 text-sm font-medium opacity-70'>
+                    <Icon name='ph:buildings-bold' class='mr-2 h-5 w-5' />
+                    {frontmatter.location}
+                </span>
+            )
+        }
+    </article>
+</li>

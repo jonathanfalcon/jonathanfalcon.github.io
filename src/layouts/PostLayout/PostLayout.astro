@@ -1,0 +1,65 @@
+---
+import { Work } from '@/types/content/Work'
+import { Icon } from 'astro-icon'
+
+import Header from './Header.astro'
+import TOC from './TOC.astro'
+
+type Props = {
+    frontmatter: Work
+    headings: Array<{ depth: number; slug: string; text: string }>
+    url: string | URL
+}
+
+const { frontmatter, headings, url } = Astro.props
+---
+
+<article class='flex flex-col items-center !pt-0'>
+    <Header image={frontmatter.image?.src}>
+        <div class='mx-auto flex max-w-3xl flex-col gap-y-4'>
+            <time
+                class='flex w-fit items-center rounded-full bg-slate-50/80 px-3 py-1.5 text-xs font-medium text-slate-700 sm:text-sm'
+            >
+                <Icon name='ph:calendar-blank-bold' class='mr-1 h-4 w-4' />{
+                    frontmatter.date.toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric',
+                        timeZone: 'UTC',
+                    })
+                }</time
+            >
+            <h1 class='font-heading text-4xl font-black sm:text-5xl'>{frontmatter.title}</h1>
+            <p class='text-lg font-medium !leading-relaxed opacity-80 sm:text-xl'>
+                {frontmatter.description}
+            </p>
+        </div>
+    </Header>
+
+    {
+        frontmatter.containsCharts && (
+            <script
+                src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js'
+                integrity='sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=='
+                crossorigin='anonymous'
+                referrerpolicy='no-referrer'
+            />
+        )
+    }
+
+    {
+        frontmatter.containsCode && (
+            <link
+                href='https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600;700&display=swap'
+                rel='stylesheet'
+            />
+        )
+    }
+
+    <div
+        class='prose prose-slate mb-20 w-[calc(100%-2rem)] max-w-3xl dark:prose-invert md:prose-lg prose-h2:font-extrabold prose-h3:font-bold prose-h4:font-bold prose-a:text-emerald-700 prose-pre:!bg-slate-800 prose-img:rounded-lg dark:prose-a:text-emerald-500'
+    >
+        <slot />
+    </div>
+    <footer></footer>
+</article>

@@ -1,0 +1,32 @@
+---
+import { Seo } from '@/types/metadata/Seo'
+
+import FavIcon from './FavIcon.astro'
+import SEO from './SEO.astro'
+
+import ColorMode from '@/components/Scripts/ColorMode.astro'
+
+type Props = {
+    seo: Seo
+}
+
+const { seo } = Astro.props
+---
+
+<head>
+    <FavIcon />
+
+    <meta name='viewport' content='width=device-width' />
+    <meta name='generator' content={Astro.generator} />
+
+    <link rel='preconnect' href='https://use.typekit.net' crossorigin />
+    <link rel='stylesheet' href='https://use.typekit.net/zcp4dkx.css' />
+    <link rel='preconnect' href='https://rsms.me/' />
+    <link rel='stylesheet' href='https://rsms.me/inter/inter.css' />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <SEO seo={{ ...seo, charset: 'utf-8' }} />
+
+    <ColorMode />
+</head>

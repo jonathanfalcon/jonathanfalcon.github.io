@@ -1,0 +1,46 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { Icon } from 'astro-icon'
+import SectionHeading from '@/components/PageElements/Generic/SectionHeading.astro'
+import Button from '@/components/PageElements/Generic/Button.astro'
+
+const seo = {
+    title: '404',
+    description: null,
+    image: '',
+    canonical: Astro.url.href,
+}
+---
+
+<BaseLayout seo={seo} firstItemPadding={false} darkHeader={true}>
+    <section
+        class='flex min-h-small-screen flex-col items-center justify-center gap-y-4 bg-emerald-950 px-6 py-28 text-center'
+    >
+        <div class='flex gap-x-4 text-emerald-800'>
+            {
+                Array.from({ length: 3 }, () => (
+                    <Icon name='ph:tree-evergreen-bold' class='h-20 w-20 lg:h-36 lg:w-36' />
+                ))
+            }
+        </div>
+
+        <SectionHeading
+            heading='404: Lost in the Digital Wilderness'
+            subheading="Uh-oh! Let's get you back on the trail."
+            headingLevel='h1'
+            darkHeading={true}
+        />
+
+        <Button
+            element='a'
+            href='/'
+            color='blue'
+            size='lg'
+            colorScheme='light'
+            class='mt-4 gap-x-2 font-medium'
+        >
+            <Icon name='ph:house-bold' class='h-6 w-6' />
+             Take Me Home
+        </Button>
+    </section>
+</BaseLayout>

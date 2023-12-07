@@ -1,0 +1,294 @@
+---
+title: Cleaning the Iowa Liquor Sales Dataset
+date: 2022-11-28
+category: Coding
+description: This R coding project aimed to clean the Iowa Liquor Sales dataset. Missing data was imputed using appropriate logic and methods, and categories were condensed by merging similar ones for ease of analysis and meaningful interpretation.
+location: The University of Texas at Austin
+image: ./images/iowa-liquor-sales.jpg
+codingLanguages:
+  - R
+containsCode: true
+containsCharts: true
+---
+
+import Histogram from '@/components/PageElements/Work/Charts/Histogram.astro'
+
+import Sales from './_files/histogram_sales.json'
+import LogSales from './_files/histogram_logSales.json'
+import BottleCost from './_files/histogram_bottleCost.json'
+import LogBottleCost from './_files/histogram_logBottleCost.json'
+import BottleRetail from './_files/histogram_bottleRetail.json'
+import LogBottleRetail from './_files/histogram_logBottleRetail.json'
+
+
+
+# Background
+
+This data is taken from the State of Iowa's publicly available data website. It was and still is collected by the Iowa Department of Commerce, Alcoholic Beverages Division, who publishes the data. The page for the dataset can be accessed here: [https://data.iowa.gov/Sales-Distribution/Iowa-Liquor-Sales/m3tr-qhgy.](https://data.iowa.gov/Sales-Distribution/Iowa-Liquor-Sales/m3tr-qhgy) 
+
+
+The data I'll be working with is the following:
+
+| Original Column Name | New Column Name | Description                                                                          |
+|:---------------------|:----------------|:-------------------------------------------------------------------------------------|
+| Date                 | `date`          | Date of order                                                                        |
+| County               | `county`        | County where the store who ordered the liquor is located                             |
+| City                 | `city`          | City where the store who ordered the liquor is located                               |
+| Zip Code             | `zipCode`       | Zip code where the store who ordered the liquor is located                           |
+| Store Number         | `store`         | Unique number assigned to the store who ordered the liquor                           |
+| Vendor Number        | `vendor`        | The vendor number of the company for the brand of liquor ordered                     |
+| Category Name        | `category`      | Category of the liquor ordered                                                       |
+| Item Description     | `item`          | Description of the individual liquor product ordered                                 |
+| Sales (Dollars)      | `sales`         | Total cost of liquor order (number of bottles multiplied by the state bottle retail) |
+| State Bottle Cost    | `bottleCost`    | The amount that Alcoholic Beverages Division paid for each bottle of liquor ordered  |
+| State Bottle Retail  | `bottleRetail`  | The amount the store paid for each bottle of liquor ordered                          |
+
+# Preliminaries
+
+## Loading the Required Libraries
+
+These two packages are required to better work with the data.
+
+```r
+library(tidyverse)
+library(lubridate)
+```
+
+## Reading in and Sampling the Data
+
+Here, we first create a named vector, consisting of the desired names for our columns and the names of the columns in the dataset.
+
+```r
+selectedVars <- c(date = "Date",
+                  store = "Store Number",
+                  city = "City",
+                  county = "County",
+                  vendor = "Vendor Number",
+                  bottleCost = "State Bottle Cost",
+                  bottleRetail = "State Bottle Retail",
+                  zipCode = "Zip Code",
+                  category = "Category Name",
+                  item = "Item Description",
+                  sales = "Sale (Dollars)")
+```
+
+Before we sample the data, we set the seed to ensure reproducibility, otherwise the results of the analysis would differ each run despite the code being identical. In this instance, I used the due date as the seed.
+
+After setting the seed, we read in the dataset using a readr function and pass it using a pipe `%>%` to a dplyr function to sample a fraction of the dataset, as working with a 6 *gigabyte* file is needlessly time-consuming. This function samples 25% of the available data.
+
+```r
+set.seed(11282022)
+
+liquorSales <- read_delim("./Data/Iowa_Liquor_Sales_Sample.tsv",
+                          col_select = all_of(selectedVars),
+                          col_types = cols("Zip Code" = "c",
+                                           "Store Number" = "c",
+                                           "Vendor Number" = "c")) %>%
+  sample_frac(0.25)
+```
+
+# Cleaning the Data
+
+## Converting `date` to Date Format
+
+This step is relatively simple, but extremely important if we are to perform any time-series analyses.
+
+```r
+liquorSales$date <- mdy(liquorSales$date)
+```
+
+## Collapsing the Liquor Categories
+There were too many different categories of liquor for any meaningful analyses, so collapsing the categories into twelve categories makes it easier. The exact item is still preserved though.
+
+This first step creates a named vector like earlier. The name is structured as a regular expression—regex for short.
+
+Breaking it down, `.*` means any character `.` zero or more times `*`. The vertical bar `|` is short for "or" in this case, e.g., `tequila OR mezcal`. All together, this finds matches for broad categories of alcohol.
+
+```r
+patternList <- c(".*vodka.*" = "Vodka",
+                 ".*schnapps.*" = "Schnapps",
+                 ".*rum.*" = "Rum",
+                 ".*tequila|mezcal.*" = "Tequila",
+                 ".*gin.*" = "Gin",
+                 ".*whisk|scotch|bourbon.*" = "Whiskey/Whisky",
+                 ".*brand.*" = "Brandy",
+                 ".*liqueur|cordial|creme|triple|anisette|amaretto.*" = "Liqueur/Cordial",
+                 ".*spirit.*" = "Spirit",
+                 ".*cocktail|rock.*" = "Cocktail",
+                 ".*beer.*" = "Beer",
+                 ".*special|american alcohol|delisted|holiday|iowa.*" = "Misc")
+```
+
+Here, we use a `for` loop to iterate over each broad category of alcohol listed above, searching for and substituting regex matches with the corresponding values. For example, categories that have some form of tequila or mezcal in it will be reassigned "Tequila."
+
+```r
+for (n in 1:length(patternList)) {
+  liquorSales$category <- liquorSales$category %>%
+    gsub(pattern = names(patternList[n]), ignore.case = TRUE, replacement = patternList[[n]])
+}
+```
+
+All together, this section aimed to condense the number of alcohol categories to provide a more reasonable amount to analyze.
+
+
+## Manually Assigning Liquor Categories Based on Item
+
+Now, admittedly, this section used pure brute force. Is there a more elegant and efficient solution? Perhaps, but I couldn't find it in time.
+
+In this first part, we select the `category` and `item` columns from `liquorSales`, keep observations with missing categories, group by `item`, and count the number of observations by that grouping variable `item`. Lastly, we sort the summary by the `item` count descending.
+
+```r
+liquorSales %>%
+  select(category, item) %>%
+  filter(is.na(category)) %>%
+  group_by(item) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n))
+```
+
+Using the above, we come up with these categories and assigned items.
+
+```r
+vodka <- "(VODKA|BURNETTS|VAN GOGH|DEEP EDDY|GREY GOOSE|SKYY|PINNACLE|SMIRNOFF|ABSOLUT|SVEDKA|STOLICHNAYA|PEARL|360 |FOREX|BELVEDERE|BURNETT'S|CIROC|KETEL ONE|NEW AMSTERDAM|PRIDE OF THE WAPSI|SOBIESKI|THREE OLIVES|TWENTY GRAND GOLD)"
+schnapps <- "(SCHNAPPS|DEKUYPER)"
+rum <- "(RUM|BACARDI|CAPTAIN MORGAN|ADMIRAL NELSON|BLUE CHAIR|CRUZAN|APPLETON ESTATE RESERVE|SORGHURM|BRUGAL|CALICHE|CALICO|CHICK'S|DEL MAGUEY|DIPLOMATICO|DON Q LIMON|GOSLING'S|KRAKEN|LAWLESS|LEBLO|PALO VIEJO|RON ABUELO|RONDIAZ)"
+tequila <- "(TEQUILA|MEZCAL|REPOSADO|PATRON|EL MAYOR|HORNITOS|AGAVE|PELIGROSO|1800 SILVER|DELEON|CORRALEJO|ANEJO|EXOTICO|LUNAZUL|MONTELOBOS|SAUZA CIEN ANOS BLANCO|TARANTULA)"
+gin <- "(GIN|BOMBAY|TANQUERAY|BEEFEATER|FIFTY POUNDS)"
+whiskey_whisky <- "(WHISKEY|GLENDRONACH|WHISKY|CROWN ROYAL|RYE|BLACK VELVET|MAKER'S MARK|SCOTCH|BOURBON|KNOB CREEK|WOODFORD RESERVE|GLENFIDDICH|SOUTHERN COMFORT|CRAIGELLACHIE|MALT|FIREBALL|JACK DANIEL'S|JACK DANIELS|ARDBEG|ABERLOUR|BIRD DOG|JIM BEAM|GENTLEMAN JACK|HENNESSY|JAMESON|HA |CODY ROAD|WHITE DOG|WILD TURKEY|CORN|GRAIN|OAT|BASTILLE|BENROMACH|BERENTZEN|CANADIAN HUNTER|CHIVAS REGAL|COLD SPELL MINT|CUTTY|DEANSTON|EAGLE RARE|FORTY CREEK|GLEN MORAY|GLENGOYNE|GLENLIVET|GREAT GLEN|JEFFERSON'S RESERVE|KAVALAN|KOVAL|LAPHROAIG|MAKERS MARK|MCCLELLAND'S|MICHTERS|OLD FORESTER|OLD MEDLEY|RED STAG|REVEL STOKE|RICH & RARE APPLE|RUSSELL'S RESERVE|TIM SMITH'S CLIMAX FIRE|TWO CASKS)"
+brandy <- "(BRANDY|E & J|E&J|GRAPPA|PAUL MASSON|COGANC|COGNAC|ARMAGNAC|5 YEAR IRISH SINGLE GRAIN|BARSOL SELECTO ITALIA PISCO|CALVADOS|BUSCA|CHRISTIAN|COURVOISIER|CYNAR|D'USSE|ENCANTO|FIVE STAR PIRATE SWORD|PISCO|REMY MARTIN|TERRY CENTENARIO)"
+liqueur_cordial <- "(LIQUER|LIQUEUR|CORDIAL|CREME|TRIPLE|ANISETTE|99 PINEAPPLE MINI|JAGERMEISTER|LIMONCELLO|CREAM|99|VALENTINO|ROTHMAN & WINTER|DR. MCGILLICUDDY'S|GRAND MARNIER|AMARETTO|DISARONNO|ALIZE|ANNIE'S APPLE PIE|AMARO|AVION ESPRESSO|CHERRY HEERING|COCOYAC|DI AMORE|DOMAINE DE CANTON|FRENCH KISS TROPICAL|GALLIANO|GAMLE ODE|KAHLUA|LICOR|MARASKA|MARIE BRIZARD|NORTH SHORE AQUAVIT|NUX ALPINA|PRAIRIE WOLF DARK|RICURA|THE BITTER TRUTH PIMENTO DRAM|TRAVIS HASSE'S)"
+spirit <- "(SPIRIT|MOONSHINE|OLE SMOKY|EVERCLEAR|MIDNIGHT MOON|ABSINTHE|YENI RAKI|AALBORG|TY KU)"
+cocktail <- "(COCKTAIL|ROCK|TGIFRIDAYS|INDIAN SUMMER|JOSE CUERVO AUTHENTIC LIME MARGARITA POUCH|JOSE CUERVO AUTHENTIC TEAGARITA MARGARITA 4PK CANS|PINA COLADA|SKINNYGIRL)"
+beer <- "(BEER)"
+misc <- "(SPECIAL|AMERICAN ALCOHOL|DESLISTED|HOLIDAY|IOWA|EGG NOG|SANGRIA|BARREL BUFFALO BILL|LA COLLECTION)"
+```
+
+After, we use another `for` loop to assign those categories. This time, the loop iterates over every row in `liquorSales`. To prevent the operation from overwriting whole data or running on observations with a missing `item`, a conditional is applied that checks if `category` is NA *and* if `item` is not NA. Then, the waterfall of `if` and `else if` statements checks if a match is found and assigns a `category` if there is a match. If no match is found for the first category, it checks the next category and so on.
+
+```r
+for (x in 1:nrow(liquorSales)) {
+  if (is.na(liquorSales$category[x]) && !is.na(liquorSales$item[x])) {
+    if (str_detect(liquorSales$item[x], vodka)) {
+      liquorSales$category[x] <- "Vodka"
+    } else if (str_detect(liquorSales$item[x], schnapps)) {
+      liquorSales$category[x] <- "Schnapps"
+    } else if (str_detect(liquorSales$item[x], rum)) {
+      liquorSales$category[x] <- "Rum"
+    } else if (str_detect(liquorSales$item[x], tequila)) {
+      liquorSales$category[x] <- "Tequila"
+    } else if (str_detect(liquorSales$item[x], gin)) {
+      liquorSales$category[x] <- "Gin"
+    } else if (str_detect(liquorSales$item[x], whiskey_whisky)) {
+      liquorSales$category[x] <- "Whiskey"
+    } else if (str_detect(liquorSales$item[x], brandy)) {
+      liquorSales$category[x] <- "Brandy"
+    } else if (str_detect(liquorSales$item[x], liqueur_cordial)) {
+      liquorSales$category[x] <- "Liqueur/Cordial"
+    } else if (str_detect(liquorSales$item[x], spirit)) {
+      liquorSales$category[x] <- "Spirit"
+    } else if (str_detect(liquorSales$item[x], cocktail)) {
+      liquorSales$category[x] <- "Cocktail"
+    } else if (str_detect(liquorSales$item[x], beer)) {
+      liquorSales$category[x] <- "Beer"
+    } else if (str_detect(liquorSales$item[x], misc)) {
+      liquorSales$category[x] <- "Misc"
+    } 
+  }
+}
+```
+
+
+# Exploratory Analysis
+
+## Histograms
+
+To make it convenient, we first create a custom function that creates a histogram of a chosen variable using the ggplot2 package's `geom_histogram()` function.
+
+```r
+hist <- function(var = sales, binwidth = NULL, bins = NULL) {
+  liquorSales %>%
+    ggplot(aes(x = {{var}})) +
+    geom_histogram(binwidth = {{binwidth}}, bins = {{bins}})
+}
+```
+
+### Sales: `sales`
+
+```r
+hist(sales)
+```
+
+<Histogram title='Histogram of Sales' data={Sales} />
+
+Here, we see a positively skewed distribution. 90% of the values for `sales` are less than or equal to \$256.44, while the maximum value is \$181,962.00. Taking the natural log of `sales` _should_ reveal a distribution that appears more normal.
+
+```r
+hist(log(sales))
+```
+
+<Histogram title='Histogram of Log Sales' data={LogSales} />
+
+As predicted, the histogram of the natural log of `sales` does show a distribution that appears more normal.
+
+### State Bottle Cost: `bottleCost`
+
+```r
+hist(bottleCost)
+```
+
+<Histogram title='Histogram of Bottle Cost' data={BottleCost} />
+
+Here, we see another positively skewed distribution. 90% of the values for `bottleCost` are less than or equal to \$18.49, while the maximum value is \$549.99. Taking the natural log of `bottleCost` _should_ again reveal a distribution that appears more normal.
+
+
+```r
+hist(log(bottleCost))
+```
+
+<Histogram title='Histogram of Log Bottle Cost' data={LogBottleCost} />
+
+
+As with `sales`, the histogram of the natural log of `bottleCost` indeed shows a distribution that appears more normal.
+
+### Retail Bottle Cost: `bottleRetail`
+
+```r
+hist(bottleRetail)
+```
+
+<Histogram title='Histogram of Bottle Retail' data={BottleRetail} />
+
+
+Here, we see another positively skewed distribution. 90% of the values for `bottleRetail` are less than or equal to \$27.74, while the maximum value is \$824.99. Taking the natural log of `bottleRetail` _should_ again reveal a distribution that appears more normal.
+
+
+```r
+hist(log(bottleRetail))
+```
+
+<Histogram title='Histogram of Log Bottle Retail' data={LogBottleRetail} />
+
+
+As with the prior two columns, the histogram of the natural log of `bottleRetail` indeed shows a distribution that appears more normal.
+
+
+
+## Most Popular Category of Alcohol by Weekday
+
+To do this, we first need to know what day of the week each date is. We use the `weekdays()` function from the lubridate package and create a new column appropriately named `weekday`.
+
+```r
+liquorSales <- liquorSales %>%
+  mutate(weekday = weekdays(date))
+```
+
+Next, we use the `summarise()` function after grouping by `category` and `weekday` to count the number of observations by both category and weekday. After counting, we ungroup to ensure no errors in the future. We then group again by `weekday` and use the `slice_max()` function to take the top row in each weekday group.
+
+```r
+liquorSales %>%
+  group_by(weekday, category) %>%
+  summarise(category_count = n()) %>%
+  ungroup() %>%
+  group_by(weekday) %>%
+  slice_max(order_by = category_count)
+```

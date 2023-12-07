@@ -1,0 +1,32 @@
+---
+import { Icon } from 'astro-icon'
+---
+
+<script type='text/javascript' is:inline>
+    window.onload = () => {
+        document.querySelector('#color-mode').value = getCurrentMode()
+    }
+</script>
+
+<div class='flex items-center'>
+    <label class='mr-5 text-slate-200' for='color-mode'>Color Mode</label>
+    <div class='relative flex items-center font-medium select-none'>
+        <Icon
+            name='ph:sun-bold'
+            class='pointer-events-none absolute left-2.5 inline h-5 w-5 text-slate-600 dark:hidden'
+        />
+        <Icon
+            name='ph:moon-fill'
+            class='pointer-events-none absolute left-2.5 hidden h-5 w-5 text-slate-400 dark:inline'
+        />
+        <select
+            onchange='setColorMode(this.value)'
+            id='color-mode'
+            class='form-select rounded-lg border-0 bg-slate-50 pl-10 text-slate-800 transition-[outline] focus:outline-4 focus:outline-offset-4 focus:outline-emerald-600 focus:ring-0 dark:bg-slate-950 dark:text-slate-200'
+        >
+            <option value='light'>Light</option>
+            <option value='dark'>Dark</option>
+            <option value='system'>System</option>
+        </select>
+    </div>
+</div>

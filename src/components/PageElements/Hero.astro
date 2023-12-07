@@ -1,0 +1,65 @@
+---
+import { Icon } from 'astro-icon'
+import SectionHeading from './Generic/SectionHeading.astro'
+import Section from './Generic/Section.astro'
+import { siteConfig } from '@/config/siteConfig'
+import profileImage from '@/assets/images/profile.jpg'
+import blurHashImage from '@/utils/blurhash/blur'
+import { Picture } from 'astro:assets'
+import Button from './Generic/Button.astro'
+
+const blurhash = await blurHashImage(profileImage.src)
+---
+
+<Section
+    fullscreen={true}
+    class='flex w-full max-w-7xl flex-col items-center gap-x-8 lg:flex-row-reverse'
+    padding='px-4'
+    background='bg-hero dark:bg-hero-dark'
+>
+    <Picture
+        src={profileImage}
+        alt='Jonathan Falcon smiling while looking away from the camera.'
+        class='mb-8 aspect-[3/2] w-[80%] max-w-[800px] rounded-3xl object-cover object-[left_50%_top_50%] shadow-stone-600/50 dark:shadow-slate-500/50 max-lg:mx-auto md:w-[80%] lg:mb-0 lg:ml-auto lg:aspect-[2/3] lg:w-full lg:max-w-[400px] lg:rounded-[4rem]'
+        widths={[768, 1500, 2500, 3000]}
+        sizes='(max-width: 1499px) 768px, (max-width: 2499px) 1500px, (max-width: 2999px) 2500px, 3000px'
+        aspectRatio={3 / 2}
+        loading='eager'
+        formats={['avif']}
+        fallbackFormat='webp'
+        style={blurhash}
+        pictureAttributes={{ class: 'm-auto max-w-5xl basis-2/5' }}
+    />
+
+    <div>
+        <SectionHeading subheading={siteConfig.description} headingLevel='span' textAlign='left'>
+            <Fragment slot='customHeading'>
+                Hi, I'm <br />
+                <h1 class='text-emerald-700 dark:text-emerald-600'>{siteConfig.title}</h1>
+            </Fragment>
+        </SectionHeading>
+        <div class='mx-auto mt-8 flex flex-col gap-4 max-lg:justify-evenly md:flex-row'>
+            <Button
+                element='a'
+                href={siteConfig.socials.find((social) => social.platform === 'LinkedIn').url}
+                color='indigo'
+                size='xl'
+                class='justify-center gap-x-2 font-bold'
+            >
+                <Icon name='simple-icons:linkedin' class='h-6 w-6' />
+                 Let's Connect
+            </Button>
+            <Button
+                element='a'
+                href='#why-me'
+                color='slate'
+                outline={true}
+                size='xl'
+                class='justify-center gap-x-2 font-medium'
+            >
+                <Icon name='ph:arrow-down-bold' class='h-6 w-6' />
+                 Why Me?
+            </Button>
+        </div>
+    </div>
+</Section>

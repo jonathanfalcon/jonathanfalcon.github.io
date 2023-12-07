@@ -1,0 +1,65 @@
+---
+import { Picture } from 'astro:assets'
+import blurHashImage from './blur'
+
+import { HTMLAttributes } from 'astro/types'
+
+type ValidImageFormats = 'webp' | 'avif' | 'png' | 'jpg' | 'jpeg'
+
+type Props = {
+    src: string
+    blurhashWidth?: number
+    width?: number
+    height?: number
+    widths?: number[]
+    aspectRatio: string
+    alt: string
+    decoding?: HTMLAttributes<'image'>['decoding']
+    loading?: HTMLAttributes<'image'>['loading']
+    formats: ValidImageFormats[]
+    fallbackFormat: ValidImageFormats
+    class?: HTMLAttributes<'picture'>['class']
+}
+
+const {
+    src,
+    blurhashWidth = 20,
+    width,
+    height,
+    widths = [900, 1400, 2000],
+    aspectRatio = '16:9',
+    alt,
+    decoding = 'async',
+    loading,
+    formats = ['avif'],
+    fallbackFormat = 'webp',
+    class: className,
+    pictureAttributes,
+} = Astro.props
+
+let altSrc
+
+if (!src.src) {
+    altSrc = src.then((result) => {
+        return result.default.src
+    })
+}
+---
+
+<Picture
+    src={src}
+    width={width}
+    height={height}
+    widths={widths}
+    aspectRatio={aspectRatio}
+    alt={alt}
+    decoding={decoding}
+    loading={loading}
+    formats={formats}
+    fallbackFormat={fallbackFormat}
+    class={className}
+    pictureAttributes={pictureAttributes}
+    style={`aspect-ratio: ${aspectRatio.replace(':', '/')}; ${await blurHashImage(
+        src.src ?? (await altSrc), blurhashWidth
+    )}`}
+/>

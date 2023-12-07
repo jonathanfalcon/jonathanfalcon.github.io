@@ -1,0 +1,166 @@
+---
+title: Americans' Intent to Install Solar Panels
+description: My marketing analytics team's project that aimed to understand Americans' intent to install solar panels. We cleaned data, utilized linear and logistic regression, created segments based on attitudinal variables using k-means clustering, and presented our findings to the class.
+location: The University of Texas at Austin
+date: 2022-11-28
+category: Marketing
+subcategory: Analytics
+image: ./images/Slide1.png
+---
+
+import BlurhashPicture from '@/utils/blurhash/BlurhashPicture.astro'
+import { Image } from 'astro:assets'
+
+import Slide6 from './images/Slide6.png'
+import Slide7 from './images/Slide7.png'
+import Slide8 from './images/Slide8.png'
+import Slide13 from './images/Slide13.png'
+import Slide16 from './images/Slide16.png'
+import TopTwoBoxIllustration from './images/top-two-box-illustration.svg'
+
+
+
+# Background
+
+## The Dataset
+
+The dataset for this project is the UT Energy Poll. Now discontinued, the biannual survey run by the Energy Institute at the University of Texas at Austin started in 2011. The dataset contained a sample of 921 respondents designed to be representative of U.S. households.
+
+
+## The Research Question
+
+With that dataset, we asked, "Can Americans’ intention to install solar panels be predicted using attitudes and demographics?"
+
+
+# About the Data
+
+Before we dove into the dataset, we tasked ourselves with first understanding who the data is about. How old are they? How do they identify? How much do they make?
+
+## Gender
+
+Here, we can see that roughly 43% of the respondents in the sample identified as female and 57% as male.
+
+<BlurhashPicture
+  src={Slide6}
+  alt="idk"
+/>
+
+
+## Age
+
+Here, we can see that most respondents were in the 65–74 age range. Following this is the 18–24 age range.
+
+<BlurhashPicture
+  src={Slide7}
+  alt="idk"
+/>
+
+
+## Income
+
+Here, we can see that most respondents had an annual income in the \$50K–\$75K range.
+
+<BlurhashPicture
+  src={Slide8}
+  alt="idk"
+/>
+
+
+## Example Survey Questions
+
+The following categories of questions pertaining to attitudes were the basis on which we created segments with k-means clustering.
+
+### Concern
+
+Please rate how concerned you are about the cost of electricity.
+
+
+### Satisfaction
+
+Please indicate how satisfied you are with the job renewable energy companies are doing to address the energy issues that are most important to you.
+
+
+### Likelihood
+
+Please indicate how likely it is that you will install solar panels at your home within the next 5 years.
+
+
+# Analysis
+
+## Variables in Use
+
+| Variable Name                       | Variable Description                                                          |
+|-------------------------------------|-------------------------------------------------------------------------------|
+| `Q160_8`                            | Intent to install solar panels from 1 to 7                                    |
+| `intent_solarPanel`                 | Recoded `Q160_8` where all values equal to or above 6 as 1s and below 6 as 0s |
+| `age`                               | Categorical age from 1 to 8                                                   |
+| `gender`                            | Binary gender with 0 being male and 1 being female                            |
+| `income`                            | Categorical income from 1 to 8                                                |
+| `age*income`                        | Interaction between age and income                                            |
+| `satisfied_gov_addressEnergyIssues` | Mean response of `Q110_1`, `Q110_2`, and `Q110_3`                             |
+| `satisfied_ngo_addressEnergyIssues` | Mean response of `Q110_22`, `Q110_23`, `Q110_24`, `Q110_25`, and `Q110_26`    |
+
+
+## Linear Regression Model
+
+We started with the basics: a linear regression model. Here, we use `Q160_8` as the dependent variable. This model provided a poor fit, only explaining about 9.7% of the variance in intent to install solar panels. Notably, age and income were significant predictors though and in alignment with natural assumptions that those who are older or make more money would be more likely display intent to install solar panels.
+
+<BlurhashPicture
+  src={Slide13}
+  alt="idk"
+/>
+
+Finding the results of this model to be poor, we moved on to a logistic regression model.
+
+
+## Logistic Regression Model
+
+Before a logistic regression would be possible, we'd need intent to install solar panels to be a binary variable, i.e., a one or zero—in this case, a yes or no. How did we do this?
+
+### Top Two Box Score (T2B)
+Similar to how Net Promoter Score (NPS) determines promoters and detractors, a top two box score takes the *top two* responses (six and seven) and summarizes them as displaying intent to install solar panels. Responses with five and below are then categorized as *not* displaying intent to install solar panels. The picture below illustrates our process of recoding.
+
+<Image
+    src={TopTwoBoxIllustration}
+    alt='Illustration of recoding of intent to install solar panels using top two box score'
+    class='bg-slate-800 md:p-8 p-4'
+/>
+
+### Results
+
+Now using our binary variable `intent_solarPanel` (the transformed `Q160_8`), we came up with the following model. Additionally, we wanted to capture any interaction between age and income, thus the use of `interact_ageIncome`.
+
+<BlurhashPicture
+    src={Slide16}
+    alt="idk"
+/>
+
+Based on the results, we noticed:
+
+* Gender was still not a significant predictor.
+* Age became an insignificant predictor.
+* Income is positively associated with intent to solar panels.
+* There is a negative interaction term between age and income.
+
+Regarding the negative interaction term (`interact_ageIncome`), this suggests a diminishing effect for income, implying that for two equal increases in income, the impact on the intent to install solar panels will, on average, be higher for a younger respondent.
+
+But we weren't satisfied just yet, so we moved on to k-means clustering.
+
+
+## K-Means Clustering
+
+### Incorporating Attitudinal Variables
+
+
+
+
+
+
+
+
+
+
+
+
+
+

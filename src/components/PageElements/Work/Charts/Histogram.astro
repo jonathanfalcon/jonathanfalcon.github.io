@@ -1,0 +1,75 @@
+---
+import colors from 'tailwindcss/colors'
+
+type Props = {
+    title: string
+    data: {
+        x: string
+        y: number
+    }
+    format: {
+
+    }
+}
+
+const { title, data } = Astro.props
+
+const file = JSON.stringify(data)
+
+const id = title.toLowerCase().replace(/\s+/g, '-')
+const varName = title.toLowerCase().replace(/\s+/g, '_')
+---
+
+<figure>
+    <canvas
+        id={id}
+        class='aspect-[16/10] h-full w-full rounded-lg bg-slate-800 p-6 md:p-8'
+        role='img'
+        aria-label={title}></canvas>
+    <figcaption class='text-right'>{title}</figcaption>
+</figure>
+
+<script
+    async
+    defer
+    is:inline
+    set:html={`
+  const ${varName} = document.getElementById('${id}');
+  
+  Chart.defaults.font.family = "'Inter var', sans-serif";
+  Chart.defaults.font.size = 16;
+  Chart.defaults.backgroundColor = '${colors.emerald[600]}';
+  Chart.defaults.hoverBackgroundColor = '${colors.emerald[800]}';
+  Chart.defaults.color = '${colors.slate[50]}';
+
+  new Chart(${varName}, {
+    type: 'bar',
+    data: {
+      datasets: [{
+        data: ${file},
+        parsing: {
+          xAxisKey: "x",
+          yAxisKey: "y"
+    }
+      }]
+    },
+    options: {
+      aspectRatio: 16/10,
+      scales: {
+        x: {
+          grid: {display: false, borderColor: "${colors.slate[600]}", borderWidth: 3},
+        },
+        y: {
+          beginAtZero: true,
+          grid: {display: false, borderColor: "${colors.slate[600]}", borderWidth: 3},
+        },
+      },
+      plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+  });
+`}
+/>

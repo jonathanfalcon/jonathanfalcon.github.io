@@ -1,0 +1,42 @@
+---
+import { siteConfig } from '@/config/siteConfig'
+import SocialLinks from './SocialLinks.astro'
+import ColorMode from './ColorMode.astro'
+
+import { Icon } from 'astro-icon'
+---
+
+<footer class='bg-emerald-900 px-6 py-12 text-slate-50 mt-auto'>
+    <div class='mx-auto flex max-w-6xl flex-col gap-y-10'>
+        <div class='flex flex-col items-center justify-between gap-y-10 sm:flex-row'>
+            <a
+                class="relative z-0 -my-2 flex items-center justify-center gap-x-3 px-3 py-2.5 before:absolute before:inset-0 before:-z-10 before:scale-0 before:rounded-lg before:bg-emerald-700 before:transition-transform before:duration-200 before:content-[''] hover:before:scale-100 focus:outline-none focus:before:scale-100"
+                href='/'
+            >
+                <Icon name='simple-icons:falcon' class='h-8 w-8' aria-hidden='true' />
+                <span class='font-heading text-2xl font-black'>{siteConfig.title}</span>
+            </a>
+            <nav role='navigation' aria-label='main'>
+                <ul class='flex items-center justify-center gap-x-5 text-xl font-semibold'>
+                    {
+                        siteConfig.links.map(({ path, label }) => (
+                            <li>
+                                <a
+                                    class="relative z-0 px-3 py-2.5 before:absolute before:inset-0 before:-z-10 before:scale-0 before:rounded-lg before:bg-emerald-700 before:transition-transform before:duration-200 before:content-[''] hover:before:scale-100 focus:outline-none focus:before:scale-100"
+                                    href={path}
+                                >
+                                    {label}
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </nav>
+        </div>
+        <hr class='rounded-full border-2 border-emerald-700' />
+        <div class='-mt-2.5 flex flex-col items-center justify-between gap-y-10 sm:flex-row'>
+            <SocialLinks />
+            <ColorMode />
+        </div>
+    </div>
+</footer>

@@ -1,16 +1,61 @@
 ---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Hero from '@/components/PageElements/Hero.astro'
+import Features from '@/components/PageElements/Features.astro'
+import FeaturedPosts from '@/components/PageElements/FeaturedWork.astro'
 
+const seo = {
+    title: null,
+    description: null,
+    image: '',
+    canonical: Astro.url.href,
+}
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout seo={seo}>
+    <Hero
+        title="Hi, I'm Jonathan Falcon"
+        subtitle="You need someone who's flexible enough to run the analyses and also effectively communicate the results."
+    />
+
+    <Features
+        title='Why me?'
+        subtitle="You need someone who's flexible enough to run the analyses and also effectively communicate the results."
+        features={[
+            {
+                title: 'Quant + Qual',
+                description:
+                    'A unique blend of quantitative and qualitative skills allow a holistic and defensible understanding of the problem.',
+                icon: 'ph:magnifying-glass-bold',
+            },
+            {
+                title: 'Curious',
+                description:
+                    "Ever wonder how something works? Knowing how something works is sometimes just as important, and that's exactly what drives me.",
+                icon: 'ph:brain-bold',
+            },
+            {
+                title: 'Resourceful',
+                description:
+                    'No data? No problem. I strive to make the fullest use of resources at hand, so I can always accomplish my goal.',
+                icon: 'mdi:lightbulb-on',
+            },
+            {
+                title: 'Multidisciplinary',
+                description:
+                    'A unique blend of economics, finance, and marketing create a unique yet harmonic perspective and method of problem-solving.',
+                icon: 'ph:stack-fill',
+            },
+        ]}
+    />
+
+    <FeaturedPosts
+        title='Check out some of my work'
+        subtitle='See more'
+        work={[
+            '2022 McCombs Marketing Challenge',
+            'Cleaning the Iowa Liquor Sales Dataset',
+            "Americans' Intent to Install Solar Panels",
+        ]}
+    />
+</BaseLayout>

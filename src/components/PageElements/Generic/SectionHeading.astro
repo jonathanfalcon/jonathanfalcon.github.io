@@ -1,0 +1,58 @@
+---
+type Props = {
+    heading: string
+    subheading?: string
+    headingLevel: 'h1' | 'h2' | 'span'
+    textAlign?: 'start' | 'center' | 'end'
+    darkHeading?: boolean
+    largeHeading?: boolean
+}
+
+const {
+    heading,
+    subheading,
+    headingLevel,
+    textAlign = 'center',
+    darkHeading = false,
+    largeHeading = false,
+} = Astro.props
+
+const HeadingTag = headingLevel
+
+const customHeading = Astro.slots.has('customHeading')
+const customSubheading = Astro.slots.has('customSubheading')
+
+let alignClasses
+
+switch (textAlign) {
+    case 'start':
+        alignClasses = 'self-start text-start items-start'
+        break
+    case 'center':
+        alignClasses = 'self-center text-center items-center'
+        break
+    case 'end':
+        alignClasses = 'self-end text-end items-end'
+}
+---
+
+<div class=`flex flex-col gap-y-2 ${alignClasses} basis-3/5`>
+    <HeadingTag
+        class={`font-heading font-black
+            ${darkHeading && 'text-slate-50'}
+            ${
+                largeHeading
+                    ? 'text-5xl md:text-6xl lg:text-7xl'
+                    : 'text-4xl md:text-5xl lg:text-6xl'
+            }
+            `}
+    >
+        {customHeading ? <slot name='customHeading' /> : heading}
+    </HeadingTag>
+    <p
+        class={`max-w-3xl font-medium !leading-tight text-lg md:text-xl lg:text-2xl
+        ${darkHeading ? 'text-slate-400' : 'text-slate-700 dark:text-slate-300'}`}
+    >
+        {customSubheading ? <slot name='customSubheading' /> : subheading}
+    </p>
+</div>

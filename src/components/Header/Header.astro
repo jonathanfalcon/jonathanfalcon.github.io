@@ -1,0 +1,39 @@
+---
+import { siteConfig } from '@/config/siteConfig'
+
+import { Icon } from 'astro-icon'
+
+type Props = {
+    darkHeader?: boolean
+}
+
+const { darkHeader = false } = Astro.props
+---
+
+<header class='absolute w-full sm:px-10 px-6 py-6 md:py-10 z-10'>
+    <div class='mx-auto flex max-w-6xl items-center justify-between'>
+        <a
+            class=`relative z-0 -mx-2.5 -my-2 flex items-center gap-x-3 px-2.5 py-2 before:absolute before:inset-0 before:-z-10 before:scale-0 before:rounded-lg before:transition-transform before:duration-200 before:content-[''] hover:before:scale-100 focus:outline-none focus:before:scale-100 md:-mx-3 md:-my-2.5 md:px-3 md:py-2.5 ${darkHeader ? 'before:bg-slate-50/20 text-slate-50' : 'before:bg-slate-950/10 dark:before:bg-slate-50/20'}`
+            href='/'
+        >
+            <Icon name='simple-icons:falcon' class='h-8 w-8' aria-hidden='true' />
+            <span class='font-heading text-2xl font-black max-sm:sr-only'>{siteConfig.title}</span>
+        </a>
+        <nav>
+            <ul class='-mr-2.5 flex items-center gap-x-1 text-lg font-semibold sm:text-xl'>
+                {
+                    siteConfig.links.map(({ path, label }) => (
+                        <li>
+                            <a
+                                class=`relative z-0 px-2.5 py-2 before:absolute before:inset-0 before:-z-10 before:scale-0 before:rounded-lg before:transition-transform before:duration-200 before:content-[''] hover:before:scale-100 focus:outline-none focus:before:scale-100 md:px-3 md:py-2.5 ${darkHeader ? 'before:bg-slate-50/20 text-slate-50' : 'before:bg-slate-950/10 dark:before:bg-slate-50/20'}`
+                                href={path}
+                            >
+                                {label}
+                            </a>
+                        </li>
+                    ))
+                }
+            </ul>
+        </nav>
+    </div>
+</header>

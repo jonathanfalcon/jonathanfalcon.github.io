@@ -1,0 +1,25 @@
+---
+import { siteConfig } from '../../config/siteConfig'
+
+import { Icon } from 'astro-icon'
+---
+
+<nav role='navigation' aria-label='social'>
+    <ul class='flex items-center justify-center gap-x-5 text-lg font-semibold md:gap-x-8'>
+        {
+            siteConfig.socials.map(({ platform, url, icon }) => (
+                <li>
+                    <a
+                        class="relative z-0 flex p-3 text-slate-50/70 transition-colors duration-200 before:absolute before:inset-0 before:-z-10 before:scale-0 before:rounded-lg before:bg-emerald-700 before:transition-transform before:duration-200 before:content-[''] hover:text-slate-50/100 hover:before:scale-100 focus:text-slate-50/100 focus:outline-none focus:before:scale-100"
+                        aria-label={platform}
+                        title={platform}
+                        href={url}
+                        target='_blank'
+                    >
+                        <Icon name={icon} class='h-8 w-8 md:h-9 md:w-9' aria-hidden='true' />
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</nav>

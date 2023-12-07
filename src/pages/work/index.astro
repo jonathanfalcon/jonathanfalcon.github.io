@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import WorkItem from '@/components/PageElements/Work/WorkItem.astro'
+import SectionHeading from '@/components/PageElements/Generic/SectionHeading.astro'
+
+const allWork = await getCollection('work')
+---
+
+<BaseLayout mainWrapper={false}>
+    <main class='flex flex-col items-center gap-y-10 py-24 md:py-28 lg:gap-y-20'>
+        <SectionHeading
+            heading='My Work'
+            subheading="The proof's in the pudding, right?"
+            headingLevel='h1'
+        />
+        <ul
+            class='mx-4 grid max-w-7xl grid-cols-1 justify-items-center gap-10 md:grid-cols-2 lg:gap-20 2xl:max-w-screen-2xl 2xl:grid-cols-3'
+        >
+            {
+                allWork
+                    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+                    .map((work) => <WorkItem frontmatter={work.data} slug={work.slug} />)
+            }
+        </ul>
+    </main>
+</BaseLayout>

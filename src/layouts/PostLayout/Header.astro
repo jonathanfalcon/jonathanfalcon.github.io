@@ -1,0 +1,25 @@
+---
+import { Work } from '@/types/content/Work'
+import blurHashImage from '@/utils/blurhash/blur'
+
+export interface Props {
+    image: Work['image']['src']
+}
+
+const { image } = Astro.props
+
+const sharedStyle = 'pt-24 md:pt-28 pb-12 px-4 mb-10 w-full'
+---
+
+{
+    image ? (
+        <header class=`${sharedStyle} relative`>
+            <slot />
+            <div style={await blurHashImage(image)} class='-z-10 inset-0 absolute opacity-40 dark:opacity-30'></div>
+        </header>
+    ) : (
+        <header class=`${sharedStyle} bg-emerald-900 text-slate-50`>
+            <slot />
+        </header>
+    )
+}

@@ -1,0 +1,36 @@
+---
+import { Icon } from 'astro-icon'
+
+type Props = {
+    icon: 'university' | 'date' | 'location' | 'issuer' | 'employer'
+}
+
+const { icon }: Props = Astro.props
+
+let iconName
+
+switch (icon) {
+    case 'university':
+        iconName = 'ph:graduation-cap-bold'
+        break
+    case 'date':
+        iconName = 'ph:calendar-blank-bold'
+        break
+    case 'location':
+        iconName = 'ph:map-pin-bold'
+        break
+    case 'issuer':
+        iconName = 'ph:medal-bold'
+        break
+    case 'employer':
+        iconName = 'ph:briefcase-bold'
+        break
+}
+---
+
+<span
+    class=`flex items-center gap-x-1 text-sm lg:text-base font-medium text-slate-500 dark:text-slate-400 !leading-tight ${icon === 'date' && 'whitespace-nowrap'}`
+>
+    <Icon name={iconName} class='h-4 w-4 shrink-0 lg:h-5 lg:w-5' />
+    <slot />
+</span>

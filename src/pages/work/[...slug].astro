@@ -1,0 +1,37 @@
+---
+import { Seo } from '@/types/metadata/Seo'
+import { getCollection } from 'astro:content'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import PostLayout from '@/layouts/PostLayout/PostLayout.astro'
+import {getImage} from 'astro:assets'
+
+export async function getStaticPaths() {
+    const workEntries = await getCollection('work')
+    return workEntries.map((entry) => ({
+        params: { slug: entry.slug },
+        props: { entry },
+    }))
+}
+
+const { entry } = Astro.props
+const { Content, headings } = await entry.render()
+
+
+const seo: Seo = {
+    title: entry.data.title,
+    description: entry.data.description,
+    canonical: Astro.url.href,
+    image: { ...entry.data.image, alt: entry.data.title },
+    openGraph: {
+        basic: {
+            type: 'article',
+        },
+    },
+}
+---
+
+<BaseLayout seo={seo} darkHeader={!Boolean(entry.data.image)}>
+    <PostLayout frontmatter={entry.data} headings={headings}>
+        <Content />
+    </PostLayout>
+</BaseLayout>

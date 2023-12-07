@@ -1,0 +1,40 @@
+---
+import { SEO } from 'astro-seo'
+import { Seo } from '@/types/metadata/Seo'
+import { siteConfig } from '@/config/siteConfig'
+
+type Props = Seo
+
+const { seo } = Astro.props
+
+const openGraph = {
+    basic: {
+        title: seo.openGraph?.basic?.title ?? (seo.title ?? siteConfig.title),
+        type: seo.openGraph?.basic?.format ?? 'website',
+        image: seo.image?.src ?? '',
+        url: seo.canonical,
+    },
+}
+
+const twitter = {
+    card: 'summary_large_image',
+    site: null,
+    creator: null,
+    image: seo.image?.src ?? '',
+    imageAlt: seo.image?.alt ?? '',
+    description: seo.description ?? siteConfig.description,
+}
+
+---
+
+<SEO
+    title={seo.title}
+    titleTemplate={`%s - ${siteConfig.title}`}
+    titleDefault={siteConfig.title}
+    description={seo.description ?? siteConfig.description}
+    canonical={seo.canonical}
+    noindex={seo.noindex}
+    nofollow={seo.nofollow}
+    charset={seo.charset}
+    openGraph={openGraph}
+/>

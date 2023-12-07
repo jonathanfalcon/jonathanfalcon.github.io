@@ -1,0 +1,136 @@
+---
+import { HTMLAttributes } from 'astro/types'
+
+type AnchorProps = {
+    element: 'a'
+} & HTMLAttributes<'a'>
+
+type ButtonProps = {
+    element: 'button'
+} & HTMLAttributes<'button'>
+
+type Props = (AnchorProps | ButtonProps) & {
+    color: 'emerald' | 'green' | 'red' | 'blue' | 'indigo' | 'slate'
+    outline?: boolean
+    colorScheme?: 'dark' | 'light' | 'auto'
+    size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+}
+
+const {
+    element: Element,
+    color,
+    outline = false,
+    colorScheme = 'auto',
+    size = 'md',
+    class: className,
+    ...attributes
+}: Props = Astro.props
+
+type ColorMap = {
+    [color in Props['color']]: {
+        [scheme in Props['colorScheme']]: string
+    }
+}
+
+const colorMap: ColorMap = {
+    emerald: {
+        light: outline
+            ? 'text-emerald-500 border-emerald-500 hover:bg-emerald-600 hover:border-emerald-600 hover:text-emerald-50'
+            : 'bg-emerald-700 text-emerald-50 hover:bg-emerald-900 hover:text-emerald-200',
+        dark: outline
+            ? 'text-emerald-600 border-emerald-600 hover:text-emerald-50 hover:bg-emerald-600'
+            : 'bg-emerald-700 text-emerald-50 hover:bg-emerald-900 hover:text-emerald-200',
+        auto: outline
+            ? 'text-emerald-600 border-emerald-600 hover:text-emerald-50 hover:bg-emerald-600 dark:text-emerald-500 dark:border-emerald-500 dark:hover:bg-emerald-600 dark:hover:border-emerald-600 dark:hover:text-emerald-50'
+            : 'bg-emerald-700 text-emerald-50 hover:bg-emerald-900 hover:text-emerald-200',
+    },
+    green: {
+        light: outline
+            ? 'text-green-500 border-green-500 hover:bg-green-600 hover:border-green-600 hover:text-green-50'
+            : 'bg-green-600 text-green-50 hover:bg-green-800 hover:text-green-200',
+        dark: outline
+            ? 'text-green-600 border-green-600 hover:text-green-50 hover:bg-green-600'
+            : 'bg-green-600 text-green-50 hover:bg-green-800 hover:text-green-200',
+        auto: outline
+            ? 'text-green-600 border-green-600 hover:text-green-50 hover:bg-green-600 dark:text-green-500 dark:border-green-500 dark:hover:bg-green-600 dark:hover:border-green-600 dark:hover:text-green-50'
+            : 'bg-green-600 text-green-50 hover:bg-green-800 hover:text-green-200',
+    },
+    red: {
+        light: outline
+            ? 'border-red-500 hover:bg-red-600 hover:border-red-600 hover:text-red-50'
+            : 'bg-red-600 text-red-50 hover:bg-red-800 hover:text-red-200',
+        dark: outline
+            ? 'text-red-600 border-red-600 hover:text-red-50 hover:bg-red-600'
+            : 'bg-red-600 text-red-50 hover:bg-red-800 hover:text-red-200',
+        auto: outline
+            ? 'text-red-600 border-red-600 hover:text-red-50 hover:bg-red-600 dark:text-red-500 dark:border-red-500 dark:hover:bg-red-600 dark:hover:border-red-600 dark:hover:text-red-50'
+            : 'bg-red-600 text-red-50 hover:bg-red-800 hover:text-red-200',
+    },
+    blue: {
+        light: outline
+            ? 'text-blue-500 border-blue-500 hover:bg-blue-500 hover:text-blue-50'
+            : 'bg-blue-600 text-blue-50 hover:bg-blue-800 hover:text-blue-200',
+        dark: outline
+            ? 'text-blue-600 border-blue-600 hover:text-blue-50 hover:bg-blue-600'
+            : 'bg-blue-600 text-blue-50 hover:bg-blue-800 hover:text-blue-200',
+        auto: outline
+            ? 'text-blue-600 border-blue-600 hover:text-blue-50 hover:bg-blue-600 dark:text-blue-500 dark:border-blue-500 dark:hover:bg-blue-500 dark:hover:text-blue-50'
+            : 'bg-blue-600 text-blue-50 hover:bg-blue-800 hover:text-blue-200',
+    },
+    indigo: {
+        light: outline
+            ? 'text-indigo-500 border-indigo-500 hover:bg-indigo-500 hover:text-indigo-50'
+            : 'bg-indigo-600 text-indigo-50 hover:bg-indigo-800 hover:text-indigo-200',
+        dark: outline
+            ? 'text-indigo-600 border-indigo-600 hover:text-indigo-50 hover:bg-indigo-600'
+            : 'bg-indigo-600 text-indigo-50 hover:bg-indigo-800 hover:text-indigo-200',
+        auto: outline
+            ? 'text-indigo-600 border-indigo-600 hover:text-indigo-50 hover:bg-indigo-600 dark:text-indigo-500 dark:border-indigo-500 dark:hover:bg-indigo-500 dark:hover:text-indigo-50'
+            : 'bg-indigo-600 text-indigo-50 hover:bg-indigo-800 hover:text-indigo-200',
+    },
+    slate: {
+        light: outline
+            ? 'text-slate-200 border-slate-200 hover:bg-slate-200 hover:text-slate-950'
+            : 'bg-slate-200 text-slate-950 hover:bg-slate-400',
+        dark: outline
+            ? 'text-slate-800 border-slate-800 hover:text-slate-50 hover:bg-slate-800'
+            : 'bg-slate-700 text-slate-50 hover:bg-slate-900 hover:text-slate-200',
+        auto: outline
+            ? 'text-slate-800 border-slate-800 hover:text-slate-50 hover:bg-slate-800 dark:text-slate-200 dark:border-slate-200 dark:hover:bg-slate-200 dark:hover:text-slate-950'
+            : 'bg-slate-700 text-slate-50 hover:bg-slate-900 hover:text-slate-200 dark:bg-slate-200 dark:text-slate-950 dark:hover:bg-slate-400',
+    },
+}
+
+let sizeProperties
+
+switch (size) {
+    case 'sm':
+        sizeProperties = 'text-sm px-3 py-1.5'
+        break
+    case 'md':
+        sizeProperties = 'text-base px-5 py-2.5'
+        break
+    case 'lg':
+        sizeProperties = 'text-lg px-6 py-3'
+        break
+    case 'xl':
+        sizeProperties = 'text-xl px-7 py-3.5'
+        break
+    case '2xl':
+        sizeProperties = 'text-2xl px-8 py-4'
+        break
+}
+---
+
+<Element
+    class={`
+    ${className}
+    ${colorMap[color][colorScheme]}
+    ${sizeProperties}
+    ${outline && 'border-2'}
+    rounded-full flex items-center transition-colors duration-200
+    `}
+    {...attributes}
+>
+    <slot />
+</Element>
