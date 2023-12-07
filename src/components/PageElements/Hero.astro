@@ -8,7 +8,7 @@ import blurHashImage from '@/utils/blurhash/blur'
 import { Picture } from 'astro:assets'
 import Button from './Generic/Button.astro'
 
-const blurhash = await blurHashImage(profileImage.src)
+const blurhash = await blurHashImage((profileImage as { src: string }).src)
 ---
 
 <Section
