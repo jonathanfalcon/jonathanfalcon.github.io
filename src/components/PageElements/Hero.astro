@@ -32,7 +32,12 @@ const blurhash = await blurHashImage(profileImage.src)
     />
 
     <div>
-        <SectionHeading subheading={siteConfig.description} headingLevel='span' textAlign='left'>
+        <SectionHeading
+            subheading={siteConfig.description}
+            headingLevel='span'
+            textAlign='left'
+            largeHeading={true}
+        >
             <Fragment slot='customHeading'>
                 Hi, I'm <br />
                 <h1 class='text-emerald-700 dark:text-emerald-600'>{siteConfig.title}</h1>
