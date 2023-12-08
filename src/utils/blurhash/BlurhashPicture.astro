@@ -60,6 +60,7 @@ if (!src.src) {
     class={className}
     pictureAttributes={pictureAttributes}
     style={`aspect-ratio: ${aspectRatio.replace(':', '/')}; ${await blurHashImage(
-        src.src ?? (await altSrc), blurhashWidth
+        src.src ?? (await altSrc),
+        blurhashWidth,
     )}`}
 />

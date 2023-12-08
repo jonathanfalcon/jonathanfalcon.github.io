@@ -15,12 +15,14 @@ export default async function blurHashImage(
 ): Promise<string> {
     const processImage = async (): Promise<BlurHashData | undefined> => {
         try {
-            const URL = path.resolve(
-                path.join(
-                    import.meta.env.PROD ? './dist' : '.',
-                    imagePath.substring(imagePath.indexOf('/src')),
-                ),
-            ).split('?')[0]
+            const URL = path
+                .resolve(
+                    path.join(
+                        import.meta.env.PROD ? './dist' : '.',
+                        imagePath.substring(imagePath.indexOf('/src')),
+                    ),
+                )
+                .split('?')[0]
 
             const image = sharp(URL).resize(adjustedWidth).modulate({ saturation: 1.5 })
 

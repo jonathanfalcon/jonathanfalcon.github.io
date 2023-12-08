@@ -1,0 +1,87 @@
+---
+import { Icon } from 'astro-icon'
+import Button from '@/components/PageElements/Generic/Button.astro'
+
+type Props = {
+    title: string
+    description: string
+}
+
+const { title, description } = Astro.props
+
+const encodedTitle = encodeURIComponent(title)
+const encodedDescription = encodeURIComponent(description)
+
+const url = Astro.url.href
+
+const shareLinks = [
+    {
+        platform: 'messages',
+        url: `sms:&body=${url + encodeURIComponent('?utm_source=sms&utm_medium=shared')}`,
+        text: 'Share via Messages',
+        icon: 'mdi:chat',
+    },
+    {
+        platform: 'email',
+        url: `mailto:?subject=%22${encodedTitle}%22&body=${encodedDescription}%20${
+            url + encodeURIComponent('?utm_source=email&utm_medium=shared')
+        }`,
+        text: 'Share via Email',
+        icon: 'mdi:email',
+    },
+    {
+        platform: 'linkedin',
+        url: `https://www.linkedin.com/sharing/share-offsite/?url=${
+            url + encodeURIComponent('?utm_source=linkedin&utm_medium=social')
+        }`,
+        text: 'Share on LinkedIn',
+        icon: 'mdi:linkedin',
+    },
+    {
+        platform: 'facebook',
+        url: `https://www.facebook.com/sharer.php?u=${
+            url + encodeURIComponent('?utm_source=facebook&utm_medium=social')
+        }`,
+        text: 'Share on Facebook',
+        icon: 'mdi:facebook',
+    },
+    {
+        platform: 'twitter',
+        url: `https://twitter.com/intent/tweet?url=${
+            url + encodeURIComponent('?utm_source=twitter&utm_medium=social')
+        }&text=${encodedTitle}`,
+        text: 'Share on Twitter',
+        icon: 'mdi:twitter',
+    },
+]
+---
+
+<footer class='flex w-[calc(100%-2rem)] max-w-3xl flex-col'>
+    <div class='ml-auto flex items-center gap-x-1'>
+        <span class='mr-1 font-medium text-slate-700 dark:text-slate-300'>Share:</span>
+        {
+            shareLinks.map(({ url, text, icon }) => (
+                <a
+                    class="relative z-0 flex p-2 text-slate-500 transition-colors before:absolute before:inset-0 before:-z-10 before:scale-0 before:rounded-lg before:bg-slate-300 before:transition-transform before:duration-200 before:content-[''] hover:text-slate-800 hover:before:scale-100 focus:text-slate-800 focus:outline-none focus:before:scale-100 dark:text-slate-400 dark:before:bg-slate-700 dark:hover:text-slate-50 dark:focus:text-slate-50"
+                    href={url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label={text}
+                    title={text}
+                >
+                    <Icon name={icon} class='h-8 w-8' aria-hidden='true' />
+                </a>
+            ))
+        }
+    </div>
+    <Button
+        color='slate'
+        outline={true}
+        size='lg'
+        element='a'
+        href='/work/'
+        class='mt-20 flex w-fit items-center gap-x-2 font-medium'
+    >
+        <Icon name='ph:arrow-left-bold' class='h-6 w-6' /> More of My Work
+    </Button>
+</footer>

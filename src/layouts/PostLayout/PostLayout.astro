@@ -1,20 +1,21 @@
 ---
 import { Work } from '@/types/content/Work'
+import { siteConfig } from '@/config/siteConfig'
 import { Icon } from 'astro-icon'
 
 import Header from './Header.astro'
+import Footer from './Footer.astro'
 import TOC from './TOC.astro'
 
 type Props = {
     frontmatter: Work
     headings: Array<{ depth: number; slug: string; text: string }>
-    url: string | URL
 }
 
-const { frontmatter, headings, url } = Astro.props
+const { frontmatter, headings } = Astro.props
 ---
 
-<article class='flex flex-col items-center !pt-0'>
+<article class='flex flex-col items-center !pt-0 pb-20'>
     <Header image={frontmatter.image?.src}>
         <div class='mx-auto flex max-w-3xl flex-col gap-y-4'>
             <time
@@ -57,9 +58,10 @@ const { frontmatter, headings, url } = Astro.props
     }
 
     <div
-        class='prose prose-slate mb-20 w-[calc(100%-2rem)] max-w-3xl dark:prose-invert md:prose-lg prose-h2:font-extrabold prose-h3:font-bold prose-h4:font-bold prose-a:text-emerald-700 prose-pre:!bg-slate-800 prose-img:rounded-lg dark:prose-a:text-emerald-500'
+        class='prose prose-slate mb-10 w-[calc(100%-2rem)] max-w-3xl dark:prose-invert md:prose-lg prose-h2:font-extrabold prose-h3:font-bold prose-h4:font-bold prose-a:text-emerald-700 prose-pre:!bg-slate-800 prose-img:rounded-lg dark:prose-a:text-emerald-500'
     >
         <slot />
     </div>
-    <footer></footer>
+
+    <Footer title={frontmatter.title} description={frontmatter.description} />
 </article>

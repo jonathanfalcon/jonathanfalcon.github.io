@@ -3,7 +3,7 @@ import { Seo } from '@/types/metadata/Seo'
 import { getCollection } from 'astro:content'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import PostLayout from '@/layouts/PostLayout/PostLayout.astro'
-import {getImage} from 'astro:assets'
+import { getImage } from 'astro:assets'
 
 export async function getStaticPaths() {
     const workEntries = await getCollection('work')
@@ -15,7 +15,6 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props
 const { Content, headings } = await entry.render()
-
 
 const seo: Seo = {
     title: entry.data.title,

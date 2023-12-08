@@ -40,7 +40,8 @@ const socialLinks: SiteConfig['socials'] = [
 
 export const siteConfig: SiteConfig = {
     title: 'Jonathan Falcon',
-    description: 'As a marketing analyst, I leverage my multidisciplinary background to give you the most holistic understanding of your customers.',
+    description:
+        'As a marketing analyst, I leverage my multidisciplinary background to give you the most holistic understanding of your customers.',
     origin: 'https://jonathanfalcon.com',
     links: siteLinks,
     socials: socialLinks,

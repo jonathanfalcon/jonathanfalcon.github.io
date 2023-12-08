@@ -9,7 +9,7 @@ const { seo } = Astro.props
 
 const openGraph = {
     basic: {
-        title: seo.openGraph?.basic?.title ?? (seo.title ?? siteConfig.title),
+        title: seo.openGraph?.basic?.title ?? seo.title ?? siteConfig.title,
         type: seo.openGraph?.basic?.format ?? 'website',
         image: seo.image?.src ?? '',
         url: seo.canonical,
@@ -24,7 +24,6 @@ const twitter = {
     imageAlt: seo.image?.alt ?? '',
     description: seo.description ?? siteConfig.description,
 }
-
 ---
 
 <SEO
