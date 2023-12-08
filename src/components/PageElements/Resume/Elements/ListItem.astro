@@ -13,30 +13,27 @@ const { title, icon, isLastItem } = Astro.props
 const withIcon = Astro.slots.has('withIcon')
 ---
 
-{
-    withIcon ? (
-        <li class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0'>
-            <Icon name={icon.name} class={'w-12 shrink-0 ' + icon.color} />
-            <div class='grow'>
-                <h3 class='mb-1 text-xl font-bold !leading-tight md:text-2xl'>
-                    {title ? title : <slot name='title' />}
-                </h3>
-                <div class='flex flex-col justify-between gap-x-10 gap-y-1 md:flex-row'>
-                    <slot name='withIcon' />
+<li class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0'>
+    {
+        (
+            <>
+                {withIcon && <Icon name={icon.name} class={'w-12 shrink-0 ' + icon.color} />}
+                <div class='grow'>
+                    <h3 class='mb-1 text-xl font-bold !leading-tight md:text-2xl'>
+                        {title ? title : <slot name='title' />}
+                    </h3>
+                    {withIcon ? (
+                        <div class='flex flex-col justify-between gap-x-10 gap-y-1 md:flex-row'>
+                            <slot name='withIcon' />
+                        </div>
+                    ) : (
+                        <slot />
+                    )}
                 </div>
-            </div>
-        </li>
-    ) : (
-        <li class='flex flex-col gap-y-2 md:flex-row md:gap-x-5 md:gap-y-0'>
-            <div class='grow'>
-                <h3 class='mb-1 text-xl font-bold leading-tight md:text-2xl'>
-                    {title ? title : <slot name='title' />}
-                </h3>
-                <slot />
-            </div>
-        </li>
-    )
-}
+            </>
+        )
+    }
+</li>
 
 {
     !isLastItem && (
