@@ -1,0 +1,259 @@
+---
+title: Personal Site
+date: 2023-12-10
+category: Coding
+subcategory: Web Development
+description: Rebuilt from the ground up, my new personal site is wholly me. I used Astro to construct an elegant website to showcase my work and so much more, with a focus on purposeful design, accessibility, and performance.
+location: Personal
+image: ./images/personal-site.png
+codingLanguages:
+    - Astro
+    - HTML
+    - CSS
+    - JavaScript
+    - TypeScript
+containsCode: true
+---
+
+import { Icon } from 'astro-icon'
+import blurHashImage from '@/utils/blurhash/blur.js'
+import BlurHashPicture from '@/utils/blurhash/BlurHashPicture.astro'
+import blurHashExample from './images/personal-site.png'
+import ColorMode from '@/components/Footer/ColorMode.astro'
+
+# Why Rebuild?
+
+The decision to rebuild my personal site was rooted in a desire for a more authentic digital representation. While the existing site was functional, it lacked a personal touch, and I couldn't confidently say that I had a hand in its creation. Additionally, the reliance on someone else's codebase, while well-constructed, led to challenges when implementing new features or making adjustments. These challenges often resulted in makeshift solutions to navigate around the existing code structure. Frustrated with this approach, I opted for a fresh start by initiating a new Astro project.
+
+# The Tech Behind the Curtain
+
+## Astro: A _Stellar_ Foundation
+
+At the heart of my site's metamorphosis lies Astro, a modern static site generator that redefines how web applications are built. Astro allows me to compose my site using React-like components and then transforms them into highly optimized static files during the build process. This not only ensures a dynamic and interactive user experience but also guarantees lightning-fast performance, a crucial element in the SEO ranking.
+
+## Elevating the Experience with Cosmic Languages
+
+### HTML: The Cosmic Blueprint
+
+HTML acts as the universal language, structuring content and providing the foundation for seamless navigation. It serves as the blueprint that defines the celestial landscape through which users navigate.
+
+### TailwindCSS: Crafting Elegant Aesthetics
+
+For styling, I've embraced Tailwind CSS – a utility-first framework. Tailwind provides a pragmatic approach to crafting elegant designs, offering a comprehensive set of utility classes. This approach enhances the visual aesthetics of the site, ensuring a clean and cohesive design.
+
+### JavaScript and TypeScript: Galactic Synergy in Dynamic Engagement
+
+JavaScript, the versatile scripting language, introduces interactivity to the site, breathing life into user interactions. TypeScript, with its static typing, adds an extra layer of structure to the codebase, enhancing development predictability and error prevention.
+
+# Crafting a Branding Experience
+
+Beyond the lines of code and the technical intricacies lies the essence of my personal site—its branding. Every visual element, color choice, and typographic decision plays a role in crafting an immersive and cohesive experience for visitors. The branding of my site is a deliberate effort to communicate a message of competence, trustworthiness, and stability, evoking emotions and providing a sense of continuity throughout the digital journey.
+
+## Color Palette: A Symphony of Confidence
+
+<div className='not-prose flex flex-row items-center gap-x-4'>
+    <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-emerald-900 text-center font-heading text-3xl font-black text-emerald-50 md:text-5xl'>
+        Emerald
+    </figure>
+    <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 text-center font-heading text-3xl font-black dark:bg-slate-800 md:text-5xl'>
+        Slate
+    </figure>
+</div>
+
+The color palette is a harmonious blend of emerald and slate, carefully selected to exude competence and stability. From the richness of emerald to all the shades of slate, each color contributes to a balanced and visually pleasing experience. This palette isn't just about aesthetics; it's about creating a visual language that resonates with visitors and reinforces the identity of my digital presence as a competent, trustworthy, and stable entity.
+
+## Typography: Elegance in Assurance
+
+<div className='not-prose flex flex-row items-center gap-x-4'>
+    <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 text-center font-heading text-3xl font-black dark:bg-slate-800 md:text-5xl'>
+        Quincy
+    </figure>
+    <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 text-center font-body text-3xl font-medium dark:bg-slate-800 md:text-5xl'>
+        Inter
+    </figure>
+</div>
+
+Typography is more than just words on a screen; it's a reflection of personality and style. For headings, Quincy exudes a timeless elegance, emphasizing competence and trustworthiness. In contrast, for smaller headings and body text, Inter provides clarity and modernity, conveying stability. Clear, legible fonts ensure that content is easily consumed, while unique typographic choices add a touch of individuality, making the reading experience both pleasant and memorable.
+
+## Logo: Symbolizing Reliability
+
+<figure className='not-prose mx-auto flex aspect-video h-full w-2/3 max-w-[376px] items-center justify-center rounded-lg bg-slate-200 p-10 dark:bg-slate-800'>
+    <Icon name='simple-icons:falcon' class='aspect-square h-1/2 w-1/2' />
+</figure>
+
+The logo, a majestic Falcon, serves as a symbol, encapsulating the essence of my personal brand as a competent, trustworthy, and stable entity. Beyond being a representation of my digital identity, the Falcon reflects my heritage and adds a layer of meaning to the brand. With its sharp gaze and powerful wings, the Falcon embodies qualities of precision, focus, and strength, reinforcing the brand values.
+
+# Elevating the User Experience
+
+## BlurHashes: Transformative Image Loading
+
+Embracing the cutting-edge technology of Blur Hashes, my site takes a visionary approach to image loading. Blur Hashes offer a compact representation of images, enabling the display of a blurred version while the full image is loading. This not only adds an aesthetic flair by providing users with a visually pleasing preview but also significantly improves loading times.
+
+As an example, view the two figures below. The left is an image, while the right is its BlurHash representation. While a lack of detail is obvious, the goal is to reduce perceived latency.
+
+<div className='not-prose grid w-full gap-4 md:grid-cols-2'>
+    <BlurHashPicture
+        src={blurHashExample}
+        alt='Screenshot of jonathanfalcon.com'
+        class='h-full w-full rounded-lg shadow-lg'
+    />
+    <div
+        className='flex aspect-video h-full w-full rounded-lg shadow-lg'
+        style={await blurHashImage(blurHashExample.src)}
+        alt='BlurHash representation of the prior image.'
+    ></div>
+</div>
+
+Unlike traditional implementations, my BlurHashes don't rely on canvas but rather leverage background image URLs. Here's an example.
+
+```html
+<img
+    width="1920px"
+    height="1080px"
+    src="source.avif"
+    style="aspect-ratio: 16/9;
+           background: center / cover
+                       url(data:image/png;base64,blurhash-image-url);"
+/>
+```
+
+### BlurHashes as Efficient Backgrounds for a Visual Continuity Concept
+
+Beyond image loading, BlurHashes play a pivotal role as backgrounds for each work page header. This strategic use is driven by a dual-purpose: reducing the need for an expensive `backdrop-filter` and significantly improving loading times compared to traditional images.
+
+The decision to use BlurHashes as backgrounds is rooted in a concept of visual continuity, where the representation of what you click on is closely tied to where you land. This creates a visual connection that users can identify, fostering a sense of coherence and navigation fluidity as they explore different sections of the site. _That, and it looks cool._
+
+## Dark, Light, or System Mode? All Three, Please!
+
+In the pursuit of providing a personalized and comfortable browsing experience, my personal site not only embraces Dark Mode but extends the choice to users with options for Light, Dark, and System-based modes. This versatile approach goes beyond aesthetics, offering a tailored experience that adapts to individual preferences and the broader system settings. Go ahead and try it out. The same menu exists in the site's footer.
+
+<div className='mx-auto flex aspect-video h-full w-1/2 max-w-[376px] items-center justify-center rounded-lg bg-slate-800'>
+    <ColorMode />
+</div>
+
+### Technical Implementation
+
+The technical implementation of the multi-mode support is designed for flexibility and responsiveness. Leveraging modern web development practices, the transition between Light, Dark, and System modes is not only visually smooth but also optimized for performance. Here's an overview of the technical aspects.
+
+#### TailwindCSS Config
+
+The TailwindCSS configuration sets up the dark mode to be toggled by adding or removing the dark class on the documentElement.
+
+```javascript
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+/** @type {import('tailwindcss').Config} */
+export default {
+    // The rest of the config
+    darkMode: 'class',
+}
+```
+
+#### JavaScript Logic
+
+The JavaScript logic handles the dynamic updating of color modes, system mode changes, and user preferences, ensuring a seamless and responsive experience.
+
+```javascript
+// Used to update current color mode
+const setCurrentMode = (mode) => {
+    if (mode === 'dark') {
+        document.documentElement.classList.add('dark')
+    } else if (mode === 'light') {
+        document.documentElement.classList.remove('dark')
+    }
+}
+
+// Replicates dynamic changes in system mode
+const handleSystemModeChange = (event) => {
+    if (event.matches) {
+        setCurrentMode('dark')
+    } else {
+        setCurrentMode('light')
+    }
+}
+
+// Used for monitoring current color mode if mode is 'system'
+const systemMode = window.matchMedia('(prefers-color-scheme: dark)')
+
+// Checks current mode on page load
+if (localStorage.mode === 'dark') {
+    setCurrentMode('dark')
+} else if (localStorage.mode === 'light') {
+    setCurrentMode('light')
+} else if (!('mode' in localStorage)) {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        setCurrentMode('dark')
+    } else {
+        setCurrentMode('light')
+    }
+
+    systemMode.addEventListener('change', handleSystemModeChange)
+}
+
+// Used for updating color mode
+const setColorMode = (mode) => {
+    if (mode === 'light' || mode === 'dark') {
+        // Updates mode in localStorage
+        localStorage.mode = mode
+
+        // Updates current color mode
+        setCurrentMode(mode)
+
+        // Removes systemMode event listener
+        systemMode.removeEventListener('change', handleSystemModeChange)
+    } else if (mode === 'system') {
+        // Removes mode from localStorage
+        localStorage.removeItem('mode')
+
+        // Checks current system mode and updates page accordingly
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setCurrentMode('dark')
+        } else {
+            setCurrentMode('light')
+        }
+
+        // Adds systemMode event listener
+        systemMode.addEventListener('change', handleSystemModeChange)
+    }
+}
+
+// Gets current color mode
+const getCurrentMode = () => {
+    return 'mode' in localStorage ? localStorage.mode : 'system'
+}
+```
+
+#### The Actual Select Element
+
+The Astro component provides the user interface for selecting color modes, ensuring a seamless and visually appealing experience.
+
+```javascript
+window.onload = () => {
+    document.querySelector('#color-mode').value = getCurrentMode()
+}
+```
+
+```astro
+<div class='flex items-center'>
+    <label class='mr-5 text-slate-200' for='color-mode'>Color Mode</label>
+    <div class='relative flex select-none items-center font-medium'>
+        <Icon
+            name='ph:sun-bold'
+            class='pointer-events-none absolute left-2.5 inline h-5 w-5 text-slate-600 dark:hidden'
+        />
+        <Icon
+            name='ph:moon-fill'
+            class='pointer-events-none absolute left-2.5 hidden h-5 w-5 text-slate-400 dark:inline'
+        />
+        <select
+            onchange='setColorMode(this.value)'
+            id='color-mode'
+            class='form-select rounded-lg border-0 bg-slate-50 pl-10 text-slate-800 transition-[outline] focus:outline-4 focus:outline-offset-4 focus:outline-emerald-600 focus:ring-0 dark:bg-slate-950 dark:text-slate-200'
+        >
+            <option value='light'>Light</option>
+            <option value='dark'>Dark</option>
+            <option value='system'>System</option>
+        </select>
+    </div>
+</div>
+```
