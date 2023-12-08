@@ -42,12 +42,17 @@ export default defineConfig({
         sitemap(),
         react(),
         compress({
-            CSS: true,
+            CSS: {
+                comments: false,
+            },
             HTML: {
                 removeAttributeQuotes: false,
+                removeComments: true,
             },
             Image: false,
-            JavaScript: true,
+            JavaScript: {
+                comments: false,
+            },
             SVG: false,
 
             logger: 1,
