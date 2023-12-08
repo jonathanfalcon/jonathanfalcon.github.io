@@ -11,7 +11,7 @@ const openGraph = {
     basic: {
         title: seo.openGraph?.basic?.title ?? seo.title ?? siteConfig.title,
         type: seo.openGraph?.basic?.format ?? 'website',
-        image: seo.image?.src ?? '',
+        image: seo.image?.src ?? `${Astro.url.origin}/opengraph.jpg`,
         url: seo.canonical,
     },
 }
