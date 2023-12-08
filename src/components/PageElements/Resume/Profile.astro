@@ -2,7 +2,7 @@
 import { profile } from '@/config/resume'
 import { siteConfig } from '@/config/siteConfig'
 import blurHashImage from '@/utils/blurhash/blur'
-import BlurhashPicture from '@/utils/blurhash/BlurhashPicture.astro'
+import BlurHashPicture from '@/utils/blurhash/BlurHashPicture.astro'
 import { Icon } from 'astro-icon'
 import Card from './Elements/Card.astro'
 
@@ -10,7 +10,7 @@ import profileImage from '@/assets/images/profile-resume.jpg'
 ---
 
 <Card class='flex h-fit flex-col gap-y-2 !p-5 md:sticky md:top-5 md:basis-1/4 lg:top-10'>
-    <BlurhashPicture
+    <BlurHashPicture
         src={profileImage}
         widths={[300, 400, 800]}
         alt='Jonathan Falcon smiling at the camera.'

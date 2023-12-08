@@ -8,7 +8,7 @@ subcategory: Analytics
 image: ./images/Slide1.png
 ---
 
-import BlurhashPicture from '@/utils/blurhash/BlurhashPicture.astro'
+import BlurHashPicture from '@/utils/blurhash/BlurHashPicture.astro'
 import { Image } from 'astro:assets'
 
 import Slide6 from './images/Slide6.png'
@@ -40,7 +40,7 @@ Before we dove into the dataset, we tasked ourselves with first understanding wh
 
 Here, we can see that roughly 43% of the respondents in the sample identified as female and 57% as male.
 
-<BlurhashPicture
+<BlurHashPicture
   src={Slide6}
   alt="idk"
 />
@@ -50,7 +50,7 @@ Here, we can see that roughly 43% of the respondents in the sample identified as
 
 Here, we can see that most respondents were in the 65–74 age range. Following this is the 18–24 age range.
 
-<BlurhashPicture
+<BlurHashPicture
   src={Slide7}
   alt="idk"
 />
@@ -60,7 +60,7 @@ Here, we can see that most respondents were in the 65–74 age range. Following 
 
 Here, we can see that most respondents had an annual income in the \$50K–\$75K range.
 
-<BlurhashPicture
+<BlurHashPicture
   src={Slide8}
   alt="idk"
 />
@@ -105,7 +105,7 @@ Please indicate how likely it is that you will install solar panels at your home
 
 We started with the basics: a linear regression model. Here, we use `Q160_8` as the dependent variable. This model provided a poor fit, only explaining about 9.7% of the variance in intent to install solar panels. Notably, age and income were significant predictors though and in alignment with natural assumptions that those who are older or make more money would be more likely display intent to install solar panels.
 
-<BlurhashPicture
+<BlurHashPicture
   src={Slide13}
   alt="idk"
 />
@@ -130,7 +130,7 @@ Similar to how Net Promoter Score (NPS) determines promoters and detractors, a t
 
 Now using our binary variable `intent_solarPanel` (the transformed `Q160_8`), we came up with the following model. Additionally, we wanted to capture any interaction between age and income, thus the use of `interact_ageIncome`.
 
-<BlurhashPicture
+<BlurHashPicture
     src={Slide16}
     alt="idk"
 />

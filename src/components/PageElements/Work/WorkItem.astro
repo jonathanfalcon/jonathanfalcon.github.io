@@ -1,6 +1,6 @@
 ---
 import { Work } from '@/types/content/Work'
-import BlurhashPicture from '@/utils/blurhash/BlurhashPicture.astro'
+import BlurHashPicture from '@/utils/blurhash/BlurHashPicture.astro'
 import blurHashImage from '@/utils/blurhash/blur'
 import { Icon } from 'astro-icon'
 
@@ -37,7 +37,7 @@ function limitStringLength(inputString: string, maxLength: number): string {
 >
     {
         frontmatter.image?.src && (
-            <BlurhashPicture
+            <BlurHashPicture
                 src={frontmatter.image}
                 alt={frontmatter.title}
                 class='rounded-t-2xl'
