@@ -6,6 +6,7 @@ type Props = {
     textAlign?: 'start' | 'center' | 'end'
     darkHeading?: boolean
     largeHeading?: boolean
+    tightSubheading?: boolean
 }
 
 const {
@@ -15,6 +16,7 @@ const {
     textAlign = 'center',
     darkHeading = false,
     largeHeading = false,
+    tightSubheading = true,
 } = Astro.props
 
 const HeadingTag = headingLevel
@@ -50,8 +52,9 @@ switch (textAlign) {
         {customHeading ? <slot name='customHeading' /> : heading}
     </HeadingTag>
     <p
-        class={`max-w-3xl font-medium !leading-tight text-lg md:text-xl lg:text-2xl
-        ${darkHeading ? 'text-slate-400' : 'text-slate-700 dark:text-slate-300'}`}
+        class={`max-w-3xl font-medium text-lg md:text-xl lg:text-2xl
+        ${darkHeading ? 'text-slate-400' : 'text-slate-700 dark:text-slate-300'}
+        ${tightSubheading && '!leading-tight'}`}
     >
         {customSubheading ? <slot name='customSubheading' /> : subheading}
     </p>
