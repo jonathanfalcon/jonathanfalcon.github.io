@@ -31,7 +31,8 @@ const featuredWork = await getCollection('work', ({ data }) => {
             element='a'
             class='mt-2'
         >
-            {subtitle} ->
+            {subtitle}
+            <Icon name='ph:arrow-right-bold' class='ml-2 h-6 w-6' />
         </Button>
     </SectionHeading>
     <ul
