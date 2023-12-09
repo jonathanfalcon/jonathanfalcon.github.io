@@ -1,15 +1,17 @@
 ---
 import { Icon } from 'astro-icon'
+
+type Props = {
+    isExample?: boolean
+}
+
+const { isExample = false } = Astro.props
+
+const selectId = isExample ? 'color-mode-example' : 'color-mode'
 ---
 
-<script type='text/javascript' is:inline>
-    window.onload = () => {
-        document.querySelector('#color-mode').value = getCurrentMode()
-    }
-</script>
-
 <div class='flex items-center'>
-    <label class='mr-5 text-slate-200' for='color-mode'>Color Mode</label>
+    <label class='mr-5 text-slate-200' for={selectId}>Color Mode</label>
     <div class='relative flex select-none items-center font-medium'>
         <Icon
             name='ph:sun-bold'
@@ -21,7 +23,7 @@ import { Icon } from 'astro-icon'
         />
         <select
             onchange='setColorMode(this.value)'
-            id='color-mode'
+            id={selectId}
             class='form-select rounded-lg border-0 bg-slate-50 pl-10 text-slate-800 transition-[outline] focus:outline-4 focus:outline-offset-4 focus:outline-emerald-600 focus:ring-0 dark:bg-slate-950 dark:text-slate-200'
         >
             <option value='light'>Light</option>
@@ -30,3 +32,15 @@ import { Icon } from 'astro-icon'
         </select>
     </div>
 </div>
+
+{
+    isExample ? (
+        <script type='text/javascript' is:inline>
+            document.querySelector('#color-mode-example').value = getCurrentMode()
+        </script>
+    ) : (
+        <script type='text/javascript' is:inline>
+            document.querySelector('#color-mode').value = getCurrentMode()
+        </script>
+    )
+}
