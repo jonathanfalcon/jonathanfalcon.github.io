@@ -25,6 +25,8 @@ const {
     mainWrapper = true,
     firstItemPadding = true,
 } = Astro.props
+
+const isDev = import.meta.env.DEV
 ---
 
 <html lang='en' class='motion-safe:scroll-smooth'>
@@ -34,7 +36,7 @@ const {
         ${className ?? 'bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50'}`
     >
         <Header darkHeader={darkHeader} />
-        <BreakpointOverlay />
+        {isDev && <BreakpointOverlay />}
         {
             mainWrapper ? (
                 <main
