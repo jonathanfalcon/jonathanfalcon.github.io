@@ -12,6 +12,8 @@ type Props = {
 }
 
 const { seo } = Astro.props
+
+const isDev = import.meta.env.DEV
 ---
 
 <head>
@@ -29,7 +31,7 @@ const { seo } = Astro.props
 
     <SEO seo={{ ...seo, charset: 'utf-8' }} />
 
-    <GoogleAnalytics />
+    {!isDev && <GoogleAnalytics />}
 
     <ColorMode />
 </head>
