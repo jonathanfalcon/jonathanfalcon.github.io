@@ -3,6 +3,7 @@ import { Seo } from '@/types/metadata/Seo'
 
 import FavIcon from './FavIcon.astro'
 import SEO from './SEO.astro'
+import GoogleAnalytics from './GoogleAnalytics.astro'
 
 import ColorMode from '@/components/Scripts/ColorMode.astro'
 
@@ -27,6 +28,8 @@ const { seo } = Astro.props
     <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
 
     <SEO seo={{ ...seo, charset: 'utf-8' }} />
+
+    <GoogleAnalytics />
 
     <ColorMode />
 </head>
