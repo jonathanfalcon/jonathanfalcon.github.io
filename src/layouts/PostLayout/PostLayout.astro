@@ -19,17 +19,18 @@ const { frontmatter, headings } = Astro.props
     <Header image={frontmatter.image?.src}>
         <div class='mx-auto flex max-w-3xl flex-col gap-y-4'>
             <time
-                class='flex w-fit items-center rounded-full bg-slate-50/80 px-3 py-1.5 text-xs font-medium text-slate-700 sm:text-sm'
+                class='flex w-fit items-center gap-x-1 rounded-full bg-slate-50/80 px-3 py-1.5 text-xs font-medium text-slate-700 sm:text-sm'
             >
-                <Icon name='ph:calendar-blank-bold' class='mr-1 h-4 w-4' />{
+                <Icon name='ph:calendar-blank-bold' class='h-4 w-4' />{
                     frontmatter.date.toLocaleDateString('en-US', {
                         month: 'long',
                         day: 'numeric',
                         year: 'numeric',
                         timeZone: 'UTC',
                     })
-                }</time
-            >
+                }
+            </time>
+
             <h1 class='font-heading text-4xl font-black sm:text-5xl'>{frontmatter.title}</h1>
             <p class='text-lg font-medium !leading-relaxed opacity-80 sm:text-xl'>
                 {frontmatter.description}
