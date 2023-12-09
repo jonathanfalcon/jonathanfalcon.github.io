@@ -18,8 +18,12 @@ containsCode: true
 import { Icon } from 'astro-icon'
 import blurHashImage from '@/utils/blurhash/blur.js'
 import BlurHashPicture from '@/utils/blurhash/BlurHashPicture.astro'
-import blurHashExample from './images/personal-site.png'
 import ColorMode from '@/components/Footer/ColorMode.astro'
+
+import blurHashExample from './images/personal-site.png'
+import blurHashHeaderExample from './images/blurhash-header-example.png'
+import astro from './images/astro.png'
+import tailwind from './images/tailwind.jpg'
 
 # Why Rebuild?
 
@@ -29,19 +33,28 @@ The decision to rebuild my personal site was rooted in a desire for a more authe
 
 ## Astro: A _Stellar_ Foundation
 
+<BlurHashPicture src={astro} alt='Astro banner saying build the web you want' aspectRatio='41:20' />
+
 At the heart of my site's metamorphosis lies Astro, a modern static site generator that redefines how web applications are built. Astro allows me to compose my site using React-like components and then transforms them into highly optimized static files during the build process. This not only ensures a dynamic and interactive user experience but also guarantees lightning-fast performance, a crucial element in the SEO ranking.
 
 ## Elevating the Experience with Cosmic Languages
 
-### HTML: The Cosmic Blueprint
-
-HTML acts as the universal language, structuring content and providing the foundation for seamless navigation. It serves as the blueprint that defines the celestial landscape through which users navigate.
-
 ### Tailwind CSS: Crafting Elegant Aesthetics
+
+<BlurHashPicture src={tailwind} alt='Tailwind CSS banner' aspectRatio='2:1' />
 
 For styling, I've embraced Tailwind CSS – a utility-first framework. Tailwind provides a pragmatic approach to crafting elegant designs, offering a comprehensive set of utility classes. This approach enhances the visual aesthetics of the site, ensuring a clean and cohesive design.
 
 ### JavaScript and TypeScript: Galactic Synergy in Dynamic Engagement
+
+<div className='not-prose flex flex-row items-center gap-x-4'>
+    <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 dark:bg-slate-800'>
+        <Icon name='logos:javascript' class='aspect-square h-1/2 w-1/2' />
+    </figure>
+    <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 dark:bg-slate-800'>
+        <Icon name='logos:typescript-icon' class='aspect-square h-1/2 w-1/2' />
+    </figure>
+</div>
 
 JavaScript, the versatile scripting language, introduces interactivity to the site, breathing life into user interactions. TypeScript, with its static typing, adds an extra layer of structure to the codebase, enhancing development predictability and error prevention.
 
@@ -118,6 +131,12 @@ Unlike traditional implementations, my BlurHashes don't rely on canvas but rathe
 ```
 
 ### BlurHashes as Efficient Backgrounds for a Visual Continuity Concept
+
+<BlurHashPicture
+    src={blurHashHeaderExample}
+    alt='Screenshot of blurhash header example'
+    aspectRatio='1408:415'
+/>
 
 Beyond image loading, BlurHashes play a pivotal role as backgrounds for each work page header. This strategic use is driven by a dual-purpose: reducing the need for an expensive `backdrop-filter` and significantly improving loading times compared to traditional images.
 
