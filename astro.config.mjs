@@ -12,6 +12,7 @@ import compress from 'astro-compress'
 // https://astro.build/config
 export default defineConfig({
     site: 'https://jonathanfalcon.com',
+    base: '/jonathanfalcon.github.io',
     server: {
         port: 4000,
         host: true,
