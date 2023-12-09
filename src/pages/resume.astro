@@ -6,11 +6,19 @@ import CardWithTitle from '@/components/PageElements/Resume/Elements/CardWithTit
 import ListItem from '@/components/PageElements/Resume/Elements/ListItem.astro'
 import IconText from '@/components/PageElements/Resume/Elements/IconText.astro'
 import { Icon } from 'astro-icon'
+
+const seo = {
+    title: 'Resume',
+    description: null,
+    image: '',
+    canonical: Astro.url.href,
+}
 ---
 
 <BaseLayout
     class='bg-slate-100 text-slate-950 dark:bg-slate-950 dark:text-slate-50'
     mainWrapper={false}
+    seo={seo}
 >
     <main
         class='flex w-full max-w-7xl flex-col gap-5 self-center px-4 py-24 md:flex-row md:py-28 lg:gap-10'

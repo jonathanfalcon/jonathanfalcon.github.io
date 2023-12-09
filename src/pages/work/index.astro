@@ -5,9 +5,16 @@ import WorkItem from '@/components/PageElements/Work/WorkItem.astro'
 import SectionHeading from '@/components/PageElements/Generic/SectionHeading.astro'
 
 const allWork = await getCollection('work')
+
+const seo = {
+    title: 'Work',
+    description: null,
+    image: '',
+    canonical: Astro.url.href,
+}
 ---
 
-<BaseLayout mainWrapper={false}>
+<BaseLayout mainWrapper={false} seo={seo}>
     <main class='flex flex-col items-center gap-y-10 py-24 md:py-28 lg:gap-y-20'>
         <SectionHeading
             heading='My Work'
