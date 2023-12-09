@@ -45,4 +45,5 @@ export const siteConfig: SiteConfig = {
     origin: 'https://jonathanfalcon.com',
     links: siteLinks,
     socials: socialLinks,
+    googleAnalyticsId: 'G-576RL0XNE9',
 }

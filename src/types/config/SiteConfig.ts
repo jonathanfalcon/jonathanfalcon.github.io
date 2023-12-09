@@ -4,6 +4,7 @@ export type SiteConfig = {
     origin: string
     links: SiteLink[]
     socials: SocialLink[]
+    googleAnalyticsId: string
 }
 
 type SocialLink = {
