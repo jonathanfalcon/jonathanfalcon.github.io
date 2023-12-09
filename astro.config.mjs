@@ -6,8 +6,8 @@ import path from 'path'
 import rehypeShiftHeading from 'rehype-shift-heading'
 import wrap from 'rehype-wrap-all'
 import react from '@astrojs/react'
-
 import compress from 'astro-compress'
+import partytown from '@astrojs/partytown'
 
 // https://astro.build/config
 export default defineConfig({
@@ -54,8 +54,10 @@ export default defineConfig({
                 comments: false,
             },
             SVG: false,
-
             logger: 1,
+        }),
+        partytown({
+            config: { forward: ['dataLayer.push'] },
         }),
     ],
     vite: {
