@@ -8,6 +8,7 @@ import wrap from 'rehype-wrap-all'
 import react from '@astrojs/react'
 import compress from 'astro-compress'
 import partytown from '@astrojs/partytown'
+import githubCustomTheme from './github-custom.json'
 
 // https://astro.build/config
 export default defineConfig({
@@ -33,6 +34,7 @@ export default defineConfig({
                 },
             ],
         ],
+        shikiConfig: { theme: githubCustomTheme },
     },
     integrations: [
         tailwind({
