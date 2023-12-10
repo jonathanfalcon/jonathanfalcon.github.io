@@ -246,13 +246,11 @@ const getCurrentMode = () => {
 
 The Astro component provides the user interface for selecting color modes, ensuring a seamless and visually appealing experience.
 
-```javascript
-window.onload = () => {
-    document.querySelector('#color-mode').value = getCurrentMode()
-}
-```
-
 ```astro
+---
+import { Icon } from 'astro-icon'
+---
+
 <div class='flex items-center'>
     <label class='mr-5 text-slate-200' for='color-mode'>Color Mode</label>
     <div class='relative flex select-none items-center font-medium'>
@@ -275,4 +273,8 @@ window.onload = () => {
         </select>
     </div>
 </div>
+
+<script type='text/javascript' is:inline>
+    document.querySelector('#color-mode').value = getCurrentMode()
+</script>
 ```
