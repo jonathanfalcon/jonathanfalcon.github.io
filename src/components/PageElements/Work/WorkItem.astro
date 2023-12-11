@@ -48,12 +48,12 @@ function limitStringLength(inputString: string, maxLength: number): string {
     <article
         class='flex h-full flex-col gap-y-2 rounded-b-2xl bg-slate-100/80 p-5 transition-[backdrop-filter] duration-300 group-focus-within:backdrop-brightness-150 group-focus-within:backdrop-saturate-150 group-hover:backdrop-brightness-150 group-hover:backdrop-saturate-150 dark:bg-slate-900/80'
     >
-        <h2 class='font-heading text-2xl font-black lg:text-3xl'>
+        <h2 class='font-heading text-2xl font-black md:text-3xl'>
             <a class='after:absolute after:inset-0 focus:outline-none' href=`${slug}/`
                 >{frontmatter.title}</a
             >
         </h2>
-        <p class='mb-4 opacity-90 lg:text-lg'>{frontmatter.description}</p>
+        <p class='mb-4 opacity-90 md:text-lg'>{frontmatter.description}</p>
         {
             includeDetails && (
                 <span class='mt-auto flex w-fit items-center px-3 py-1.5 text-sm font-medium opacity-70'>
