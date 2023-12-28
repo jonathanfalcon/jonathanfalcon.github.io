@@ -12,7 +12,6 @@ type Props = {
     width?: number
     height?: number
     widths?: number[]
-    aspectRatio: string
     alt: string
     decoding?: HTMLAttributes<'image'>['decoding']
     loading?: HTMLAttributes<'image'>['loading']
@@ -27,7 +26,6 @@ const {
     width,
     height,
     widths = [900, 1400, 2000],
-    aspectRatio = '16:9',
     alt,
     decoding = 'async',
     loading,
@@ -41,9 +39,11 @@ let altSrc
 
 if (!src.src) {
     altSrc = src.then((result) => {
-        return result.default.src
+        return result.default
     })
 }
+
+const aspectRatio = (src.width / src.height) ?? (altSrc.width / altSrc.height)
 ---
 
 <Picture
@@ -59,8 +59,8 @@ if (!src.src) {
     fallbackFormat={fallbackFormat}
     class={className}
     pictureAttributes={pictureAttributes}
-    style={`aspect-ratio: ${aspectRatio.replace(':', '/')}; ${await blurHashImage(
-        src.src ?? (await altSrc),
+    style={`aspect-ratio: ${aspectRatio}; ${await blurHashImage(
+        src.src ?? (await altSrc.src),
         blurhashWidth,
     )}`}
 />
