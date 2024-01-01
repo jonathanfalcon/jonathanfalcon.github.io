@@ -17,7 +17,7 @@ export default {
             },
             fontFamily: {
                 heading: ['quincy-cf', ...defaultTheme.fontFamily.serif],
-                body: ['Inter var', ...defaultTheme.fontFamily.sans],
+                body: ['InterVariable', ...defaultTheme.fontFamily.sans],
                 mono: ['Fira Code', ...defaultTheme.fontFamily.mono],
             },
         },
