@@ -15,11 +15,11 @@ const selectId = isExample ? 'color-mode-example' : 'color-mode'
     <div class='relative flex select-none items-center font-medium'>
         <Icon
             name='ph:sun-bold'
-            class='pointer-events-none absolute left-2.5 inline h-5 w-5 text-slate-600 dark:hidden'
+            class='pointer-events-none absolute left-2.5 inline size-5 text-slate-600 dark:hidden'
         />
         <Icon
             name='ph:moon-fill'
-            class='pointer-events-none absolute left-2.5 hidden h-5 w-5 text-slate-400 dark:inline'
+            class='pointer-events-none absolute left-2.5 hidden size-5 text-slate-400 dark:inline'
         />
         <select
             onchange='setColorMode(this.value)'

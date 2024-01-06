@@ -49,10 +49,10 @@ For styling, I've embraced Tailwind CSS – a utility-first framework. Tailwind 
 
 <div className='not-prose flex flex-row items-center gap-x-4'>
     <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 dark:bg-slate-800'>
-        <Icon name='logos:javascript' class='aspect-square h-1/2 w-1/2' />
+        <Icon name='logos:javascript' class='aspect-square size-1/2' />
     </figure>
     <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 dark:bg-slate-800'>
-        <Icon name='logos:typescript-icon' class='aspect-square h-1/2 w-1/2' />
+        <Icon name='logos:typescript-icon' class='aspect-square size-1/2' />
     </figure>
 </div>
 
@@ -91,7 +91,7 @@ Typography is more than just words on a screen; it's a reflection of personality
 ## Logo: Symbolizing Reliability
 
 <figure className='not-prose mx-auto flex aspect-video h-full w-2/3 max-w-[376px] items-center justify-center rounded-lg bg-slate-200 p-10 dark:bg-slate-800'>
-    <Icon name='feather' class='aspect-square h-1/2 w-1/2' />
+    <Icon name='ph:feather-fill' class='aspect-square size-1/2' />
 </figure>
 
 A feather, reminiscent of a falcon, adds a personal touch to the brand. The choice of a feather symbolizes lightness, precision, and trust, aligning with the characteristics of a falcon. It becomes a visual representation of identity, embodying the values and aspirations that define my online presence.
@@ -108,10 +108,10 @@ As an example, view the two figures below. The left is an image, while the right
     <BlurHashPicture
         src={blurHashExample}
         alt='Screenshot of jonathanfalcon.com'
-        class='h-full w-full rounded-lg shadow-lg'
+        class='size-full rounded-lg shadow-lg'
     />
     <div
-        className='flex aspect-video h-full w-full rounded-lg shadow-lg'
+        className='flex aspect-video size-full rounded-lg shadow-lg'
         style={await blurHashImage(blurHashExample.src)}
         aria-label='BlurHash representation of the prior image.'
     ></div>
@@ -145,7 +145,7 @@ The decision to use BlurHashes as backgrounds is rooted in a concept of visual c
 
 In the pursuit of providing a personalized and comfortable browsing experience, my personal site not only embraces Dark Mode but extends the choice to users with options for Light, Dark, and System-based modes. This versatile approach goes beyond aesthetics, offering a tailored experience that adapts to individual preferences and the broader system settings. Go ahead and try it out. The same menu exists in the site's footer.
 
-<div className='mx-auto flex aspect-video h-full w-full max-w-[376px] items-center justify-center rounded-lg bg-slate-800'>
+<div className='mx-auto flex aspect-video size-full max-w-[376px] items-center justify-center rounded-lg bg-slate-800'>
     <ColorMode isExample={true} />
 </div>
 
@@ -255,11 +255,11 @@ import { Icon } from 'astro-icon/components'
     <div class='relative flex select-none items-center font-medium'>
         <Icon
             name='ph:sun-bold'
-            class='pointer-events-none absolute left-2.5 inline h-5 w-5 text-slate-600 dark:hidden'
+            class='pointer-events-none absolute left-2.5 inline size-5 text-slate-600 dark:hidden'
         />
         <Icon
             name='ph:moon-fill'
-            class='pointer-events-none absolute left-2.5 hidden h-5 w-5 text-slate-400 dark:inline'
+            class='pointer-events-none absolute left-2.5 hidden size-5 text-slate-400 dark:inline'
         />
         <select
             onchange='setColorMode(this.value)'

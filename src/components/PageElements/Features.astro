@@ -26,10 +26,10 @@ const { title, subtitle, features } = Astro.props
             features.map(({ icon, title, description }) => (
                 <div class='grid max-w-xl place-items-start items-center gap-y-0.5 md:auto-cols-auto md:gap-x-4 md:gap-y-0'>
                     <div
-                        class='flex aspect-square h-11 w-11 items-center justify-center rounded-full bg-emerald-700 p-2.5 text-slate-50'
+                        class='flex aspect-square size-11 items-center justify-center rounded-full bg-emerald-700 p-2.5 text-slate-50'
                         aria-hidden='true'
                     >
-                        <Icon name={icon} class='h-full w-full' />
+                        <Icon name={icon} class='size-full' />
                     </div>
 
                     <dt class='text-xl font-bold text-slate-800 dark:text-slate-200 lg:text-2xl'>
