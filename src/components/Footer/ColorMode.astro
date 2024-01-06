@@ -35,11 +35,11 @@ const selectId = isExample ? 'color-mode-example' : 'color-mode'
 
 {
     isExample ? (
-        <script type='text/javascript' is:inline>
+        <script is:inline>
             document.querySelector('#color-mode-example').value = getCurrentMode()
         </script>
     ) : (
-        <script type='text/javascript' is:inline>
+        <script is:inline>
             document.querySelector('#color-mode').value = getCurrentMode()
         </script>
     )
