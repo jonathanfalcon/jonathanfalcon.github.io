@@ -5,16 +5,6 @@ export default {
     content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
     theme: {
         extend: {
-            minHeight: {
-                'small-screen': ['100vh /* fallback */', '100svh'],
-                'small-screen-1/2': ['50vh /* fallback */', '50svh'],
-                'dynamic-screen': ['100vh /* fallback */', '100dvh'],
-            },
-            height: {
-                'small-screen': ['100vh /* fallback */', '100svh'],
-                'small-screen-1/2': ['50vh /* fallback */', '50svh'],
-                'dynamic-screen': ['100vh /* fallback */', '100dvh'],
-            },
             fontFamily: {
                 heading: ['quincy-cf', ...defaultTheme.fontFamily.serif],
                 body: ['InterVariable', ...defaultTheme.fontFamily.sans],
