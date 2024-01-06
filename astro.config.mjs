@@ -8,6 +8,7 @@ import wrap from 'rehype-wrap-all'
 import react from '@astrojs/react'
 import compress from 'astro-compress'
 import partytown from '@astrojs/partytown'
+import icon from 'astro-icon'
 import githubCustomTheme from './github-custom.json'
 
 // https://astro.build/config
@@ -61,6 +62,7 @@ export default defineConfig({
         partytown({
             config: { forward: ['dataLayer.push'] },
         }),
+        icon(),
     ],
     vite: {
         resolve: {

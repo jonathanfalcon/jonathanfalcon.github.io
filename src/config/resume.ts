@@ -12,7 +12,7 @@ export const educationList: EducationList = [
         university: 'The University of Texas at Austin',
         college: 'McCombs School of Business',
         icon: {
-            name: 'longhorn',
+            name: 'colleges/longhorn',
             color: 'text-[#BF5700]',
         },
         graduationDate: {
@@ -24,7 +24,7 @@ export const educationList: EducationList = [
         degree: 'Bachelor of Business Administration in Economics',
         university: 'Texas State University',
         icon: {
-            name: 'bobcat',
+            name: 'colleges/bobcat',
             color: 'text-[#571C1F] dark:text-[#AC9155]',
         },
         graduationDate: {
