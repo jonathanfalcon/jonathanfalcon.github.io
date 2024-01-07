@@ -20,7 +20,7 @@ const blurhash = await blurHashImage((profileImage as { src: string }).src)
     <Picture
         src={profileImage}
         alt='Jonathan Falcon smiling while looking away from the camera.'
-        class='mb-8 aspect-[3/2] w-[80%] max-w-[800px] rounded-3xl object-cover object-[left_50%_top_50%] shadow-stone-600/50 dark:shadow-slate-500/50 max-lg:mx-auto md:w-[80%] lg:mb-0 lg:ml-auto lg:aspect-[2/3] lg:w-full lg:max-w-[400px] lg:rounded-[4rem]'
+        class='mb-8 aspect-[3/2] w-[80%] max-w-[800px] rounded-3xl object-cover object-[left_50%_top_50%] shadow-stone-600/50 dark:shadow-slate-500/50 max-lg:mx-auto md:w-[80%] lg:mb-0 lg:ml-auto lg:aspect-[2/3] lg:w-full lg:max-w-[clamp(300px,80%,400px)] lg:rounded-[4rem]'
         widths={[768, 1500, 2500, 3000]}
         sizes='(max-width: 1499px) 768px, (max-width: 2499px) 1500px, (max-width: 2999px) 2500px, 3000px'
         aspectRatio={3 / 2}
@@ -53,7 +53,7 @@ const blurhash = await blurHashImage((profileImage as { src: string }).src)
                 class='justify-center gap-x-2 font-bold'
             >
                 <Icon name='simple-icons:linkedin' class='size-6' />
-                 Let's Connect
+                Let's Connect
             </Button>
             <Button
                 element='a'
@@ -64,7 +64,7 @@ const blurhash = await blurHashImage((profileImage as { src: string }).src)
                 class='justify-center gap-x-2 font-medium'
             >
                 <Icon name='ph:arrow-down-bold' class='size-6' />
-                 Why Me?
+                Why Me?
             </Button>
         </div>
     </div>
