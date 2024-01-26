@@ -4,7 +4,7 @@ import { siteConfig } from '../../config/siteConfig'
 import { Icon } from 'astro-icon/components'
 ---
 
-<nav role='navigation' aria-label='social'>
+<nav aria-label='social'>
     <ul class='flex items-center justify-center gap-x-5 text-lg font-semibold md:gap-x-8'>
         {
             siteConfig.socials.map(({ platform, url, icon }) => (
