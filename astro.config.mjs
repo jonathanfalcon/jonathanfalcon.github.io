@@ -64,11 +64,4 @@ export default defineConfig({
         }),
         icon(),
     ],
-    vite: {
-        resolve: {
-            alias: {
-                '@': path.resolve('./src'),
-            },
-        },
-    },
 })

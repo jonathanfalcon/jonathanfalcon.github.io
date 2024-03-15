@@ -4,7 +4,7 @@
     "strictNullChecks": true,
     "allowJs": true,
     "verbatimModuleSyntax": false,
-    "baseUrl": "/Users/jonathanfalcon/GitHub/jonathanfalcon.github.io",
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "src/*"
