@@ -17,8 +17,10 @@ import Slide8 from './images/Slide8.png'
 import Slide13 from './images/Slide13.png'
 import Slide16 from './images/Slide16.png'
 import TopTwoBoxIllustration from './images/top-two-box-illustration.svg'
-
-
+import Slide19 from './images/Slide19.png'
+import Slide20 from './images/Slide20.png'
+import Slide21 from './images/Slide21.png'
+import Slide23 from './images/Slide23.png'
 
 # Background
 
@@ -150,6 +152,67 @@ But we weren't satisfied just yet, so we moved on to k-means clustering.
 ## K-Means Clustering
 
 ### Incorporating Attitudinal Variables
+
+Before we could cluster, we needed to incorporate the attitudinal variables to ensure that we can make a meaningful comparison between the regression model/models before and after clustering.
+
+The two variables we added were the satisfaction with how environmental NGOs and also the government are addressing energy issues—(`satisfied_ngo_addressEnergyIssues`) and (`satisfied_gov_addressEnergyIssues`), respectively.
+
+<BlurHashPicture
+    src={Slide19}
+    alt='Slide 19, detailing the results of incorporating attitudinal variables.'
+/>
+
+We added these variables to the model and found:
+* Both income and the interaction between age and income remained significant.
+* Both income and the interaction between age and income’s magnitude remained nearly the same.
+* That satisfaction with how the government is addressing energy issues is not significant.
+* That satisfaction with how environmental NGOs are addressing energy issues is significant and is positively associated with intention to install solar panels.
+
+### Clustering
+
+We then used k-means clustering to segment the respondents based on the attitudinal variables.
+
+<BlurHashPicture
+    src={Slide20}
+    alt='Slide 19, detailing the results of the k-means clustering.'
+/>
+
+We found that the optimal number of clusters was three. The clusters were as follows:
+
+1. **Cluster 1**: Relatively low satisfaction with both government and environmental NGOs addressing energy issues.
+2. **Cluster 2**: Relatively high satisfaction with both government and environmental NGOs addressing energy issues.
+3. **Cluster 3**: Relatively high satisfaction with environmental NGOs addressing energy issues and relatively low satisfaction with government addressing energy issues.
+
+### Results
+
+After deciding on three clusters, we then ran a logistic regression model for each cluster.
+
+<BlurHashPicture
+    src={Slide21}
+    alt="Slide 21, detailing the results of the each cluster's respective regression model."
+/>
+
+We found that there were few statistically significant differences between the clusters, and overall, clustering provided little in the way of meaningful results.
+
+# Conclusion
+
+## Answering the Research Question
+
+We found that some demographics (e.g., income) may predict Americans' intent to install solar panels better than attitudes, though attitudes are not perfect predictors of intent. We also found that clustering based on attitudes did not provide meaningful results.
+
+Thus, the best model to predict Americans' intent to install solar panels was the logistic regression model that incorporated attitudinal variables.
+
+## Using the Model
+
+<BlurHashPicture
+    src={Slide23}
+    alt='Slide 23, detailing the suggestions for using the model.'
+/>
+
+Based on our findings, we suggested that if the cost of acquiring a customer is low, then this model may be worth using and carries little risk. However, if the cost is high, then the model may not be worth using, as it carries a high risk.
+
+
+
 
 
 
