@@ -32,8 +32,8 @@ const isDev = import.meta.env.DEV
 <html lang='en' class='motion-safe:scroll-smooth'>
     <Head seo={seo} />
     <body
-        class=`font-body font-normal flex flex-col min-h-svh
-        ${className ?? 'bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50'}`
+        class={`font-body font-normal flex flex-col min-h-svh
+        ${className ?? 'bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50'}`}
     >
         <Header darkHeader={darkHeader} />
         {isDev && <BreakpointOverlay />}

@@ -32,7 +32,7 @@ function limitStringLength(inputString: string, maxLength: number): string {
 ---
 
 <li
-    class=`group relative flex ${cardSize} flex-col rounded-2xl transition-transform duration-300 focus-within:scale-105 hover:scale-105 bg-emerald-700 self-start`
+    class={`group relative flex ${cardSize} flex-col rounded-2xl transition-transform duration-300 focus-within:scale-105 hover:scale-105 bg-emerald-700 self-start`}
     style={frontmatter.image?.src && (await blurHashImage(frontmatter.image.src))}
 >
     {
@@ -49,7 +49,7 @@ function limitStringLength(inputString: string, maxLength: number): string {
         class='flex h-full flex-col gap-y-2 rounded-b-2xl bg-slate-100/80 p-5 transition-[backdrop-filter] duration-300 group-focus-within:backdrop-brightness-150 group-focus-within:backdrop-saturate-150 group-hover:backdrop-brightness-150 group-hover:backdrop-saturate-150 dark:bg-slate-900/80'
     >
         <h2 class='font-heading text-2xl font-black md:text-3xl'>
-            <a class='after:absolute after:inset-0 focus:outline-none' href=`${slug}/`
+            <a class='after:absolute after:inset-0 focus:outline-none' href={`${slug}/`}
                 >{frontmatter.title}</a
             >
         </h2>
