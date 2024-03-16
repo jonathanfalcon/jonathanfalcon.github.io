@@ -46,4 +46,5 @@ export const siteConfig: SiteConfig = {
     links: siteLinks,
     socials: socialLinks,
     googleAnalyticsId: 'G-576RL0XNE9',
+    icon: 'ph:feather-fill',
 }

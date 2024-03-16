@@ -5,6 +5,7 @@ export type SiteConfig = {
     links: SiteLink[]
     socials: SocialLink[]
     googleAnalyticsId: string
+    icon: string
 }
 
 type SocialLink = {

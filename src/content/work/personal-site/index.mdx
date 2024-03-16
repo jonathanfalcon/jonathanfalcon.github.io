@@ -19,6 +19,7 @@ import { Icon } from 'astro-icon/components'
 import blurHashImage from '@/utils/blurhash/blur.js'
 import BlurHashPicture from '@/utils/blurhash/BlurHashPicture.astro'
 import ColorMode from '@/components/Footer/ColorMode.astro'
+import { siteConfig } from "@/config/siteConfig.js"
 
 import blurHashExample from './images/personal-site.png'
 import blurHashHeaderExample from './images/blurhash-header-example.png'
@@ -91,7 +92,7 @@ Typography is more than just words on a screen; it's a reflection of personality
 ## Icon
 
 <figure className='not-prose mx-auto flex aspect-video h-full w-2/3 max-w-[376px] items-center justify-center rounded-lg bg-slate-200 p-10 dark:bg-slate-800'>
-    <Icon name='ph:feather-fill' class='aspect-square size-1/2' />
+    <Icon name={siteConfig.icon} class='aspect-square size-1/2' />
 </figure>
 
 A feather, reminiscent of a falcon, adds a personal touch to the brand. The choice of a feather symbolizes lightness, precision, and trust, aligning with the characteristics of a falcon.
