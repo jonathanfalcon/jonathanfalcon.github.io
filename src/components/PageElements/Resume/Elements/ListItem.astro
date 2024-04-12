@@ -20,7 +20,7 @@ const withIcon = Astro.slots.has('withIcon')
                 {withIcon && (
                     <Icon
                         name={icon.name}
-                        class={'h-auto max-h-12 w-12 shrink-0 ' + icon.color ?? ''}
+                        class={`h-auto max-h-12 w-12 shrink-0 ${icon.color ?? ''}`}
                     />
                 )}
                 <div class='grow'>
