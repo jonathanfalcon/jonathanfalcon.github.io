@@ -2,6 +2,8 @@
 import { siteConfig } from '../../config/siteConfig'
 
 import { Icon } from 'astro-icon/components'
+
+import SpecialLink from '@/components/PageElements/Generic/SpecialLink.astro'
 ---
 
 <nav aria-label='social'>
@@ -9,15 +11,21 @@ import { Icon } from 'astro-icon/components'
         {
             siteConfig.socials.map(({ platform, url, icon }) => (
                 <li>
-                    <a
-                        class="relative z-0 flex p-3 text-slate-50/70 transition-colors duration-200 before:absolute before:inset-0 before:-z-10 before:scale-0 before:rounded-lg before:bg-emerald-700 before:transition-transform before:duration-200 before:content-[''] hover:text-slate-50/100 hover:before:scale-100 focus:text-slate-50/100 focus:outline-none focus:before:scale-100"
+                    <SpecialLink
+                        href={url}
                         aria-label={platform}
                         title={platform}
-                        href={url}
                         target='_blank'
+                        class={`
+                            flex
+                            p-3
+                            text-slate-50/70 transition-colors duration-200
+                            before:bg-emerald-700 hover:text-slate-50/100
+                            focus:text-slate-50/100 
+                        `}
                     >
                         <Icon name={icon} class='size-8 md:size-9' aria-hidden='true' />
-                    </a>
+                    </SpecialLink>
                 </li>
             ))
         }
