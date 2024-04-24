@@ -7,6 +7,7 @@ import ListItem from '@/components/PageElements/Resume/Elements/ListItem.astro'
 import IconText from '@/components/PageElements/Resume/Elements/IconText.astro'
 import { Icon } from 'astro-icon/components'
 import SpecialLink from '@/components/PageElements/Generic/SpecialLink.astro'
+import { createDateTime } from '@/utils/createDateTime'
 
 const seo = {
     title: 'Resume',
@@ -39,7 +40,15 @@ const seo = {
                                     {education.university}
                                     {education.college && `, ${education.college}`}
                                 </IconText>
-                                <IconText icon='date'>{`${education.graduationDate.month} ${education.graduationDate.year}`}</IconText>
+                                <IconText icon='date'>
+                                    <time
+                                        datetime={createDateTime.monthYear(
+                                            education.graduationDate,
+                                        )}
+                                    >
+                                        {`${education.graduationDate.month} ${education.graduationDate.year}`}
+                                    </time>
+                                </IconText>
                             </Fragment>
                         </ListItem>
                     ))
@@ -112,7 +121,15 @@ const seo = {
                             </Fragment>
                             <Fragment slot='withIcon'>
                                 <IconText icon='issuer'>{certification.issuer}</IconText>
-                                <IconText icon='date'>{`${certification.completionDate.month} ${certification.completionDate.year}`}</IconText>
+                                <IconText icon='date'>
+                                    <time
+                                        datetime={createDateTime.monthYear(
+                                            certification.completionDate,
+                                        )}
+                                    >
+                                        {`${certification.completionDate.month} ${certification.completionDate.year}`}
+                                    </time>
+                                </IconText>
                             </Fragment>
                         </ListItem>
                     ))
