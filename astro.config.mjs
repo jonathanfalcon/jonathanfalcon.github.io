@@ -6,7 +6,7 @@ import path from 'path'
 import rehypeShiftHeading from 'rehype-shift-heading'
 import wrap from 'rehype-wrap-all'
 import react from '@astrojs/react'
-import compress from 'astro-compress'
+import playformCompress from '@playform/compress'
 import partytown from '@astrojs/partytown'
 import icon from 'astro-icon'
 import githubCustomTheme from './github-custom.json'
@@ -44,7 +44,7 @@ export default defineConfig({
         mdx(),
         sitemap(),
         react(),
-        compress({
+        playformCompress({
             CSS: {
                 comments: false,
             },
