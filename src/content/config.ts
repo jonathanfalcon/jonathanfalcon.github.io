@@ -14,6 +14,7 @@ export const WorkSchema = z.object({
 
     containsCode: z.boolean().optional(),
     containsCharts: z.boolean().optional(),
+    containsMath: z.boolean().optional(),
 })
 
 const work = defineCollection({

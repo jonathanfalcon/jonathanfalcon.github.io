@@ -10,6 +10,8 @@ import playformCompress from '@playform/compress'
 import partytown from '@astrojs/partytown'
 import icon from 'astro-icon'
 import githubCustomTheme from './github-custom.json'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,6 +22,7 @@ export default defineConfig({
     },
     output: 'static',
     markdown: {
+        remarkPlugins: [remarkMath],
         rehypePlugins: [
             [
                 rehypeShiftHeading,
@@ -34,6 +37,7 @@ export default defineConfig({
                     wrapper: 'div.prose-table-wrapper',
                 },
             ],
+            rehypeKatex,
         ],
         shikiConfig: { theme: githubCustomTheme },
     },
