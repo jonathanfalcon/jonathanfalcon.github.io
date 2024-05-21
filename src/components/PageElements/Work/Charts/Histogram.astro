@@ -7,7 +7,6 @@ type Props = {
         x: string
         y: number
     }
-    format: {}
 }
 
 const { title, data } = Astro.props
@@ -34,7 +33,7 @@ const varName = title.toLowerCase().replace(/\s+/g, '_')
     set:html={`
   const ${varName} = document.getElementById('${id}');
   
-  Chart.defaults.font.family = "'Inter var', sans-serif";
+  Chart.defaults.font.family = "'InterVariable', sans-serif";
   Chart.defaults.font.size = 16;
   Chart.defaults.backgroundColor = '${colors.emerald[600]}';
   Chart.defaults.hoverBackgroundColor = '${colors.emerald[800]}';
