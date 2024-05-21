@@ -1,0 +1,157 @@
+---
+import colors from 'tailwindcss/colors'
+
+type Props = {
+    title: string
+    data: {
+        false_positive_rate: number[]
+        true_positive_rate: number[]
+        thresholds: number[]
+        auc: number
+    }
+}
+
+const { title, data } = Astro.props
+
+let rocData = []
+
+// Initialize an empty object to keep track of unique data points
+let uniqueDataPoints = {}
+
+// Loop through the arrays and create an object for each pair of values
+for (let i = 0; i < data.false_positive_rate.length; i++) {
+    let roundedFPR = data.false_positive_rate[i].toFixed(3)
+    let roundedTPR = data.true_positive_rate[i].toFixed(3)
+
+    // Check if the rounded pair of values is already in the uniqueDataPoints object
+    if (!(roundedFPR in uniqueDataPoints) || uniqueDataPoints[roundedFPR] !== roundedTPR) {
+        let dataPoint = {
+            false_positive_rate: roundedFPR,
+            true_positive_rate: roundedTPR,
+        }
+        rocData.push(dataPoint)
+
+        // Add the rounded pair of values to the uniqueDataPoints object
+        uniqueDataPoints[roundedFPR] = roundedTPR
+    }
+}
+
+const file = JSON.stringify(rocData)
+
+const id = title.toLowerCase().replace(/\s+/g, '-')
+const varName = title.toLowerCase().replace(/\s+/g, '_')
+---
+
+<figure>
+    <canvas
+        id={id}
+        class='aspect-square size-full rounded-lg bg-slate-800 p-6 md:p-8'
+        role='img'
+        aria-label={title}></canvas>
+    <figcaption class='text-right'>{title}</figcaption>
+</figure>
+
+<script
+    async
+    defer
+    is:inline
+    set:html={`
+  const ${varName} = document.getElementById('${id}');
+  
+  Chart.defaults.font.family = "'InterVariable', sans-serif";
+  Chart.defaults.font.size = 16;
+  Chart.defaults.backgroundColor = '${colors.emerald[600]}';
+  Chart.defaults.hoverBackgroundColor = '${colors.emerald[800]}';
+  Chart.defaults.color = '${colors.slate[50]}';
+
+  new Chart(${varName}, {
+    type: 'line',
+    data: {
+      datasets: [{
+        data: ${file},
+        parsing: {
+          xAxisKey: "false_positive_rate",
+          yAxisKey: "true_positive_rate"
+        },
+        borderColor: '${colors.emerald[600]}',
+        label: 'ROC Curve (AUC = ${data.auc.toFixed(2)})',
+      },
+      {
+        data: [{x: 0, y: 0}, {x: 1, y: 1}],
+        borderColor: '${colors.blue[500]}',
+        borderDash: [10, 10],
+      }]
+    },
+    options: {
+      aspectRatio: 1/1,
+      elements: {
+        point: {
+          radius: 0
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          grid: {
+            display: true,
+            borderColor: "${colors.slate[600]}",
+            color: "${colors.slate[700]}",
+            borderWidth: 3
+          },
+          title: {
+            display: true,
+            text: "False Positive Rate",
+            font: {
+              size: 20,
+              weight: 600
+            }
+          },
+          ticks: {
+            stepSize: 0.2,
+            maxTicksLimit: 6,
+            autoSkip: false
+          },
+          type: 'linear',
+          max: 1
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            display: true,
+            borderColor: "${colors.slate[600]}",
+            color: "${colors.slate[700]}",
+            borderWidth: 3
+          },
+          title: {
+            display: true,
+            text: "True Positive Rate",
+            font: {
+              size: 20,
+              weight: 600
+            }
+          },
+          ticks: {
+            stepSize: 0.2,
+            maxTicksLimit: 7,
+            callback: (value, index, values) => (index == (values.length-1)) ? undefined : value,
+          },
+          type: 'linear',
+          max: 1.05
+        },
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            filter: (legendItem, chartData) => legendItem.text !== undefined,
+          },
+        },
+        tooltip: {
+          enabled: false,
+        },
+      }
+    }
+  });
+`}
+/>
