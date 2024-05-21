@@ -1,0 +1,703 @@
+---
+title: Predictors of Teacher Retention
+description: This project is a Python adaptation (with tweaks and extensions) of my Empirical Data Analysis team's project. We use the School and Staffing Survey (SASS) and Teacher Follow-Up Survey (TFS) data files from 1999 to 2000 to understand predictors of teacher retention. Data is prepared, transformed, and then analyzed using a logistic regression model.
+location: Texas State University
+date: 2021-11-10
+category: Data Analysis
+containsCode: true
+containsCharts: true
+containsMath: true
+image: ./images/predictors-of-teacher-retention.jpg
+---
+
+import ROCCurve from '@/components/PageElements/Work/Charts/ROCCurve.astro'
+import ROCCurveData from './_files/roc_curve_data.json'
+
+# About the Data
+
+The data utilized in this analysis are sourced from the School and Staffing Survey (SASS) and Teacher Follow-Up Survey (TFS) results for the academic year 1999-2000. Specifically, the analysis draws from the public school and public teacher files within the SASS, as well as the current teacher and former teacher files within the TFS. These comprehensive datasets provide valuable insights into various aspects of the education system during the specified period.
+
+For access to the original data files, they can be found on the National Center for Education Statistics (NCES) website at the following link: https://nces.ed.gov/surveys/sass/dataprod9901.asp.
+
+# Reading in the Data
+
+For reference, here is a table describing the data files used.
+
+| Survey                                                                                                      | File Name                      |
+|-------------------------------------------------------------------------------------------------------------|--------------------------------|
+| [SASS (Public School)](https://nces.ed.gov/surveys/sass/dataprod9901.asp#:~:text=Public%20School,-ASCII)    | `sass_99_00_s3a_v1_0.sas7bdat` |
+| [SASS (Public Teacher)](https://nces.ed.gov/surveys/sass/dataprod9901.asp#:~:text=Public%20Teacher,-ASCII)  | `sass_99_00_s4a_v1_0.sas7bdat` |
+| [TFS (Former Teacher)](https://nces.ed.gov/surveys/sass/dataprod9901.asp#:~:text=Former%20Teacher)          | `sass_99_00_t2_v1_0.sas7bdat`  |
+| [TFS (Current Teacher)](https://nces.ed.gov/surveys/sass/dataprod9901.asp#:~:text=Current%20Teacher,-ASCII) | `sass_99_00_t3_v1_0.sas7bdat`  |
+
+For an unknown reason, the data files are only available in ASCII, SAS, and SPSS formats. As such, `pyreadstat` and its `read_sas7bdat()` function are helpful to access the data due to SAS being proprietary (not free).
+
+While `pandas` does have a `read_sas()` function, it is not as robust as `read_sas7bdat()` found in `pyreadstat`.
+
+```python
+import pyreadstat
+import pandas as pd
+import numpy as np
+```
+
+```python
+# Public school (SASS)
+sass_school_public, meta_sass_school_public = pyreadstat.read_file_multiprocessing(
+    pyreadstat.read_sas7bdat,
+    'sass_99_00_s3a_v1_0.sas7bdat',
+)
+
+# Public teacher (SASS)
+sass_teacher_public, meta_sass_teacher_public = pyreadstat.read_file_multiprocessing(
+    pyreadstat.read_sas7bdat,
+    'sass_99_00_s4a_v1_0.sas7bdat',
+)
+
+# Former teacher (TFS)
+tfs_teacher_former, meta_tfs_teacher_former = pyreadstat.read_file_multiprocessing(
+    pyreadstat.read_sas7bdat,
+    'sass_99_00_t2_v1_0.sas7bdat',
+)
+
+# Current teacher (TFS)
+tfs_teacher_current, meta_tfs_teacher_current =  pyreadstat.read_file_multiprocessing(
+    pyreadstat.read_sas7bdat,
+    'sass_99_00_t3_v1_0.sas7bdat',
+)
+```
+
+# Preparing the Data
+
+## Replacing `-8` and `-9` With `NaN`
+
+Depending on the reason, missing values are originally coded with `-8` and `-9`. Because the distinction makes no seemingly practical difference, we replace them with `np.NaN`. This prevents those values from unknowingly messing with results.
+
+```python
+# Public school (SASS)
+sass_school_public.replace([-8, -9], np.NaN, inplace = True)
+
+# Public teacher (SASS)
+sass_teacher_public.replace([-8, -9], np.NaN, inplace = True)
+
+# Former teacher (TFS)
+tfs_teacher_former.replace([-8, -9], np.NaN, inplace = True)
+
+# Current teacher (TFS)
+tfs_teacher_current.replace([-8, -9], np.NaN, inplace = True)
+```
+
+## Dropping Imputation Flag and `SURVEY` Columns
+
+While nice to have, the imputation flag columns are not necessary to operations. As such, we drop them to help improve performance in later operations. Additionally, the `SURVEY` column serves little purpose, since all data files will eventually be merged.
+
+```python
+# Public school (SASS)
+sass_school_public.drop(
+    list(sass_school_public.filter(regex = 'F_')) + ['SURVEY'],
+    axis = 1,
+    inplace = True
+)
+
+# Public teacher (SASS)
+sass_teacher_public.drop(
+    list(sass_teacher_public.filter(regex = 'F_')) + ['SURVEY'],
+    axis = 1,
+    inplace = True
+)
+
+# Former teacher (TFS)
+tfs_teacher_former.drop(
+    list(tfs_teacher_former.filter(regex = 'F_')) + ['SURVEY'],
+    axis = 1,
+    inplace = True
+)
+
+# Current teacher (TFS)
+tfs_teacher_current.drop(
+    list(tfs_teacher_current.filter(regex = 'F_')) + ['SURVEY'],
+    axis = 1,
+    inplace = True
+)
+```
+
+## Combining the TFS Data Files
+
+To accurately assess later if a teacher has stayed at the same school, relocated to another school, or left teaching altogether, we must combine the two data files. We use the `concat()` function to combine the two data frames.
+
+```python
+tfs_teacher_all = pd.concat([tfs_teacher_current, tfs_teacher_former])
+```
+
+## Merging SASS Data Files
+
+Combining `sass_teacher_public` and `sass_school_public` provides us with a more comprehensive understanding of factors that might have led to a teacher leaving teaching. Together, they allow for examination of both individual-level factors and school-level factors.
+
+We can describe this merge as a joining `sass_school_public` onto `sass_teacher_public` using `SCHCNTL` as the key. Due to the fact that many teachers can belong to one school, our validation reflects that (`m:1`). Lastly, we attach the suffix `_SCHOOL` to any overlapping columns from `sass_school_public`. We will use this when imputing values later.
+
+```python
+sass_teacherSchool_public = pd.merge(
+    sass_teacher_public,
+    sass_school_public,
+    on = 'SCHCNTL',
+    how = 'left',
+    validate = 'm:1',
+    suffixes = (None, '_SCHOOL')
+)
+```
+
+## Merging `sass_teacherSchool_public` and `tfs_teacher_all`
+
+Our last merge will isolate teachers that have taken the TFS, thus allowing the identification of stayers, movers, and leavers.
+
+We can describe this merge as joining `sass_school_public` and `sass_teacher_public` using `CNTLNUM` as the key. Given that each record in `sass_teacherSchool_public` corresponds to exactly one record in `tfs_teacher_all`, our validation reflects that one-to-one relationship (`1:1`). Finally, similar to the prior merge, we attach the suffix `_TFS` to any overlapping columns from `tfs_teacher_all`.
+
+```python
+public_teacher = pd.merge(
+    sass_teacherSchool_public,
+    tfs_teacher_all,
+    on = 'CNTLNUM',
+    how = 'inner',
+    validate = '1:1',
+    suffixes = (None, '_TFS')
+)
+```
+
+## Imputing Values and Pruning Columns
+
+The final step in data preparation is identifying opportunities for imputation. Here, imputation will be derived from overlapping columns identified in the prior merges, i.e., columns with either a `_SCHOOL` or `_TFS` suffix. The following operation identifies those columns.
+
+```python
+overlapping_columns = public_teacher.filter(regex='_TFS$').columns.append(
+    public_teacher.filter(regex='_SCHOOL$').columns
+).sort_values()
+
+overlapping_columns
+```
+
+```
+Index(['AGE_T_TFS', 'ASSIGN_TFS', 'COLBARG_TFS', 'ENRK12UG_TFS',
+       'MINENR_SCHOOL', 'MINTCH_SCHOOL', 'NEWTCH_TFS', 'NUMTCH_SCHOOL',
+       'PGMTYPE_SCHOOL', 'PGMTYPE_TFS', 'RACETH_T_TFS', 'REGION_SCHOOL',
+       'REGION_TFS', 'SCHCNTL_TFS', 'SCHLEVEL_SCHOOL', 'SCHLEVEL_TFS',
+       'SECTOR_SCHOOL', 'SECTOR_TFS', 'STU_TCH_SCHOOL', 'TOTEXPER_TFS',
+       'URBANIC_SCHOOL', 'URBANIC_TFS', 'YRTCHSC_TFS'],
+      dtype='object')
+```
+
+Now that overlapping columns have been identified, we should compare them against the original column they overlap. Save for missing values, the overlapping column's value should be identical to the original column's value for each observation. Thus, the following block:
+
+1. Initializes an empty dictionary `discrepant_columns`.
+2. Loops over every overlapping column to:
+    1. Determine the name of the original column (`original_column`).
+    2. Isolate rows with discrepancies where null values in the overlapping column are disregarded, storing them in `discrepancies`.
+    3. Count the number of discrepant rows (`discrepancies_count`) and locate where they are (`discrepancies_index`).
+    4. If there are discrepancies (`discrepancies_count > 0`), add an item to the dictionary, where the:
+        * **Key** is a tuple containing the names of the original and overlapping columns (`(original_column, overlapping_column)`).
+        * **Value** is the position of the discrepant rows (`discrepancies_index`).
+3. Cleans up the temporary variables.
+
+```python
+import re
+```
+```python
+discrepant_columns = {}
+
+for overlapping_column in overlapping_columns:
+    original_column = re.split(r'_TFS|_SCHOOL', overlapping_column)[0]
+
+    discrepancies = public_teacher.loc[
+        (public_teacher[original_column] != public_teacher[overlapping_column]) &
+        (public_teacher[overlapping_column].notnull()),
+        overlapping_column
+    ]
+
+    discrepancies_count, discrepancies_index = discrepancies.count(), discrepancies.index
+
+    if discrepancies_count > 0:
+        discrepant_columns[(original_column, overlapping_column)] = discrepancies_index
+
+
+del overlapping_column, original_column, discrepancies, discrepancies_count, discrepancies_index
+
+discrepant_columns
+```
+```
+{}
+```
+
+The dictionary `discrepant_columns` ends up being empty, meaning either the columns are identical or any discrepancies arose as a result of non-null values inside the overlapping columns. As such, there is no need for imputation.
+
+# Transforming the Data
+
+Before any analysis can be done, we must transform the data. Below are two tables, one for teacher-level variables and another for school-level variables.
+
+## Adding a New Data Frame
+
+To prevent overwriting or erasure, we create a new data frame (`final_data`) using `CNTLNUM` and `SCHCNTL`.
+
+```python
+final_data = pd.DataFrame(public_teacher[['CNTLNUM', 'SCHCNTL']])
+```
+
+## Creating a Custom `where_binary()` Function
+
+While it seems logical to go ahead and use `np.where()` for some of our transformations, it's important to remember that it also evaluates null values. This could drastically alter the results of any regressions where `NaN` was not preserved.
+
+Thus, we create the `where_binary()` function. It accepts a column and a condition. It first checks for `NaN` values and assigns `np.NaN` when true. When false, the condition is evaluated in a nested condition, assigning `1` if true and `0` if false.
+
+```python
+def where_binary(column: pd.Series, condition: pd.Series) -> np.ndarray:
+    return np.where(
+        pd.isnull(column), np.NaN,
+        np.where(condition, 1, 0)
+    )
+```
+
+## Teacher-Level Variables
+
+The teacher variables provide insights into individual teacher characteristics and experiences within the educational system.
+
+| Variable                                   | Source     | Description                                                             |
+|--------------------------------------------|------------|-------------------------------------------------------------------------|
+| `teacher_left`                             | `STATUS`   | Indicates whether the teacher has left their teaching position.         |
+| `teacher_age_50_or_above`                  | `AGE_T`    | Indicates whether the teacher is 50 years of age or older.              |
+| `teacher_experience_years`                 | `TOTEXPER` | Represents the total number of years the teacher has been teaching.     |
+| `teacher_age_50_or_above*teacher_experience_years` |  | Interaction term between teacher age 50 or above and teacher experience years. |
+| `teacher_management_perception`            | `MGMNT_T`  | Reflects the teacher's perception of the management at their school.    |
+| `teacher_female`                           | `T0356`    | Indicates whether the teacher is female.                                |
+| `teacher_race_ethnicity_AIAN_non_Hispanic`| `RACETH_T` | Indicates whether the teacher is American Indian or Alaska Native, non-Hispanic. |
+| `teacher_race_ethnicity_API_non_Hispanic` | `RACETH_T` | Indicates whether the teacher is Asian or Pacific Islander, non-Hispanic.       |
+| `teacher_race_ethnicity_Black_non_Hispanic`| `RACETH_T` | Indicates whether the teacher is Black, non-Hispanic.                    |
+| `teacher_race_ethnicity_Hispanic`         | `RACETH_T` | Indicates whether the teacher is Hispanic, regardless of race.          |
+| `teacher_paid_for_summer_school`          | `T0341`    | Indicates whether the teacher has received pay for summer school.        |
+| `teacher_salary_below_25000`              | `T0347`    | Indicates whether the teacher's salary is below $25,001.                |
+| `teacher_salary_above_45000`              | `T0347`    | Indicates whether the teacher's salary is $45,001 or above.             |
+| `teacher_union_member`                    | `T0355`    | Indicates whether the teacher is a member of a union.                   |
+
+
+### `teacher_left`
+
+To derive `teacher_left` from `STATUS`, we utilize a conditional statement. If the value in the `STATUS` column equals `'L'`, `1` is assigned to `teacher_left`, indicating that the teacher has left. Otherwise, if the condition is not met, `0` is assigned, indicating that the teacher has not left.
+
+```python
+final_data['teacher_left'] = where_binary(
+    public_teacher['STATUS'],
+    public_teacher['STATUS'] == 'L'
+)
+```
+
+### `teacher_age_50_or_above`
+
+By using a conditional, we assign to `teacher_age_50_or_above` `1` if `AGE_T` is `4` ("50 years or older") and `0` otherwise, save for missing values.
+
+```python
+final_data['teacher_age_50_or_above'] = where_binary(
+    public_teacher['AGE_T'],
+    public_teacher['AGE_T'] == 4
+)
+```
+
+### `teacher_experience_years`
+
+Here, `teacher_experience_years` is simply a copy of `TOTEXPER`. No transformation is needed.
+
+```python
+final_data['teacher_experience_years'] = public_teacher['TOTEXPER']
+```
+
+### `teacher_age_50_or_above*teacher_experience_years`
+
+This is simply an interaction term, thus we multiply `teacher_age_50_or_above` and `teacher_experience_years`.
+
+```python
+final_data['teacher_age_50_or_above*teacher_experience_years'] = final_data['teacher_age_50_or_above'] * final_data['teacher_experience_years']
+```
+
+### `teacher_management_perception`
+
+Similarly, `teacher_management_perception` is a copy of `MGMNT_T`, needing no transformation.
+
+```python
+final_data['teacher_management_perception'] = public_teacher['MGMNT_T']
+```
+
+### `teacher_female`
+
+To get `teacher_female`, we subtract one from `T0356`, as the binary category uses `1` for male and `2` for female.
+
+```python
+final_data['teacher_female'] = public_teacher['T0356'] - 1
+```
+
+### `teacher_race_ethnicity_AIAN_non_Hispanic`, `teacher_race_ethnicity_API_non_Hispanic`, `teacher_race_ethnicity_Black_non_Hispanic`, and `teacher_race_ethnicity_Hispanic`
+
+Because of the hassle using categorical variables in regressions, we separate `RACETH_T` into four variables. The category `4` (White, non-Hispanic) is used as the base case, meaning it is not included as a column/variable.
+
+```python
+final_data['teacher_race_ethnicity_AIAN_non_Hispanic'] = where_binary(
+    public_teacher['RACETH_T'],
+    public_teacher['RACETH_T'] == 1
+)
+
+final_data['teacher_race_ethnicity_API_non_Hispanic'] = where_binary(
+    public_teacher['RACETH_T'],
+    public_teacher['RACETH_T'] == 2
+)
+
+final_data['teacher_race_ethnicity_Black_non_Hispanic'] = where_binary(
+    public_teacher['RACETH_T'],
+    public_teacher['RACETH_T'] == 3
+)
+
+final_data['teacher_race_ethnicity_Hispanic'] = where_binary(
+    public_teacher['RACETH_T'],
+    public_teacher['RACETH_T'] == 5
+)
+```
+
+### `teacher_paid_for_summer_school`
+
+Because the desired base case is a teacher that hasn't been paid for teaching summer school, and the code for yes is `1`, another conditional must be used to derive `teacher_paid_for_summer_school` from `T0341`.
+
+```python
+final_data['teacher_paid_for_summer_school'] = where_binary(
+    public_teacher['T0341'],
+    public_teacher['T0341'] == 1
+)
+```
+
+### `teacher_salary_below_25000` and `teacher_salary_above_45000`
+
+Rather than encoding each marginal category for `T0347`, we took the highest and lowest categories and created `teacher_salary_below_25000` and `teacher_salary_above_45000` using conditionals. The codes for "Less than \$25,001" and "\$45,001 or more" inside `T0347` are `1` and `5`, respectively.
+
+```python
+final_data['teacher_salary_below_25000'] = where_binary(
+    public_teacher['T0347'],
+    public_teacher['T0347'] == 1
+)
+
+final_data['teacher_salary_above_45000'] = where_binary(
+    public_teacher['T0347'],
+    public_teacher['T0347'] == 5
+)
+```
+
+### `teacher_union_member`
+
+We derive `teacher_union_member` from `T0355`, using a teacher that is not a union member as the base case. Like `teacher_paid_for_summer_school`, `1` is yes, so we must use another conditional.
+
+```python
+final_data['teacher_union_member'] = where_binary(
+    public_teacher['T0355'],
+    public_teacher['T0355'] == 1
+)
+```
+
+## School-Level Variables
+
+The school variables offer key details about the educational institutions themselves.
+
+| Variable                | Source   | Description                              |
+|-------------------------|----------|------------------------------------------|
+| `school_has_secondary_grades`          | `SCHLEVEL` | Indicates whether the school has any grades within the range of 7 to 12.                   |
+| `school_minority_enrollment_above_20_percent` | `MINENR`   | Indicates whether the school's minority enrollment is above 20%. |
+| `school_conducts_drug_sweeps`        | `S0200`    | Indicates whether the school conducts drug sweeps.                    |
+| `school_has_daily_police_security`   | `S0201`    | Indicates whether the school has daily police or security presence.   |
+| `school_region_Northeast`            | `REGION`   | Indicates whether the school is located in the Northeast region.      |
+| `school_region_Midwest`              | `REGION`   | Indicates whether the school is located in the Midwest region.        |
+| `school_region_West`                 | `REGION`   | Indicates whether the school is located in the West region.           |
+
+### `school_has_secondary_grades`
+
+To derive `school_has_secondary_grades` from `SCHLEVEL`, we use another conditional, where `1` is returned when `SCHLEVEL` is `2` or higher.
+
+Looking at `SCHLEVEL`, we see that category `1` ("school has any of grades K–6 and none of grades 9–12") precludes schools having any of grades 9–12, and category `2` ("school has any of grades 7-12 and none of grades K-6") precludes schools having any of grades K–6. Thus, we can safely assume that category `3` ("all other cases") includes schools having at least any of grades 7–12 in addition to any of grades K–6. We overlook that distinction though, instead focusing on schools that have at least any grades within the range of 7 to 12.
+
+```python
+final_data['school_has_secondary_grades'] = where_binary(
+    public_teacher['SCHLEVEL'],
+    public_teacher['SCHLEVEL'] >= 2
+)
+```
+
+### `school_minority_enrollment_above_20_percent`
+
+To get `school_minority_enrollment_above_20_percent`, we subtract one from `MINENR_S`, as the binary category uses `1` for "fewer than 20% minority students" and `2` for "20% or more minority students."
+
+```python
+final_data['school_minority_enrollment_above_20_percent'] = public_teacher['MINENR_S'] - 1
+```
+
+### `school_conducts_drug_sweeps`
+
+We want to use schools that aren't currently conducting drug sweeps as the base case, so we use a conditional to assign `1` when `S0200` is `1` and `0` otherwise.
+
+```python
+final_data['school_conducts_drug_sweeps'] = where_binary(
+    public_teacher['S0200'],
+    public_teacher['S0200'] == 1
+)
+```
+
+### `school_has_daily_police_security`
+
+Similar to `school_conducts_drug_sweeps` want to use schools that don't have daily police/security presence as the base case, so we use a conditional to assign `1` when `S0201` is `1` and `0` otherwise.
+
+```python
+final_data['school_has_daily_police_security'] = where_binary(
+    public_teacher['S0201'],
+    public_teacher['S0201'] == 1
+)
+```
+
+### `school_region_Northeast`, `school_region_Midwest`, and `school_region_West`
+
+Similar to how we handled race/ethnicity, we separate `REGION` into distinct variables, where South is the base case. Unlike before though, `REGION` uses a string to represent its numbers, so we use, for example, `'1'` instead of `1`.
+
+```python
+final_data['school_region_Northeast'] = where_binary(
+    public_teacher['REGION'],
+    public_teacher['REGION'] == '1'
+)
+
+final_data['school_region_Midwest'] = where_binary(
+    public_teacher['REGION'],
+    public_teacher['REGION'] == '2'
+)
+
+final_data['school_region_West'] = where_binary(
+    public_teacher['REGION'],
+    public_teacher['REGION'] == '4'
+)
+```
+
+# Simple Logistic Regression
+
+## Equation
+
+We start with a simple logistic regression model like this:
+
+$$
+\begin{align}
+
+\text{logit}(P(\text{teacher\_left})) = \beta_0
+& + \beta_{1} \times \text{teacher\_age\_50\_or\_above} \notag \\
+& + \beta_{2} \times \text{teacher\_experience\_years} \notag \\
+& + \beta_{3} \times (\text{teacher\_age\_50\_or\_above} \times \text{teacher\_experience\_years}) \notag \\
+& + \beta_{4} \times \text{teacher\_management\_perception} \notag \\
+& + \beta_{5} \times \text{teacher\_female} \notag \\
+& + \beta_{6} \times \text{teacher\_race\_ethnicity\_AIAN\_non\_Hispanic} \notag \\
+& + \beta_{7} \times \text{teacher\_race\_ethnicity\_API\_non\_Hispanic} \notag \\
+& + \beta_{8} \times \text{teacher\_race\_ethnicity\_Black\_non\_Hispanic} \notag \\
+& + \beta_{9} \times \text{teacher\_race\_ethnicity\_Hispanic} \notag \\
+& + \beta_{10} \times \text{teacher\_paid\_for\_summer\_school} \notag \\
+& + \beta_{11} \times \text{teacher\_salary\_below\_25000} \notag \\
+& + \beta_{12} \times \text{teacher\_salary\_above\_45000} \notag \\
+& + \beta_{13} \times \text{teacher\_union\_member} \notag \\
+& + \beta_{14} \times \text{school\_has\_secondary\_grades} \notag \\
+& + \beta_{15} \times \text{school\_minority\_enrollment\_above\_20\_percent} \notag \\
+& + \beta_{16} \times \text{school\_conducts\_drug\_sweeps} \notag \\
+& + \beta_{17} \times \text{school\_has\_daily\_police\_security} \notag \\
+& + \beta_{18} \times \text{school\_region\_Northeast} \notag \\
+& + \beta_{19} \times \text{school\_region\_Midwest} \notag \\
+& + \beta_{20} \times \text{school\_region\_West} \notag \\
+
+\end{align}
+$$
+
+## Performing the Regression
+
+To perform this regression, we use the `logit()` function from `statsmodels.formula.api`. Due to the number of variables, we use Python's f-strings to help prevent misspellings or forgetting of variables. We assign to `y_var` our dependent variable `teacher_left`. `x_vars` is assigned all columns in `final_data` except for `y_var`, `CNTLNUM`, and `SCHCNTL`. The latter two are control numbers for teachers and schools, respectively. Finally, we assign to the `missing` parameter `'drop'` to drop all the observations with missing values.
+
+```python
+import statsmodels.formula.api as sm
+```
+
+```python
+y_var = 'teacher_left'
+x_vars = final_data.columns.drop([y_var, 'CNTLNUM', 'SCHCNTL'])
+
+logit_model = sm.logit(
+    f'{y_var} ~ {" + ".join(x_vars)}',
+    data = final_data,
+    missing = 'drop'
+).fit()
+```
+```
+Optimization terminated successfully.
+         Current function value: 0.558194
+         Iterations 6
+```
+
+## ROC Curve
+
+Here, we use `sklearn` and `matplotlib` to generate and plot the ROC curve.
+
+```python
+from sklearn.metrics import roc_curve, auc
+import matplotlib.pyplot as plt
+```
+
+```python
+false_positive_rate, true_positive_rate, thresholds = roc_curve(
+    final_data.dropna()[y_var],
+    logit_model.predict()
+)
+
+roc_auc = auc(false_positive_rate, true_positive_rate)
+```
+
+```python
+plt.figure()
+plt.plot(
+    false_positive_rate,
+    true_positive_rate,
+    color = 'green',
+    lw = 2,
+    label = 'ROC curve (area = %0.2f)' % roc_auc
+)
+plt.plot([0, 1], [0, 1], color = 'navy', lw = 2, linestyle = '--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend(loc ='lower right')
+plt.show()
+```
+
+<ROCCurve title='ROC Curve Logit' data={ROCCurveData} />
+
+## Results and Inferences
+
+### Results
+
+We now use the `summary()` method on `logit_model` to display the output from fitting the model. We also use an alpha of 0.05 to evaluate significance.
+
+```python
+logit_model.summary()
+```
+
+```
+                           Logit Regression Results
+==============================================================================
+Dep. Variable:           teacher_left   No. Observations:                 3828
+Model:                          Logit   Df Residuals:                     3807
+Method:                           MLE   Df Model:                           20
+Date:                            Date   Pseudo R-squ.:                  0.1722
+Time:                            Time   Log-Likelihood:                -2136.8
+converged:                       True   LL-Null:                       -2581.4
+Covariance Type:            nonrobust   LLR p-value:                1.525e-175
+====================================================================================================================
+                                                       coef    std err          z      P>|z|      [0.025      0.975]
+--------------------------------------------------------------------------------------------------------------------
+Intercept                                           -1.3920      0.232     -5.997      0.000      -1.847      -0.937
+teacher_age_50_or_above                             -0.1389      0.202     -0.688      0.492      -0.535       0.257
+teacher_experience_years                             0.0404      0.007      6.164      0.000       0.028       0.053
+teacher_age_50_or_above:teacher_experience_years     0.0447      0.009      4.737      0.000       0.026       0.063
+teacher_management_perception                       -0.0104      0.010     -1.015      0.310      -0.031       0.010
+teacher_female                                       0.0389      0.086      0.455      0.649      -0.129       0.207
+teacher_race_ethnicity_AIAN_non_Hispanic             0.3976      0.266      1.492      0.136      -0.125       0.920
+teacher_race_ethnicity_API_non_Hispanic              0.2846      0.271      1.050      0.294      -0.247       0.816
+teacher_race_ethnicity_Black_non_Hispanic            0.0132      0.165      0.080      0.936      -0.309       0.336
+teacher_race_ethnicity_Hispanic                     -0.4089      0.187     -2.181      0.029      -0.776      -0.042
+teacher_paid_for_summer_school                      -0.4059      0.113     -3.608      0.000      -0.626      -0.185
+teacher_salary_below_25000                           0.2948      0.105      2.808      0.005       0.089       0.501
+teacher_salary_above_45000                          -0.2320      0.116     -2.007      0.045      -0.459      -0.005
+teacher_union_member                                -0.3861      0.089     -4.354      0.000      -0.560      -0.212
+school_has_secondary_grades                          1.1125      0.093     12.022      0.000       0.931       1.294
+school_minority_enrollment_above_20_percent          0.0528      0.087      0.610      0.542      -0.117       0.222
+school_conducts_drug_sweeps                          0.0486      0.091      0.536      0.592      -0.129       0.226
+school_has_daily_police_security                    -0.2612      0.089     -2.949      0.003      -0.435      -0.088
+school_region_Northeast                             -0.1278      0.136     -0.939      0.348      -0.395       0.139
+school_region_Midwest                               -0.1006      0.108     -0.933      0.351      -0.312       0.111
+school_region_West                                   0.3898      0.104      3.757      0.000       0.186       0.593
+====================================================================================================================
+```
+
+#### `teacher_age_50_or_above`
+
+We might be tempted to say something regarding this variable; however, given its p-value (0.492) and consequent inclusion of zero in the 95% confidence interval, it is not statistically significant. Thus, we cannot say if a teacher being age fifty or above has any impact on a teacher leaving teaching.
+
+
+#### `teacher_experience_years`
+
+Looking at the effect of the number of years of teaching experience a given teacher has, we can say that, holding all else constant, the more years of experience a teacher has, the more likely they are to leave teaching. We base this off of the p-value (\<0.001).
+
+This interpretation aligns with our supposition, though it's important to note that we can't explicitly say *why* this is. Is it because a teacher's patience has worn thin or because they realized teaching isn't what they wanted to do?
+
+
+#### `teacher_age_50_or_above*teacher_experience_years`
+
+The interaction term for a teacher being age fifty or above and teaching experience in years shows a similar result. The p-value (\<0.001) indicates that it is statistically significant. Thus, holding all else constant, the more years of experience a teacher age fifty or above has, they more likely they are to leave teaching.
+
+Additionally, as this is an interaction term, the impact of years of experience on a teacher leaving is comparatively higher for those age fifty or above.
+
+We repeat our note: we cannot say why this is. Here, it could be that these teachers are that much closer to becoming eligible to retire.
+
+
+#### `teacher_management_perception`
+
+Given the p-value (0.310), we cannot say that a teacher's perception of management at their school influences a teacher leaving teaching.
+
+
+#### `teacher_female`
+
+The same rings true here based on the p-value (0.649). We cannot say, one way or another, that a teacher being female has any impact on that teacher leaving teaching.
+
+
+#### `teacher_race_ethnicity_AIAN_non_Hispanic`, `teacher_race_ethnicity_API_non_Hispanic`, `teacher_race_ethnicity_Black_non_Hispanic`, and `teacher_race_ethnicity_Hispanic`
+
+As a reminder, the base case for this group of variables is a White, non-Hispanic teacher. Compared to that base case, only a teacher that is Hispanic (regardless of race) is statistically significant based on p-value (0.029). Thus, holding all else constant, a teacher that is Hispanic (regardless of race) is less likely to leave teaching than that of a White, non-Hispanic teacher.
+
+
+#### `teacher_paid_for_summer_school`
+
+Based on the p-value (\<0.001), this variable is statistically significant, so we can say that, all else being equal, a teacher paid for teaching summer school is less likely to leave teaching.
+
+We found this to be in opposition to what we initially thought. While we cannot explicitly say why this is, we can provide a few suppositions using this as a proxy for determining if a teacher had taught summer school:
+
+1. Teachers that teach summer school are more experienced and thus less likely to leave in general.
+2. Teachers that teach summer school are more “dedicated” to teaching and thus more likely to continue teaching despite adverse climate, job conditions, etc.
+
+
+#### `teacher_salary_below_25000` and `teacher_salary_above_45000`
+
+Conversely, we found the results here aligned with expectations. The p-value (0.005) for a teacher with a salary below \$25,001, and the p-value (0.045) for a teacher with a salary above \$45,001 indicate that both variables are statistically significant. As such, we can say that a teacher with a salary below \$25,001 is more likely to leave teaching, while a teacher with a salary above \$45,001 is less likely to leave teaching, holding all else constant. We should note that these are in comparison to teachers with a salary between those two figures, not with each other.
+
+
+#### `teacher_union_member`
+
+Based on the p-value (\<0.001), this variable is statistically significant. Holding all else constant, we can say that a teacher being a member of a union is less likely to leave teaching.
+
+As before, we cannot offer an explicit explanation, but we can create a supposition using simplified economic concepts. In the absence of a union, the relationship between a school district and teachers can be described as a monopsony—a market with one buyer (the district) and many sellers (individual teachers). Here, the district has substantial buying power, allowing it to almost unilaterally set wages, terms, etc.
+
+To combat this, the sellers may effectively merge into a monopoly (union), consolidating selling power, often referred to as bargaining power for unions. This can enable negotiable wages, terms, etc. This new relationship between one buyer (the district) and one seller (the newfound union) would be roughly described as a bilateral monopoly. Analysis of this market structure often requires use of game theory or other methods for studying bargaining dynamics.
+
+
+#### `school_has_secondary_grades`
+
+As we expected, teachers who teach at schools with grades seven through twelve are, holding all else constant, more likely to leave teaching. This variable is also statistically significant based on the p-value (\<0.001).
+
+We reasoned that this may be a result of potentially increased stress resulting from teaching older students, though we can't say for sure.
+
+
+#### `school_minority_enrollment_above_20_percent`
+
+As this variable has a p-value of 0.542, it is not statistically significant. Thus, we cannot say a school with minority enrollment above 20% influences a teacher leaving teaching.
+
+
+#### `school_conducts_drug_sweeps`
+
+Likewise, with a p-value of 0.592, this variable is also not statistically significant, meaning we cannot say a school conducting drug sweeps has an impact on a teacher leaving teaching.
+
+
+#### `school_has_daily_police_security`
+
+With a p-value of 0.003, this variable is statistically significant, meaning can say, holding all else equal, that the daily presence of police/security in a school reduces the likelihood of a teacher leaving teaching.
+
+This was opposite what we initially thought. We supposed that daily presence of police/security would have indicated an unsafe school or otherwise made teachers feel unsafe. Rather, we possibly see the converse.
+
+
+#### `school_region_Northeast`, `school_region_Midwest`, and `school_region_West`
+
+As a reminder, the base case for this group of variables is school with region South. Compared to that base case, only a school with region West is statistically significant based on p-value (\<0.001). Thus, holding all else constant, a teacher in a West region school is less likely to leave teaching than that of a teacher in a South region school.
