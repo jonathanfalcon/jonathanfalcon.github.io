@@ -243,7 +243,7 @@ final_data = pd.DataFrame(public_teacher[['CNTLNUM', 'SCHCNTL']])
 
 While it seems logical to go ahead and use `np.where()` for some of our transformations, it's important to remember that it also evaluates null values. This could drastically alter the results of any regressions where `NaN` was not preserved.
 
-Thus, we create the `where_binary()` function. It accepts a column and a condition. It first checks for `NaN` values and assigns `np.NaN` when true. When false, the condition is evaluated in a nested condition, assigning `1` if true and `0` if false.
+Thus, we create the `where_binary()` function. It accepts a column and a condition (or rather a column of binary values). It first checks for `NaN` values and assigns `np.NaN` when true. When false, the condition is evaluated in a nested condition, assigning `1` if true and `0` if false.
 
 ```python
 def where_binary(column: pd.Series, condition: pd.Series) -> np.ndarray:
