@@ -41,16 +41,13 @@ function limitStringLength(inputString: string, maxLength: number): string {
 ---
 
 <li
-    class={`group relative flex ${cardSize} flex-col rounded-2xl transition-transform duration-300 focus-within:scale-105 hover:scale-105 bg-emerald-700 self-start
-    after:absolute after:inset-0
-    after:bg-slate-100/80 dark:after:bg-slate-900/80
-    after:z-0 *:z-10
-    after:rounded-2xl
-    after:transition-[backdrop-filter] after:duration-300
-    focus-within:after:backdrop-brightness-150 focus-within:after:backdrop-saturate-150
-    hover:after:backdrop-brightness-150 hover:after:backdrop-saturate-150`}
+    class={`group relative flex ${cardSize} flex-col rounded-2xl transition-transform duration-300 focus-within:scale-105 hover:scale-105 bg-emerald-700 self-start *:z-10`}
     style={frontmatter.image?.src && (await blurHashImage(frontmatter.image.src))}
 >
+    <div
+        class='absolute inset-0 z-0 rounded-2xl bg-slate-100/80 transition-[backdrop-filter] duration-300 group-focus-within:backdrop-brightness-150 group-focus-within:backdrop-saturate-150 group-hover:backdrop-brightness-150 group-hover:backdrop-saturate-150 dark:bg-slate-900/80'
+    >
+    </div>
     {
         frontmatter.image?.src && (
             <BlurHashPicture
