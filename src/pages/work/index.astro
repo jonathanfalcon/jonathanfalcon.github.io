@@ -27,7 +27,9 @@ const seo = {
             {
                 allWork
                     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-                    .map((work) => <WorkItem frontmatter={work.data} slug={work.slug} />)
+                    .map((work) => (
+                        <WorkItem frontmatter={work.data} slug={work.slug} headingLevel='h2' />
+                    ))
             }
         </ul>
     </main>
