@@ -53,6 +53,9 @@ export default defineConfig({
                 csso: {
                     comments: false,
                 },
+                lightningcss: {
+                    include: 262144, // VendorPrefixes: Prevents removal of -webkit-backdrop-filter in WorkItem.astro
+                },
             },
             HTML: {
                 'html-minifier-terser': {
