@@ -47,14 +47,17 @@ export default defineConfig({
         }),
         mdx(),
         sitemap(),
-        react(),
+        // react(), Currently unused
         playformCompress({
             CSS: {
-                comments: false,
+                csso: {
+                    comments: false,
+                },
             },
             HTML: {
-                removeAttributeQuotes: false,
-                removeComments: true,
+                'html-minifier-terser': {
+                    removeComments: true,
+                },
             },
             Image: false,
             JavaScript: {
