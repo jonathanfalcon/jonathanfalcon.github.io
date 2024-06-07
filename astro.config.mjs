@@ -2,9 +2,8 @@ import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
-import path from 'path'
 import rehypeShiftHeading from 'rehype-shift-heading'
-import wrap from 'rehype-wrap-all'
+import rehypeWrap from 'rehype-wrap-all'
 import react from '@astrojs/react'
 import playformCompress from '@playform/compress'
 import partytown from '@astrojs/partytown'
@@ -31,11 +30,13 @@ export default defineConfig({
                 },
             ],
             [
-                wrap,
-                {
-                    selector: 'table',
-                    wrapper: 'div.prose-table-wrapper',
-                },
+                rehypeWrap,
+                [
+                    {
+                        selector: 'table',
+                        wrapper: 'div.prose-table-wrapper',
+                    },
+                ],
             ],
             rehypeKatex,
         ],
