@@ -5,14 +5,18 @@ import { siteConfig } from '@/config/siteConfig'
 
 type Props = Seo
 
-const { seo } = Astro.props
+const { seo }: Seo = Astro.props
 
 const openGraph = {
     basic: {
         title: seo.openGraph?.basic?.title ?? seo.title ?? siteConfig.title,
-        type: seo.openGraph?.basic?.format ?? 'website',
+        type: seo.openGraph?.basic?.type ?? 'website',
         image: seo.image?.src ?? `${Astro.url.origin}/opengraph.jpg`,
         url: seo.canonical,
+    },
+    optional: {
+        description: seo.description ?? siteConfig.description,
+        siteName: siteConfig.title,
     },
 }
 
