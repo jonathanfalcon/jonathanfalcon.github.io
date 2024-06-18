@@ -15,7 +15,7 @@ astro.config.ts
 package-lock.json
 package.json
 
-tailwind.config.mjs
+tailwind.config.ts
 
 tsconfig.json
 
