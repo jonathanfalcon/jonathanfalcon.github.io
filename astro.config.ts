@@ -34,7 +34,7 @@ export default defineConfig({
                 [
                     {
                         selector: 'table',
-                        wrapper: 'div.prose-table-wrapper',
+                        wrapper: 'div.relative.overflow-x-auto',
                     },
                 ],
             ],
