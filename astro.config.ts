@@ -3,7 +3,7 @@ import tailwind from '@astrojs/tailwind'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import rehypeShiftHeading from 'rehype-shift-heading'
-import rehypeWrap from 'rehype-wrap-all'
+import rehypeWrapAll from 'rehype-wrap-all'
 import react from '@astrojs/react'
 import playformCompress from '@playform/compress'
 import partytown from '@astrojs/partytown'
@@ -30,7 +30,7 @@ export default defineConfig({
                 },
             ],
             [
-                rehypeWrap,
+                rehypeWrapAll,
                 [
                     {
                         selector: 'table',
@@ -65,10 +65,14 @@ export default defineConfig({
             },
             Image: false,
             JavaScript: {
-                comments: false,
+                terser: {
+                    format: {
+                        comments: false,
+                    },
+                },
             },
             SVG: false,
-            logger: 1,
+            Logger: 1,
         }),
         partytown({
             config: { forward: ['dataLayer.push'] },

@@ -10,7 +10,7 @@ node_modules
 .prettierignore
 .prettierrc.cjs
 
-astro.config.mjs
+astro.config.ts
 
 package-lock.json
 package.json
