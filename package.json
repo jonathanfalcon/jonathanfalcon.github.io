@@ -25,7 +25,7 @@
     "@iconify-json/ph": "^1.1.9",
     "@iconify-json/simple-icons": "^1.1.86",
     "@iconify-json/vscode-icons": "^1.1.32",
-    "@playform/compress": "^0.0.10",
+    "@playform/compress": "^0.0.13",
     "@types/react": "^18.2.31",
     "@types/react-dom": "^18.2.14",
     "astro": "^4.3.7",
@@ -50,12 +50,12 @@
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "blurhash": "^2.0.5",
-    "eslint": "^8.0.0",
-    "eslint-plugin-astro": "^0.34.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-astro": "^1.2.2",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^3.0.3",
-    "prettier-plugin-astro": "^0.13.0",
-    "prettier-plugin-tailwindcss": "^0.5.6"
+    "prettier-plugin-astro": "^0.14.0",
+    "prettier-plugin-tailwindcss": "^0.6.5"
   }
 }
