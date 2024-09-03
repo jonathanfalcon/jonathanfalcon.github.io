@@ -13,11 +13,12 @@ type Props = {
     height?: number
     widths?: number[]
     alt: string
-    decoding?: HTMLAttributes<'image'>['decoding']
-    loading?: HTMLAttributes<'image'>['loading']
+    decoding?: HTMLAttributes<'img'>['decoding']
+    loading?: HTMLAttributes<'img'>['loading']
     formats: ValidImageFormats[]
     fallbackFormat: ValidImageFormats
     class?: HTMLAttributes<'picture'>['class']
+    pictureAttributes?: HTMLAttributes<'picture'>
 }
 
 const {
