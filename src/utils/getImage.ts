@@ -16,7 +16,7 @@ export const getImage = async (imagePath: string): Promise<ImageMetadata> => {
         const src = await images[imagePath]()
 
         return src.default
-    } catch (error) {
+    } catch {
         throw new Error(`Image not found: ${imagePath}`)
     }
 }
