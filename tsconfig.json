@@ -8,9 +8,6 @@
     "paths": {
       "@/*": [
         "src/*"
-      ],
-      "@workImages/*": [
-        "src/assets/images/work/*"
       ]
     },
     "jsx": "react-jsx",
