@@ -4,9 +4,6 @@ node_modules
 .gitignore
 .changeset
 
-.eslintrc.cjs
-.eslintignore
-
 .prettierignore
 .prettierrc.cjs
 
