@@ -1,6 +1,9 @@
 import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
 
+import tailwindTypography from '@tailwindcss/typography'
+import tailwindForms from '@tailwindcss/forms'
+
 export default {
     content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}', './astro.config.ts'],
     theme: {
@@ -17,6 +20,6 @@ export default {
             },
         },
     },
-    plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')],
+    plugins: [tailwindTypography, tailwindForms],
     darkMode: 'class',
 } satisfies Config
