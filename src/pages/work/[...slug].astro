@@ -3,7 +3,6 @@ import { Seo } from '@/types/metadata/Seo'
 import { getCollection } from 'astro:content'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import PostLayout from '@/layouts/PostLayout/PostLayout.astro'
-import { getImage } from 'astro:assets'
 
 export async function getStaticPaths() {
     const workEntries = await getCollection('work')
