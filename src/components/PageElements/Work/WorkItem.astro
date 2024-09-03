@@ -21,23 +21,6 @@ const {
 }: Props = Astro.props
 
 const HeadingTag = headingLevel
-
-function limitStringLength(inputString: string, maxLength: number): string {
-    if (inputString.length <= maxLength) {
-        return inputString
-    }
-
-    // Find the last space within the limit
-    const lastSpaceIndex = inputString.lastIndexOf(' ', maxLength)
-
-    // If there is no space, just truncate the string
-    if (lastSpaceIndex === -1) {
-        return inputString.slice(0, maxLength) + '...'
-    }
-
-    // Otherwise, truncate at the last space
-    return inputString.slice(0, lastSpaceIndex) + '...'
-}
 ---
 
 <li
