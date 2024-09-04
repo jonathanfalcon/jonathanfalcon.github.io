@@ -1,32 +1,35 @@
 ---
 import { Picture } from 'astro:assets'
 import blurHashImage from './blur'
+import { getImage } from '../getImage'
 
 import { HTMLAttributes } from 'astro/types'
-
-type ValidImageFormats = 'webp' | 'avif' | 'png' | 'jpg' | 'jpeg'
+import { ImageMetadata, ImageInputFormat } from 'astro'
 
 type Props = {
-    src: string
+    src: string | ImageMetadata
     blurhashWidth?: number
     width?: number
     height?: number
     widths?: number[]
+    sizes?: string
     alt: string
     decoding?: HTMLAttributes<'img'>['decoding']
     loading?: HTMLAttributes<'img'>['loading']
-    formats: ValidImageFormats[]
-    fallbackFormat: ValidImageFormats
+    formats?: ImageInputFormat[]
+    fallbackFormat?: ImageInputFormat
     class?: HTMLAttributes<'picture'>['class']
     pictureAttributes?: HTMLAttributes<'picture'>
+    deriveAspectRatio?: boolean
 }
 
 const {
-    src,
+    src: baseSrc,
     blurhashWidth = 20,
     width,
     height,
     widths = [900, 1400, 2000],
+    sizes,
     alt,
     decoding = 'async',
     loading,
@@ -34,17 +37,14 @@ const {
     fallbackFormat = 'webp',
     class: className,
     pictureAttributes,
+    deriveAspectRatio = true,
 } = Astro.props
 
-let altSrc
+const src = typeof baseSrc === 'string' ? await getImage(baseSrc) : baseSrc
 
-if (!src.src) {
-    altSrc = src.then((result) => {
-        return result.default
-    })
-}
-
-const aspectRatio = (src.width / src.height) ?? (altSrc.width / altSrc.height)
+const aspectRatioStyle = `aspect-ratio: ${src.width / src.height};`
+const backgroundStyle = await blurHashImage(src.src, blurhashWidth)
+const style = deriveAspectRatio ? `${aspectRatioStyle} ${backgroundStyle}` : backgroundStyle
 ---
 
 <Picture
@@ -52,7 +52,7 @@ const aspectRatio = (src.width / src.height) ?? (altSrc.width / altSrc.height)
     width={width}
     height={height}
     widths={widths}
-    aspectRatio={aspectRatio}
+    sizes={sizes}
     alt={alt}
     decoding={decoding}
     loading={loading}
@@ -60,8 +60,5 @@ const aspectRatio = (src.width / src.height) ?? (altSrc.width / altSrc.height)
     fallbackFormat={fallbackFormat}
     class={className}
     pictureAttributes={pictureAttributes}
-    style={`aspect-ratio: ${aspectRatio}; ${await blurHashImage(
-        src.src ?? (await altSrc.src),
-        blurhashWidth,
-    )}`}
+    style={style}
 />
