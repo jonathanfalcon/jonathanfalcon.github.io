@@ -3,14 +3,14 @@ node_modules
 .github
 .gitignore
 .changeset
+.astro
+.idea
+.vscode
 
 .prettierignore
-.prettierrc.cjs
-
 
 package-lock.json
 package.json
-
 
 tsconfig.json
 

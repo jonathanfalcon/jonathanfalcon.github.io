@@ -16,7 +16,7 @@ export default [
     },
     ...astro.configs.recommended,
     {
-        files: ['**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}'],
+        files: ['**/*.{js,mjs,cjs,jsx,ts,tsx}'],
         ...react.configs.flat.recommended,
         settings: {
             react: {
@@ -25,6 +25,6 @@ export default [
         },
     },
     {
-        ignores: ['dist', 'node_modules', '**/.*'],
+        ignores: ['dist', 'node_modules', 'project_assets', '**/.*', '*/env.d.ts'],
     },
 ]
