@@ -29,7 +29,7 @@ const isDev = import.meta.env.DEV
     <link rel='preconnect' href='https://fonts.googleapis.com' />
     <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
 
-    <SEO seo={{ ...seo, charset: 'utf-8' }} />
+    <SEO {...seo} charset='utf-8' />
 
     {!isDev && <GoogleAnalytics />}
 
