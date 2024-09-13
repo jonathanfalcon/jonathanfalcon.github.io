@@ -40,7 +40,9 @@ const isDev = import.meta.env.DEV
         {
             mainWrapper ? (
                 <main
-                    class={firstItemPadding && '[&>:first-child]:pt-24 [&>:first-child]:md:pt-28'}
+                    class={
+                        firstItemPadding ? '[&>:first-child]:pt-24 [&>:first-child]:md:pt-28' : null
+                    }
                 >
                     <slot />
                 </main>
