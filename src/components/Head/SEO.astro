@@ -31,9 +31,7 @@ const openGraphMain = {
 }
 
 const twitterMain = {
-    card: 'summary_large_image',
-    site: null,
-    creator: null,
+    card: twitter?.card ?? 'summary_large_image',
     image: image?.src ?? '',
     imageAlt: image?.alt ?? '',
     description: description ?? siteConfig.description,
@@ -50,4 +48,5 @@ const twitterMain = {
     nofollow={nofollow}
     charset={charset}
     openGraph={openGraphMain}
+    twitter={twitterMain}
 />
