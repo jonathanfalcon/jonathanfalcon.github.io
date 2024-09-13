@@ -1,43 +1,53 @@
 ---
-import { SEO } from 'astro-seo'
+import { SEO as AstroSEO } from 'astro-seo'
 import { Seo } from '@/types/metadata/Seo'
 import { siteConfig } from '@/config/siteConfig'
 
 type Props = Seo
 
-const { seo }: Seo = Astro.props
+const {
+    title,
+    description,
+    charset,
+    canonical,
+    noindex,
+    image,
+    nofollow,
+    openGraph,
+    twitter,
+}: Seo = Astro.props
 
-const openGraph = {
+const openGraphMain = {
     basic: {
-        title: seo.openGraph?.basic?.title ?? seo.title ?? siteConfig.title,
-        type: seo.openGraph?.basic?.type ?? 'website',
-        image: seo.image?.src ?? `${Astro.url.origin}/opengraph.jpg`,
-        url: seo.canonical,
+        title: openGraph?.basic?.title ?? title ?? siteConfig.title,
+        type: openGraph?.basic?.type ?? 'website',
+        image: image?.src ?? `${Astro.url.origin}/opengraph.jpg`,
+        url: canonical,
     },
     optional: {
-        description: seo.description ?? siteConfig.description,
+        description: description ?? siteConfig.description,
         siteName: siteConfig.title,
     },
 }
 
-const twitter = {
+const twitterMain = {
     card: 'summary_large_image',
     site: null,
     creator: null,
-    image: seo.image?.src ?? '',
-    imageAlt: seo.image?.alt ?? '',
-    description: seo.description ?? siteConfig.description,
+    image: image?.src ?? '',
+    imageAlt: image?.alt ?? '',
+    description: description ?? siteConfig.description,
 }
 ---
 
-<SEO
-    title={seo.title}
+<AstroSEO
+    title={title}
     titleTemplate={`%s - ${siteConfig.title}`}
     titleDefault={siteConfig.title}
-    description={seo.description ?? siteConfig.description}
-    canonical={seo.canonical}
-    noindex={seo.noindex}
-    nofollow={seo.nofollow}
-    charset={seo.charset}
-    openGraph={openGraph}
+    description={description ?? siteConfig.description}
+    canonical={canonical}
+    noindex={noindex}
+    nofollow={nofollow}
+    charset={charset}
+    openGraph={openGraphMain}
 />

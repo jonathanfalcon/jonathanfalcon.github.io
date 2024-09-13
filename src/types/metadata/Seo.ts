@@ -1,3 +1,5 @@
+import { ImageMetadata } from 'astro'
+
 export type Seo = {
     title?: string
     description?: string
@@ -5,13 +7,7 @@ export type Seo = {
     canonical?: URL | string
     nofollow?: boolean
     noindex?: boolean
-    image?: {
-        src: URL | string
-        format: string
-        width: string
-        height: string
-        alt: string
-    }
+    image?: ImageMetadata & { alt: string }
     openGraph?: {
         basic: {
             title?: string
