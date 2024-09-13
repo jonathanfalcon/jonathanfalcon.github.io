@@ -19,7 +19,7 @@ const seo: Seo = {
     title: entry.data.title,
     description: entry.data.description,
     canonical: Astro.url.href,
-    image: { ...entry.data.image, alt: entry.data.title },
+    image: entry.data.image && { ...entry.data.image, alt: entry.data.title },
     openGraph: {
         basic: {
             type: 'article',

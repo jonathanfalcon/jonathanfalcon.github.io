@@ -28,7 +28,7 @@ const {
 
 type ColorMap = {
     [color in Props['color']]: {
-        [scheme in Props['colorScheme']]: string
+        [scheme in Exclude<Props['colorScheme'], undefined>]: string
     }
 }
 

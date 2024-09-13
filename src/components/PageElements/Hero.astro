@@ -42,7 +42,7 @@ import Button from './Generic/Button.astro'
         <div class='mx-auto mt-8 flex flex-col gap-4 max-lg:justify-evenly md:flex-row'>
             <Button
                 element='a'
-                href={siteConfig.socials.find((social) => social.platform === 'LinkedIn').url}
+                href={siteConfig.socials.find((social) => social.platform === 'LinkedIn')?.url}
                 color='indigo'
                 size='xl'
                 class='justify-center gap-x-2 font-bold'
