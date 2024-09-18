@@ -25,10 +25,8 @@
     const systemMode = window.matchMedia('(prefers-color-scheme: dark)')
 
     // Checks current mode on page load
-    if (localStorage.mode === 'dark') {
-        setCurrentMode('dark')
-    } else if (localStorage.mode === 'light') {
-        setCurrentMode('light')
+    if (localStorage.mode === 'dark' || localStorage.mode === 'light') {
+        setCurrentMode(localStorage.mode)
     } else if (!('mode' in localStorage)) {
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
             setCurrentMode('dark')
