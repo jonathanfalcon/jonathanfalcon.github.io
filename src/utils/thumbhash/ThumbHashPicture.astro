@@ -1,0 +1,55 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import type { ImageMetadata, ImageInputFormat } from 'astro'
+
+import { getImage } from '../getImage'
+import { getThumbHashDataUrl } from './thumbhash'
+import { Picture } from 'astro:assets'
+
+interface Props {
+    src: string | ImageMetadata
+    hashDimension?: number
+    hashSaturation?: number
+    width?: number
+    height?: number
+    widths?: number[]
+    sizes?: string
+    alt: string
+    decoding?: HTMLAttributes<'img'>['decoding']
+    loading?: HTMLAttributes<'img'>['loading']
+    formats?: ImageInputFormat[]
+    fallbackFormat?: ImageInputFormat
+    class?: HTMLAttributes<'picture'>['class']
+    pictureAttributes?: HTMLAttributes<'picture'>
+    deriveAspectRatio?: boolean
+}
+
+const {
+    src: baseSrc,
+    hashDimension,
+    hashSaturation,
+    widths = [900, 1400, 2000],
+    decoding = 'async',
+    formats = ['avif'],
+    fallbackFormat = 'webp',
+    deriveAspectRatio = true,
+    ...props
+} = Astro.props
+
+const image = typeof baseSrc === 'string' ? await getImage(baseSrc) : baseSrc
+
+const aspectRatioStyle = `aspect-ratio: ${image.width / image.height};`
+const base64DataUrl = await getThumbHashDataUrl(image.src, hashDimension, hashSaturation)
+const backgroundStyle = `background: center / cover url(${base64DataUrl});`
+const style = deriveAspectRatio ? `${aspectRatioStyle} ${backgroundStyle}` : backgroundStyle
+---
+
+<Picture
+    src={image}
+    widths={widths}
+    decoding={decoding}
+    formats={formats}
+    fallbackFormat={fallbackFormat}
+    style={style}
+    {...props}
+/>
