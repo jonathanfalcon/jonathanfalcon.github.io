@@ -12,9 +12,14 @@ import { processImage, convertBase64PngToWebp } from './processImage'
 export const getThumbHashDataUrl = async (
     src: string,
     adjustedDimension: number = 10,
-    saturation: number = 1.75,
+    saturation: number = 1.5,
 ): Promise<string | undefined> => {
     try {
+        if (adjustedDimension > 100) {
+            console.error('Adjusted dimension must be less than or equal to 100. Will use 100 instead.')
+            adjustedDimension = 100
+        }
+
         const processedImage = await processImage(src, adjustedDimension, saturation)
 
         if (!processedImage) {

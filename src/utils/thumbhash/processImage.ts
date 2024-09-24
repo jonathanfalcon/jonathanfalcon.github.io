@@ -47,11 +47,6 @@ export const processImage = async (
     adjustedDimension: number = 20,
     saturation: number = 1.75,
 ): Promise<ProcessedImage | undefined> => {
-    if (adjustedDimension > 100) {
-        console.error('Adjusted dimension must be less than or equal to 100')
-        return
-    }
-
     try {
         const absolutePath = resolveAbsolutePath(src)
 
