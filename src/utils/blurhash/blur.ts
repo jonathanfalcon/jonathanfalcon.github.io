@@ -1,6 +1,6 @@
 import sharp from 'sharp'
 import { decode, encode } from 'blurhash'
-import path from 'path'
+import path from 'node:path'
 
 interface BlurHashData {
     data: Uint8ClampedArray
@@ -9,20 +9,33 @@ interface BlurHashData {
     hash: string
 }
 
+/**
+ * Resolves the absolute path of an image file using the provided path from an image metadata object's `src` property.
+ *
+ * The function will resolve the path depending on the environment:
+ * - Development: base directory is `.` (`/src` is already included in `pathToResolve`)
+ * - Production: base directory is `/dist`
+ *
+ * @param pathToResolve Path to resolve
+ * @returns Resolved absolute path
+ */
+const resolveAbsolutePath = (pathToResolve: string) => {
+    const baseDirectory = import.meta.env.PROD ? './dist' : '.'
+
+    const relevantPath = pathToResolve.substring(pathToResolve.indexOf('/src'))
+
+    const joinedPath = path.join(baseDirectory, relevantPath)
+
+    return path.resolve(joinedPath).split('?')[0]
+}
+
 export default async function blurHashImage(
     imagePath: string,
     adjustedWidth: number = 20,
 ): Promise<string> {
     const processImage = async (): Promise<BlurHashData | undefined> => {
         try {
-            const URL = path
-                .resolve(
-                    path.join(
-                        import.meta.env.PROD ? './dist' : '.',
-                        imagePath.substring(imagePath.indexOf('/src')),
-                    ),
-                )
-                .split('?')[0]
+            const URL = resolveAbsolutePath(imagePath)
 
             const image = sharp(URL).resize(adjustedWidth).modulate({ saturation: 1.5 })
 
