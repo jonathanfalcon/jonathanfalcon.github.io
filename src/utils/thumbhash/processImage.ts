@@ -45,7 +45,7 @@ const resolveAbsolutePath = (pathToResolve: string) => {
 export const processImage = async (
     src: string,
     adjustedDimension: number = 20,
-    saturation: number = 1.75,
+    saturation: number = 1.5,
 ): Promise<ProcessedImage | undefined> => {
     try {
         const absolutePath = resolveAbsolutePath(src)
