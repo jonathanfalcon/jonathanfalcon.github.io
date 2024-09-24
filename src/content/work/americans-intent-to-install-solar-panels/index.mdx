@@ -11,16 +11,7 @@ image: ./images/Slide1.png
 import BlurHashPicture from '@/utils/blurhash/BlurHashPicture.astro'
 import { Image } from 'astro:assets'
 
-import Slide6 from './images/Slide6.png'
-import Slide7 from './images/Slide7.png'
-import Slide8 from './images/Slide8.png'
-import Slide13 from './images/Slide13.png'
-import Slide16 from './images/Slide16.png'
 import TopTwoBoxIllustration from './images/top-two-box-illustration.svg'
-import Slide19 from './images/Slide19.png'
-import Slide20 from './images/Slide20.png'
-import Slide21 from './images/Slide21.png'
-import Slide23 from './images/Slide23.png'
 
 # Background
 
@@ -43,7 +34,7 @@ Before we dove into the dataset, we tasked ourselves with first understanding wh
 Here, we can see that roughly 43% of the respondents in the sample identified as female and 57% as male.
 
 <BlurHashPicture
-  src={Slide6}
+  src='./images/Slide6.png'
   alt="Slide 6, showing the breakdown of responsdents' gender."
 />
 
@@ -53,7 +44,7 @@ Here, we can see that roughly 43% of the respondents in the sample identified as
 Here, we can see that most respondents were in the 65–74 age range. Following this is the 18–24 age range.
 
 <BlurHashPicture
-  src={Slide7}
+  src='./images/Slide7.png'
   alt="Slide 7, showing the breakdown of responsdents' age."
 />
 
@@ -63,7 +54,7 @@ Here, we can see that most respondents were in the 65–74 age range. Following 
 Here, we can see that most respondents had an annual income in the \$50K–\$75K range.
 
 <BlurHashPicture
-  src={Slide8}
+  src='./images/Slide8.png'
   alt="Slide 8, showing the breakdown of responsdents' income."
 />
 
@@ -108,7 +99,7 @@ Please indicate how likely it is that you will install solar panels at your home
 We started with the basics: a linear regression model. Here, we use `Q160_8` as the dependent variable. This model provided a poor fit, only explaining about 9.7% of the variance in intent to install solar panels. Notably, age and income were significant predictors though and in alignment with natural assumptions that those who are older or make more money would be more likely display intent to install solar panels.
 
 <BlurHashPicture
-  src={Slide13}
+  src='./images/Slide13.png'
   alt='Slide 13, detailing the results of the linear regression model.'
 />
 
@@ -133,7 +124,7 @@ Similar to how Net Promoter Score (NPS) determines promoters and detractors, a t
 Now using our binary variable `intent_solarPanel` (the transformed `Q160_8`), we came up with the following model. Additionally, we wanted to capture any interaction between age and income, thus the use of `interact_ageIncome`.
 
 <BlurHashPicture
-    src={Slide16}
+    src='./images/Slide16.png'
     alt='Slide 16, detailing the results of the logistic regression model.'
 />
 
@@ -158,7 +149,7 @@ Before we could cluster, we needed to incorporate the attitudinal variables to e
 The two variables we added were the satisfaction with how environmental NGOs and also the government are addressing energy issues—(`satisfied_ngo_addressEnergyIssues`) and (`satisfied_gov_addressEnergyIssues`), respectively.
 
 <BlurHashPicture
-    src={Slide19}
+    src='./images/Slide19.png'
     alt='Slide 19, detailing the results of incorporating attitudinal variables.'
 />
 
@@ -173,8 +164,8 @@ We added these variables to the model and found:
 We then used k-means clustering to segment the respondents based on the attitudinal variables.
 
 <BlurHashPicture
-    src={Slide20}
-    alt='Slide 19, detailing the results of the k-means clustering.'
+    src='./images/Slide20.png'
+    alt='Slide 20, detailing the results of the k-means clustering.'
 />
 
 We found that the optimal number of clusters was three. The clusters were as follows:
@@ -188,7 +179,7 @@ We found that the optimal number of clusters was three. The clusters were as fol
 After deciding on three clusters, we then ran a logistic regression model for each cluster.
 
 <BlurHashPicture
-    src={Slide21}
+    src='./images/Slide21.png'
     alt="Slide 21, detailing the results of the each cluster's respective regression model."
 />
 
@@ -205,7 +196,7 @@ Thus, the best model to predict Americans' intent to install solar panels was th
 ## Using the Model
 
 <BlurHashPicture
-    src={Slide23}
+    src='./images/Slide23.png'
     alt='Slide 23, detailing the suggestions for using the model.'
 />
 

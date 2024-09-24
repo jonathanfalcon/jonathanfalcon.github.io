@@ -13,6 +13,8 @@ import rehypeKatex from 'rehype-katex'
 import { rehypeDemoteHeading } from './src/utils/markdown/rehypeDemoteHeading'
 // noinspection ES6PreferShortImport
 import { rehypeWrap } from './src/utils/markdown/rehypeWrap'
+// noinspection ES6PreferShortImport
+import { remarkResolveJsxPaths } from './src/utils/markdown/remarkResolveJsxPaths'
 
 // https://astro.build/config
 export default defineConfig({
@@ -23,7 +25,7 @@ export default defineConfig({
     },
     output: 'static',
     markdown: {
-        remarkPlugins: [remarkMath],
+        remarkPlugins: [remarkMath, [remarkResolveJsxPaths, { attributeNames: ['src'] }]],
         rehypePlugins: [
             rehypeDemoteHeading,
             [
