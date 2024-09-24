@@ -40,15 +40,15 @@ const {
     deriveAspectRatio = true,
 } = Astro.props
 
-const src = typeof baseSrc === 'string' ? await getImage(baseSrc) : baseSrc
+const image = typeof baseSrc === 'string' ? await getImage(baseSrc) : baseSrc
 
-const aspectRatioStyle = `aspect-ratio: ${src.width / src.height};`
-const backgroundStyle = await blurHashImage(src.src, blurhashWidth)
+const aspectRatioStyle = `aspect-ratio: ${image.width / image.height};`
+const backgroundStyle = await blurHashImage(image.src, blurhashWidth)
 const style = deriveAspectRatio ? `${aspectRatioStyle} ${backgroundStyle}` : backgroundStyle
 ---
 
 <Picture
-    src={src}
+    src={image}
     width={width}
     height={height}
     widths={widths}
