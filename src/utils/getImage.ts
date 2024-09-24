@@ -2,6 +2,7 @@ import type { ImageMetadata } from 'astro'
 
 /**
  * Gets image metadata using the image path. Handles both `@/assets/images` and `/src/assets/images` paths.
+ *
  * @param imagePath Path to the image
  * @returns Image metadata
  * @throws Error if image is not found
@@ -12,7 +13,13 @@ export const getImage = async (imagePath: string): Promise<ImageMetadata> => {
             imagePath = imagePath.replace('@/assets/images', '/src/assets/images')
         }
 
-        const images = import.meta.glob<{ default: ImageMetadata }>('@/assets/images/**/*')
+        const assetsImages = import.meta.glob<{ default: ImageMetadata }>('@/assets/images/**/*')
+        const contentImages = import.meta.glob<{ default: ImageMetadata }>(
+            '@/content/**/**/images/**/*',
+        )
+
+        const images = { ...assetsImages, ...contentImages }
+
         const src = await images[imagePath]()
 
         return src.default
