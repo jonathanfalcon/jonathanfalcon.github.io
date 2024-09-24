@@ -11,7 +11,7 @@ import { processImage, convertBase64PngToWebp } from './processImage'
  */
 export const getThumbHashDataUrl = async (
     src: string,
-    adjustedDimension: number = 20,
+    adjustedDimension: number = 10,
     saturation: number = 1.75,
 ): Promise<string | undefined> => {
     try {
