@@ -1,6 +1,6 @@
 ---
 import { Work } from '@/types/content/Work'
-import blurHashImage from '@/utils/blurhash/blur'
+import { getThumbHashDataUrl } from '@/utils/thumbhash/thumbhash'
 
 export interface Props {
     image: Work['image']['src']
@@ -16,7 +16,7 @@ const sharedStyle = 'pt-24 md:pt-28 pb-12 px-4 mb-10 w-full'
         <header class={`${sharedStyle} relative`}>
             <slot />
             <div
-                style={await blurHashImage(image)}
+                style={`background: center / cover url(${await getThumbHashDataUrl(image)});`}
                 class='absolute inset-0 -z-10 opacity-40 dark:opacity-30'
             />
         </header>

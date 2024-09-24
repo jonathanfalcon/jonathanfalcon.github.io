@@ -1,7 +1,7 @@
 ---
 import { Work } from '@/types/content/Work'
-import BlurHashPicture from '@/utils/blurhash/BlurHashPicture.astro'
-import blurHashImage from '@/utils/blurhash/blur'
+import ThumbHashPicture from '@/utils/thumbhash/ThumbHashPicture.astro'
+import { getThumbHashDataUrl } from '@/utils/thumbhash/thumbhash'
 import { Icon } from 'astro-icon/components'
 
 type Props = {
@@ -32,11 +32,12 @@ const HeadingTag = headingLevel
     after:transition-[backdrop-filter] after:duration-300
     focus-within:after:backdrop-brightness-150 focus-within:after:backdrop-saturate-150
     hover:after:backdrop-brightness-150 hover:after:backdrop-saturate-150`}
-    style={frontmatter.image?.src && (await blurHashImage(frontmatter.image.src))}
+    style={frontmatter.image?.src &&
+        `background: center / cover url(${await getThumbHashDataUrl(frontmatter.image.src)});`}
 >
     {
         frontmatter.image?.src && (
-            <BlurHashPicture
+            <ThumbHashPicture
                 src={frontmatter.image}
                 alt={frontmatter.title}
                 class='rounded-t-2xl'

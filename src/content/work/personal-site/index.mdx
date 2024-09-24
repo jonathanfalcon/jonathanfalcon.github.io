@@ -16,8 +16,8 @@ containsCode: true
 ---
 
 import { Icon } from 'astro-icon/components'
-import blurHashImage from '@/utils/blurhash/blur'
-import BlurHashPicture from '@/utils/blurhash/BlurHashPicture.astro'
+import { getThumbHashDataUrl } from '@/utils/thumbhash/thumbhash'
+import ThumbHashPicture from '@/utils/thumbhash/ThumbHashPicture.astro'
 import ColorMode from '@/components/Footer/ColorMode.astro'
 import { siteConfig } from "@/config/siteConfig"
 
@@ -31,7 +31,7 @@ The decision to rebuild my personal site was rooted in a desire for a more authe
 
 ## Astro: A _Stellar_ Foundation
 
-<BlurHashPicture src='./images/astro.png' alt='Astro banner saying build the web you want' />
+<ThumbHashPicture src='./images/astro.png' alt='Astro banner saying build the web you want' />
 
 At the heart of my site's metamorphosis lies Astro, a modern static site generator that redefines how web applications are built. Astro allows me to compose my site using React-like components and then transform them into highly optimized static files during the build process. This not only ensures a dynamic and interactive user experience but also guarantees lightning-fast performance, one of many elements in SEO ranking.
 
@@ -39,7 +39,7 @@ At the heart of my site's metamorphosis lies Astro, a modern static site generat
 
 ### Tailwind CSS
 
-<BlurHashPicture src='./images/tailwind.jpg' alt='Tailwind CSS banner' />
+<ThumbHashPicture src='./images/tailwind.jpg' alt='Tailwind CSS banner' />
 
 For styling, I've embraced Tailwind CSS – a utility-first framework. Tailwind provides a pragmatic approach to crafting elegant designs, offering a comprehensive set of utility classes. This approach enhances the visual aesthetics of the site, ensuring a clean and cohesive design.
 
@@ -103,14 +103,14 @@ BlurHashes offer a compact representation of images, enabling the display of a b
 As an example, view the two figures below. The left is an image, while the right is its BlurHash representation. While a lack of detail is obvious, the goal is to reduce perceived latency.
 
 <div className='not-prose grid w-full gap-4 md:grid-cols-2 grid-cols-1'>
-    <BlurHashPicture
+    <ThumbHashPicture
         src={blurHashExample}
         alt='Screenshot of jonathanfalcon.com'
         class='size-full rounded-lg shadow-lg'
     />
     <div
         className='flex aspect-video size-full rounded-lg shadow-lg'
-        style={await blurHashImage(blurHashExample.src)}
+        style={`background: center / cover url(${await getThumbHashDataUrl(blurHashExample.src)});`}
         aria-label='BlurHash representation of the prior image.'
     ></div>
 </div>
@@ -130,7 +130,7 @@ Unlike traditional implementations, these BlurHashes don't rely on canvas but ra
 
 ### BlurHashes as Efficient Backgrounds for a Visual Continuity Concept
 
-<BlurHashPicture
+<ThumbHashPicture
     src='./images/blurhash-header-example.png'
     alt='Screenshot of blurhash header example'
 />

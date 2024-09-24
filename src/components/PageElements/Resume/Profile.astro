@@ -1,7 +1,7 @@
 ---
 import { profile } from '@/config/resume'
 import { siteConfig } from '@/config/siteConfig'
-import BlurHashPicture from '@/utils/blurhash/BlurHashPicture.astro'
+import ThumbHashPicture from '@/utils/thumbhash/ThumbHashPicture.astro'
 import { Icon } from 'astro-icon/components'
 import Card from './Elements/Card.astro'
 
@@ -9,12 +9,11 @@ import SpecialLink from '../Generic/SpecialLink.astro'
 ---
 
 <Card class='flex h-fit flex-col gap-y-2 !p-5 md:sticky md:top-5 md:basis-1/4 lg:top-10'>
-    <BlurHashPicture
+    <ThumbHashPicture
         src='@/assets/images/profile-resume.jpg'
         widths={[300, 400, 800]}
         alt='Jonathan Falcon smiling at the camera.'
         class='mx-auto w-32 rounded-full'
-        blurhashWidth={10}
     />
 
     <div class='text-center'>
