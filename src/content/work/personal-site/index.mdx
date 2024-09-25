@@ -21,7 +21,7 @@ import ThumbHashPicture from '@/utils/thumbhash/ThumbHashPicture.astro'
 import ColorMode from '@/components/Footer/ColorMode.astro'
 import { siteConfig } from "@/config/siteConfig"
 
-import blurHashExample from './images/personal-site.png'
+import thumbHashExample from './images/personal-site.png'
 
 # Why Rebuild?
 
@@ -96,26 +96,27 @@ A feather, reminiscent of a falcon, adds a personal touch to the brand.
 
 # Elevating the User Experience
 
-## BlurHashes
+## ThumbHashes
 
-BlurHashes offer a compact representation of images, enabling the display of a blurred version while the full image is loading. This not only adds an aesthetic flair by providing users with a visually pleasing preview but also reduces perceived latency.
+ThumbHashes offer a compact representation of images, enabling the display of a blurred version while the full image is loading. This not only adds an aesthetic flair by providing users with a visually pleasing preview but also reduces perceived latency.
 
-As an example, view the two figures below. The left is an image, while the right is its BlurHash representation. While a lack of detail is obvious, the goal is to reduce perceived latency.
+As an example, view the two figures below. The left is an image, while the right is its ThumbHash representation. While a lack of detail is obvious, the goal is to reduce perceived latency.
 
 <div className='not-prose grid w-full gap-4 md:grid-cols-2 grid-cols-1'>
     <ThumbHashPicture
-        src={blurHashExample}
+        src={thumbHashExample}
         alt='Screenshot of jonathanfalcon.com'
+        widths={[500, 1000]}
         class='size-full rounded-lg shadow-lg'
     />
     <div
         className='flex aspect-video size-full rounded-lg shadow-lg'
-        style={`background: center / cover url(${await getThumbHashDataUrl(blurHashExample.src)});`}
-        aria-label='BlurHash representation of the prior image.'
+        style={`background: center / cover url(${await getThumbHashDataUrl(thumbHashExample.src)});`}
+        aria-label='ThumbHash representation of the prior image.'
     ></div>
 </div>
 
-Unlike traditional implementations, these BlurHashes don't rely on canvas but rather leverage background image URLs. Here's an example.
+Unlike traditional implementations, these ThumbHashes don't rely on canvas but rather leverage background image URLs. Here's an example.
 
 ```html
 <img
@@ -124,20 +125,20 @@ Unlike traditional implementations, these BlurHashes don't rely on canvas but ra
     src="source.avif"
     style="aspect-ratio: 16/9;
            background: center / cover
-                       url(data:image/png;base64,blurhash-image-url);"
+                       url(data:image/png;base64,thumbhash-image-url);"
 />
 ```
 
-### BlurHashes as Efficient Backgrounds for a Visual Continuity Concept
+### ThumbHashes as Efficient Backgrounds for a Visual Continuity Concept
 
 <ThumbHashPicture
-    src='./images/blurhash-header-example.png'
-    alt='Screenshot of blurhash header example'
+    src='./images/thumbhash-header-example.png'
+    alt='Screenshot of thumbhash header example'
 />
 
-Beyond image loading, BlurHashes play a pivotal role as backgrounds for each work page header. This strategic use is driven by a dual-purpose: reducing the need for an expensive `backdrop-filter` and significantly improving loading times compared to traditional images.
+Beyond image loading, ThumbHashes play a pivotal role as backgrounds for each work page header. This strategic use is driven by a dual-purpose: reducing the need for an expensive `backdrop-filter` and significantly improving loading times compared to traditional images.
 
-The decision to use BlurHashes as backgrounds is rooted in a concept of visual continuity, where the representation of what you click on is closely tied to where you land. This creates a visual connection that users can identify, fostering a sense of coherence and navigation fluidity as they explore different sections of the site.
+The decision to use ThumbHashes as backgrounds is rooted in a concept of visual continuity, where the representation of what you click on is closely tied to where you land. This creates a visual connection that users can identify, fostering a sense of coherence and navigation fluidity as they explore different sections of the site.
 
 ## Dark, Light, or System Mode? All Three, Please!
 
