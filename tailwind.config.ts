@@ -5,7 +5,11 @@ import tailwindTypography from '@tailwindcss/typography'
 import tailwindForms from '@tailwindcss/forms'
 
 export default {
-    content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}', './astro.config.ts'],
+    content: [
+        './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
+        './astro.config.ts',
+        './work/**/*.{md,mdx}',
+    ],
     theme: {
         extend: {
             fontFamily: {

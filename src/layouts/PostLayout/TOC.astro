@@ -1,6 +1,6 @@
 ---
 type Props = {
-    headings: Array<{ depth: number; slug: string; text: string }>
+    headings: Array<{ depth: number; id: string; text: string }>
 }
 
 const { headings } = Astro.props
@@ -25,7 +25,7 @@ const { headings } = Astro.props
 
             return (
                 <li class={`py-2 hover:bg-slate-500 ${styling}`}>
-                    <a href={`#${heading.slug}`}>{heading.text}</a>
+                    <a href={`#${heading.id}`}>{heading.text}</a>
                 </li>
             )
         })

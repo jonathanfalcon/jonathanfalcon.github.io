@@ -6,7 +6,7 @@ import { Icon } from 'astro-icon/components'
 
 type Props = {
     frontmatter: Work
-    slug: string
+    id: string
     includeDetails?: boolean
     cardSize?: 'max-w-sm' | 'max-w-md' | 'max-w-lg'
     headingLevel: 'h2' | 'h3'
@@ -14,7 +14,7 @@ type Props = {
 
 const {
     frontmatter,
-    slug,
+    id,
     includeDetails = true,
     cardSize = 'max-w-lg',
     headingLevel,
@@ -47,7 +47,7 @@ const HeadingTag = headingLevel
 
     <article class='flex h-full flex-col gap-y-2 p-5'>
         <HeadingTag class='font-heading text-2xl font-extrabold md:text-3xl'>
-            <a class='after:absolute after:inset-0 focus:outline-none' href={`${slug}/`}
+            <a class='after:absolute after:inset-0 focus:outline-none' href={`${id}/`}
                 >{frontmatter.title}</a
             >
         </HeadingTag>

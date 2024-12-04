@@ -1,14 +1,13 @@
 import { HTMLAttributes } from 'astro/types'
-import { DateShortMonth } from '@/types/misc/date.ts'
+
+export type DateObject = {
+    shortDate: string
+    isoDate: string
+}
 
 export type Icon = {
     name: string
     color?: HTMLAttributes<'svg'>['class']
-}
-
-export type Dates = {
-    from: DateShortMonth
-    to: DateShortMonth
 }
 
 export type Profile = {
@@ -22,7 +21,7 @@ export type EducationList = {
     university: string
     college?: string
     icon: Icon
-    graduationDate: DateShortMonth
+    graduationDate: DateObject
 }[]
 
 export type ExperienceList = {
@@ -30,7 +29,10 @@ export type ExperienceList = {
     company: string
     about: string
     icon: Icon
-    tenure: Dates
+    tenure: {
+        from: DateObject
+        to: DateObject
+    }
 }[]
 
 export type CertificationList = {
@@ -38,7 +40,7 @@ export type CertificationList = {
     issuer: string
     url: string
     icon: Icon
-    completionDate: DateShortMonth
+    completionDate: DateObject
 }[]
 
 export type SkillList = {

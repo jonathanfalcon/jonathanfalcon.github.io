@@ -1,4 +1,19 @@
-import { Profile, EducationList, CertificationList, SkillList } from '@/types/content/Resume'
+import {
+    Profile,
+    EducationList,
+    CertificationList,
+    SkillList,
+    DateObject,
+} from '@/types/content/Resume'
+
+const createDate = (shortDate: string): DateObject => {
+    const date = new Date(`${shortDate} UTC`)
+
+    return {
+        shortDate,
+        isoDate: date.toISOString().split('T')[0],
+    }
+}
 
 export const profile: Profile = {
     name: 'Jonathan Falcon',
@@ -15,10 +30,7 @@ export const educationList: EducationList = [
             name: 'colleges/longhorn',
             color: 'text-[#BF5700]',
         },
-        graduationDate: {
-            month: 'May',
-            year: 2023,
-        },
+        graduationDate: createDate('May 2023'),
     },
     {
         degree: 'Bachelor of Business Administration in Economics',
@@ -27,10 +39,7 @@ export const educationList: EducationList = [
             name: 'colleges/bobcat',
             color: 'text-[#571C1F] dark:text-[#AC9155]',
         },
-        graduationDate: {
-            month: 'May',
-            year: 2022,
-        },
+        graduationDate: createDate('May 2022'),
     },
 ]
 
@@ -42,10 +51,7 @@ export const certificationList: CertificationList = [
             name: 'logos:google-analytics',
         },
         url: 'https://skillshop.credential.net/b3a851ef-f9ec-4a1a-b996-abad6215f36c',
-        completionDate: {
-            month: 'Mar',
-            year: 2023,
-        },
+        completionDate: createDate('Mar 2023'),
     },
     {
         certification: 'Digital Marketing',
@@ -55,10 +61,7 @@ export const certificationList: CertificationList = [
             color: 'text-[rgb(255,122,89)]',
         },
         url: 'https://app.hubspot.com/academy/achievements/j4h7lgvw/en/1/jonathan-falcon/digital-marketing',
-        completionDate: {
-            month: 'Feb',
-            year: 2023,
-        },
+        completionDate: createDate('Feb 2023'),
     },
     {
         certification: 'Inbound Marketing',
@@ -68,10 +71,7 @@ export const certificationList: CertificationList = [
             color: 'text-[rgb(255,122,89)]',
         },
         url: 'https://app.hubspot.com/academy/achievements/ndrfv7dj/en/1/jonathan-falcon/inbound-marketing',
-        completionDate: {
-            month: 'Feb',
-            year: 2023,
-        },
+        completionDate: createDate('Feb 2023'),
     },
     {
         certification: 'Introduction to Stata 15',
@@ -80,10 +80,7 @@ export const certificationList: CertificationList = [
             name: 'vscode-icons:file-type-stata',
         },
         url: 'https://www.linkedin.com/learning/certificates/436fa84b6cd23f585d94aa70a3145df09c922ddb99bab3e984ecd5b9f5e1d899?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3B0CbUnInpQIuMyB6eR%2Fo4CA%3D%3D',
-        completionDate: {
-            month: 'Mar',
-            year: 2022,
-        },
+        completionDate: createDate('Mar 2022'),
     },
 ]
 
@@ -99,7 +96,7 @@ export const skillList: SkillList = [
             {
                 skill: 'Python',
                 icon: [{ name: 'logos:python' }],
-                proficiency: 60,
+                proficiency: 80,
             },
         ],
     },
@@ -113,7 +110,7 @@ export const skillList: SkillList = [
                     { name: 'logos:mysql' },
                     { name: 'logos:sqlite' },
                 ],
-                proficiency: 50,
+                proficiency: 70,
             },
         ],
     },

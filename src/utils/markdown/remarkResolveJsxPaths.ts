@@ -22,7 +22,10 @@ const resolvePath = (path: string, markdownPath: string) => {
     if (path.startsWith('./')) {
         return path.replace(
             '.',
-            markdownPath.slice(markdownPath.indexOf('/src'), markdownPath.lastIndexOf('/')),
+            markdownPath.slice(
+                markdownPath.indexOf('github.io') + 'github.io'.length,
+                markdownPath.lastIndexOf('/'),
+            ),
         )
     }
 

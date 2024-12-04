@@ -1,19 +1,19 @@
 ---
 import { Seo } from '@/types/metadata/Seo'
-import { getCollection } from 'astro:content'
+import { getCollection, render } from 'astro:content'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import PostLayout from '@/layouts/PostLayout/PostLayout.astro'
 
 export async function getStaticPaths() {
     const workEntries = await getCollection('work')
     return workEntries.map((entry) => ({
-        params: { slug: entry.slug },
+        params: { id: entry.id },
         props: { entry },
     }))
 }
 
 const { entry } = Astro.props
-const { Content, headings } = await entry.render()
+const { Content, headings } = await render(entry)
 
 const seo: Seo = {
     title: entry.data.title,

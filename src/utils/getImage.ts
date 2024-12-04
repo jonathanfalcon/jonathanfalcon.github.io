@@ -14,11 +14,9 @@ export const getImage = async (imagePath: string): Promise<ImageMetadata> => {
         }
 
         const assetsImages = import.meta.glob<{ default: ImageMetadata }>('@/assets/images/**/*')
-        const contentImages = import.meta.glob<{ default: ImageMetadata }>(
-            '@/content/**/**/images/**/*',
-        )
+        const workImages = import.meta.glob<{ default: ImageMetadata }>('/work/*/images/**/*')
 
-        const images = { ...assetsImages, ...contentImages }
+        const images = { ...assetsImages, ...workImages }
 
         const src = await images[imagePath]()
 

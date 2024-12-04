@@ -7,7 +7,6 @@ import ListItem from '@/components/PageElements/Resume/Elements/ListItem.astro'
 import IconText from '@/components/PageElements/Resume/Elements/IconText.astro'
 import { Icon } from 'astro-icon/components'
 import SpecialLink from '@/components/PageElements/Generic/SpecialLink.astro'
-import { createDateTime } from '@/utils/createDateTime'
 
 const seo = {
     title: 'Resume',
@@ -39,12 +38,8 @@ const seo = {
                                     {education.college && `, ${education.college}`}
                                 </IconText>
                                 <IconText icon='date'>
-                                    <time
-                                        datetime={createDateTime.monthYear(
-                                            education.graduationDate,
-                                        )}
-                                    >
-                                        {`${education.graduationDate.month} ${education.graduationDate.year}`}
+                                    <time datetime={education.graduationDate.isoDate}>
+                                        {education.graduationDate.shortDate}
                                     </time>
                                 </IconText>
                             </Fragment>
@@ -104,14 +99,7 @@ const seo = {
                                         href={certification.url}
                                         aria-label={`Link to ${certification.certification} from ${certification.issuer}`}
                                         target='_blank'
-                                        class={`
-                                                flex
-                                                p-2
-                                                text-slate-500 transition-colors
-                                                duration-200 before:bg-slate-300
-                                                hover:text-slate-700 focus:text-slate-700 dark:text-slate-400 dark:before:bg-slate-600
-                                                dark:hover:text-slate-200 dark:focus:text-slate-200
-                                            `}
+                                        class={`flex p-2 text-slate-500 transition-colors duration-200 before:bg-slate-300 hover:text-slate-700 focus:text-slate-700 dark:text-slate-400 dark:before:bg-slate-600 dark:hover:text-slate-200 dark:focus:text-slate-200`}
                                     >
                                         <Icon name='ph:link-bold' class='size-5' />
                                     </SpecialLink>
@@ -120,12 +108,8 @@ const seo = {
                             <Fragment slot='withIcon'>
                                 <IconText icon='issuer'>{certification.issuer}</IconText>
                                 <IconText icon='date'>
-                                    <time
-                                        datetime={createDateTime.monthYear(
-                                            certification.completionDate,
-                                        )}
-                                    >
-                                        {`${certification.completionDate.month} ${certification.completionDate.year}`}
+                                    <time datetime={certification.completionDate.isoDate}>
+                                        {certification.completionDate.shortDate}
                                     </time>
                                 </IconText>
                             </Fragment>

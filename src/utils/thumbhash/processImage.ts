@@ -25,9 +25,11 @@ interface ProcessedImage {
  * @returns Resolved absolute path
  */
 const resolveAbsolutePath = (pathToResolve: string) => {
-    const baseDirectory = import.meta.env.PROD ? './dist' : '.'
+    const baseDirectory = import.meta.env.PROD ? './dist/_astro' : '.'
 
-    const relevantPath = pathToResolve.substring(pathToResolve.indexOf('/src'))
+    const relevantPath = pathToResolve.slice(
+        pathToResolve.indexOf('github.io') + 'github.io'.length,
+    )
 
     const joinedPath = path.join(baseDirectory, relevantPath)
 

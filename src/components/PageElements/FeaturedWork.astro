@@ -45,7 +45,7 @@ const featuredWork = await getCollection('work', ({ data }) => {
                 .map((work) => (
                     <WorkItem
                         frontmatter={work.data}
-                        slug={`/work/${work.slug}`}
+                        id={`/work/${work.id}`}
                         includeDetails={false}
                         cardSize='max-w-md'
                         headingLevel='h3'

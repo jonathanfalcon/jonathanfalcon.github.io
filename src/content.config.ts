@@ -1,11 +1,19 @@
 import { z, defineCollection } from 'astro:content'
+import { glob } from 'astro/loaders'
 
 export const WorkSchema = z.object({
     title: z.string(),
     description: z.string(),
     location: z.string(),
 
-    date: z.date(),
+    date: z.string().transform((longDate) => {
+        const date = new Date(`${longDate} UTC`)
+        return {
+            longDate,
+            isoDate: date.toISOString().split('T')[0],
+            numberDate: date.getTime(),
+        }
+    }),
     draft: z.boolean().optional(),
 
     category: z.string().optional(),
@@ -18,7 +26,7 @@ export const WorkSchema = z.object({
 })
 
 const work = defineCollection({
-    type: 'content',
+    loader: glob({ base: './work', pattern: '*/index.{md,mdx}' }),
     schema: ({ image }) =>
         WorkSchema.extend({
             image: image().optional(),
