@@ -7,10 +7,10 @@ import { visit } from 'unist-util-visit'
  * Resolves a path based on the current markdown file. Handles paths starting with: `@/`, and `./`. If a path starts with `/src`, it will be returned as is.
  *
  * @param path - Path to resolve
- * @param markdownPath - Path of the markdown file
+ * @param relativePath - Path of the markdown file relative to the project root
  * @returns Resolved path
  */
-const resolvePath = (path: string, markdownPath: string) => {
+const resolvePath = (path: string, relativePath: string) => {
     if (path.startsWith('/src')) {
         return path
     }
@@ -20,13 +20,7 @@ const resolvePath = (path: string, markdownPath: string) => {
     }
 
     if (path.startsWith('./')) {
-        return path.replace(
-            '.',
-            markdownPath.slice(
-                markdownPath.indexOf('github.io') + 'github.io'.length,
-                markdownPath.lastIndexOf('/'),
-            ),
-        )
+        return path.replace('.', relativePath)
     }
 
     return path
@@ -47,8 +41,13 @@ interface Options {
  * @param options - Options for the plugin. See {@link Options}
  */
 export const remarkResolveJsxPaths: RemarkPlugin = ({ attributeNames }: Options) => {
-    return (tree, { history }) => {
-        const markdownPath = history[0]
+    return (tree, { dirname, cwd }) => {
+        const relativePath = dirname?.replace(cwd, '')
+
+        if (!relativePath) {
+            console.error('Could not resolve relative path for markdown file')
+            return
+        }
 
         visit(tree, 'mdxJsxFlowElement', (node: MdxJsxFlowElement) => {
             node.attributes.forEach((attribute) => {
@@ -61,12 +60,12 @@ export const remarkResolveJsxPaths: RemarkPlugin = ({ attributeNames }: Options)
 
                 if (attributeNames) {
                     if (attributeNames.includes(attribute.name)) {
-                        attribute.value = resolvePath(attribute.value, markdownPath)
+                        attribute.value = resolvePath(attribute.value, relativePath)
                     }
                     return
                 }
 
-                attribute.value = resolvePath(attribute.value, markdownPath)
+                attribute.value = resolvePath(attribute.value, relativePath)
             })
         })
     }
