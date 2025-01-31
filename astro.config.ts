@@ -33,7 +33,10 @@ export default defineConfig({
                 [
                     {
                         selector: 'table',
-                        wrapper: 'div.relative.overflow-x-auto',
+                        wrapper: {
+                            element: 'div',
+                            className: 'relative overflow-x-auto',
+                        },
                     },
                 ],
             ],

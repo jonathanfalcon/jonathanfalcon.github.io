@@ -7,7 +7,10 @@ import { Root } from 'hast'
 
 type Option = {
     selector: string
-    wrapper: string
+    wrapper: {
+        element: string
+        className?: string
+    }
 }
 
 type Options = Option | Option[]
@@ -15,7 +18,10 @@ type Options = Option | Option[]
 const wrapElement = (tree: Root, { selector, wrapper }: Option) => {
     for (const match of selectAll(selector, tree)) {
         visit(tree, match, (elementToWrap, index, parentElement) => {
-            const elementWrapper = parseSelector(wrapper)
+            const elementWrapper = parseSelector(wrapper.element)
+
+            elementWrapper.properties.className = wrapper.className
+
             elementWrapper.children = [elementToWrap]
 
             if (parentElement && index) {
