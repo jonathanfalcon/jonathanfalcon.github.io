@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config'
-import tailwind from '@astrojs/tailwind'
+import tailwind from '@tailwindcss/vite'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 // import react from '@astrojs/react'
@@ -45,9 +45,6 @@ export default defineConfig({
         shikiConfig: { theme: githubCustomTheme },
     },
     integrations: [
-        tailwind({
-            applyBaseStyles: false,
-        }),
         mdx(),
         sitemap(),
         // react(), Currently unused
@@ -81,4 +78,7 @@ export default defineConfig({
             Logger: 1,
         }),
     ],
+    vite: {
+        plugins: [tailwind()],
+    },
 })
