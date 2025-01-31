@@ -48,6 +48,10 @@ export default defineConfig({
         mdx(),
         sitemap(),
         // react(), Currently unused
+        partytown({
+            config: { forward: ['dataLayer.push'] },
+        }),
+        icon(),
         playformCompress({
             CSS: {
                 csso: {
@@ -73,9 +77,5 @@ export default defineConfig({
             SVG: false,
             Logger: 1,
         }),
-        partytown({
-            config: { forward: ['dataLayer.push'] },
-        }),
-        icon(),
     ],
 })
