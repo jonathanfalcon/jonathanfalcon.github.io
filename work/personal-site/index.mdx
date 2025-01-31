@@ -172,72 +172,46 @@ The JavaScript logic handles the dynamic updating of color modes, system mode ch
 
 ```javascript
 // Used to update current color mode
-const setCurrentMode = (mode) => {
-    if (mode === 'dark') {
-        document.documentElement.classList.add('dark')
-    } else if (mode === 'light') {
-        document.documentElement.classList.remove('dark')
-    }
-}
+const setCurrentMode = (mode) =>
+    document.documentElement.classList.toggle('dark', mode === 'dark')
 
 // Replicates dynamic changes in system mode
-const handleSystemModeChange = (event) => {
-    if (event.matches) {
-        setCurrentMode('dark')
-    } else {
-        setCurrentMode('light')
-    }
-}
+const handleSystemModeChange = ({ matches }) => setCurrentMode(matches ? 'dark' : 'light')
 
 // Used for monitoring current color mode if mode is 'system'
 const systemMode = window.matchMedia('(prefers-color-scheme: dark)')
 
-// Checks current mode on page load
-if (localStorage.mode === 'dark') {
-    setCurrentMode('dark')
-} else if (localStorage.mode === 'light') {
-    setCurrentMode('light')
-} else if (!('mode' in localStorage)) {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        setCurrentMode('dark')
-    } else {
-        setCurrentMode('light')
-    }
+// Sets current mode on page load
+setCurrentMode(localStorage.mode || (systemMode.matches ? 'dark' : 'light'))
 
-    systemMode.addEventListener('change', handleSystemModeChange)
-}
+// Adds `systemMode` event listener if `mode` in `localStorage` is falsy
+!localStorage.mode && systemMode.addEventListener('change', handleSystemModeChange)
 
-// Used for updating color mode
+// Used for updating color mode from `<select>`
 const setColorMode = (mode) => {
-    if (mode === 'light' || mode === 'dark') {
-        // Updates mode in localStorage
+    if (mode === 'system') {
+        // Removes `mode` from `localStorage`
+        localStorage.removeItem('mode')
+
+        // Checks current system mode and updates page accordingly
+        setCurrentMode(systemMode.matches ? 'dark' : 'light')
+
+        // Adds `systemMode` event listener
+        systemMode.addEventListener('change', handleSystemModeChange)
+    } else {
+        // Updates `mode` in `localStorage`
         localStorage.mode = mode
 
         // Updates current color mode
         setCurrentMode(mode)
 
-        // Removes systemMode event listener
+        // Removes `systemMode` event listener
         systemMode.removeEventListener('change', handleSystemModeChange)
-    } else if (mode === 'system') {
-        // Removes mode from localStorage
-        localStorage.removeItem('mode')
-
-        // Checks current system mode and updates page accordingly
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setCurrentMode('dark')
-        } else {
-            setCurrentMode('light')
-        }
-
-        // Adds systemMode event listener
-        systemMode.addEventListener('change', handleSystemModeChange)
     }
 }
 
 // Gets current color mode
-const getCurrentMode = () => {
-    return 'mode' in localStorage ? localStorage.mode : 'system'
-}
+const getCurrentMode = () => localStorage.mode || 'system'
 ```
 
 #### The Actual Select Element
