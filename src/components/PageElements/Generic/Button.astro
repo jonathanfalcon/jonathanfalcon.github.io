@@ -128,7 +128,8 @@ switch (size) {
     ${colorMap[color][colorScheme]}
     ${sizeProperties}
     ${outline && 'border-2'}
-    rounded-full flex items-center transition-colors duration-200
+    rounded-full flex items-center transition-[color,background,border,outline] duration-200
+    focus:outline-4 focus:outline-offset-4 focus:outline-emerald-600 focus:ring-0
     `}
     {...attributes}
 >
