@@ -28,7 +28,7 @@ const seo: Seo = {
 }
 ---
 
-<BaseLayout seo={seo} darkHeader={!Boolean(entry.data.image)} firstItemPadding={false}>
+<BaseLayout seo={seo} darkHeader={!entry.data.image} firstItemPadding={false}>
     <PostLayout frontmatter={entry.data} headings={headings}>
         <Content />
     </PostLayout>
