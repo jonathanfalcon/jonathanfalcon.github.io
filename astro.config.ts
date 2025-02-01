@@ -54,14 +54,7 @@ export default defineConfig({
         }),
         icon(),
         playformCompress({
-            CSS: {
-                csso: {
-                    comments: false,
-                },
-                lightningcss: {
-                    include: 262144, // VendorPrefixes: Prevents removal of -webkit-backdrop-filter in WorkItem.astro
-                },
-            },
+            CSS: true,
             HTML: {
                 'html-minifier-terser': {
                     removeComments: true,
