@@ -12,12 +12,12 @@
 }
 
 /* v4 fix: removes margin from top of first element in `prose` */
-.md\:prose-xl :where(.md\:prose-xl > :first-child):not(:where([class ~ =not-prose], [class ~ =not-prose] *)) {
+.md\:prose-xl :where(.md\:prose-xl > :first-child):not(:where([class ~=not-prose], [class ~=not-prose] *)) {
     margin-top: 0;
 }
 
 /* v4 fix: removes margin from bottom of last element in `prose` */
-.md\:prose-xl :where(.md\:prose-xl > :last-child):not(:where([class ~ =not-prose], [class ~ =not-prose] *)) {
+.md\:prose-xl :where(.md\:prose-xl > :last-child):not(:where([class ~=not-prose], [class ~=not-prose] *)) {
     margin-bottom: 0;
 }
 
