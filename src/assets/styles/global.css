@@ -5,10 +5,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-    --font-heading: 'quincy-cf', var(--font-serif);
-    --font-body: 'InterVariable', var(--font-sans);
-    --font-code: 'Fira Code', var(--font-mono);
+@theme inline {
+    --font-heading: 'quincy-cf', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-body: 'InterVariable', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 /* v4 fix: removes margin from top of first element in `prose` */
