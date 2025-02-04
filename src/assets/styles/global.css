@@ -1,14 +1,27 @@
 @import 'tailwindcss';
 
 @plugin '@tailwindcss/typography';
-@plugin '@tailwindcss/forms';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
+@layer base {
+    :focus-visible {
+        @apply outline-emerald-600 outline-4 outline-offset-4 duration-200 transition-[outline];
+    }
+}
+
+@theme {
     --font-heading: 'quincy-cf', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
     --font-body: 'InterVariable', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    --transform-scale-size-0: 0;
+    --transform-scale-size-100: 1;
+    --transform-scale-size-105: 1.05;
+}
+
+@utility transform-scale-* {
+    transform: scale(--value(--transform-scale-size-*));
 }
 
 /* v4 fix: removes margin from top of first element in `prose` */

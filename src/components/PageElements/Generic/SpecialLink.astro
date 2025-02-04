@@ -1,22 +1,25 @@
 ---
 import { HTMLAttributes } from 'astro/types'
 
+import { cn } from '@/utils/cn'
+
 type Props = HTMLAttributes<'a'>
 
 const { class: customClasses, ...attributes }: Props = Astro.props
-
-const baseClasses = 'relative z-0'
-
-const beforeClasses = `
-before:content-['']
-before:absolute before:inset-0 before:-z-10 before:scale-0
-before:rounded-lg
-before:transition-transform before:duration-200 before:will-change-transform
-hover:before:scale-100
-focus:before:scale-100 focus:outline-none
-`
 ---
 
-<a class={`${baseClasses} ${beforeClasses} ${customClasses}`} {...attributes}>
+<a
+    class={cn(
+        'relative z-0',
+        'before:content-[""]',
+        'before:absolute before:inset-0 before:-z-10 before:transform-scale-0',
+        'before:rounded-lg',
+        'before:transition-transform before:duration-200 before:will-change-transform',
+        'hover:before:transform-scale-100',
+        'focus:outline-none focus:before:transform-scale-100',
+        customClasses,
+    )}
+    {...attributes}
+>
     <slot />
 </a>
