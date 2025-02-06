@@ -1,32 +1,28 @@
 import { visit } from 'unist-util-visit'
 import { selectAll } from 'hast-util-select'
-import { parseSelector } from 'hast-util-parse-selector'
 
 import { RehypePlugin } from '@astrojs/markdown-remark'
-import { Root } from 'hast'
+import { Properties, Root, Element } from 'hast'
 
 type Option = {
     selector: string
-    wrapper: {
-        element: string
-        className?: string
-    }
+    wrapper: keyof HTMLElementTagNameMap
+    attributes?: Properties
 }
 
 type Options = Option | Option[]
 
-const wrapElement = (tree: Root, { selector, wrapper }: Option) => {
+const wrapElement = (tree: Root, { selector, wrapper, attributes }: Option) => {
     for (const match of selectAll(selector, tree)) {
         visit(tree, match, (elementToWrap, index, parentElement) => {
-            const elementWrapper = parseSelector(wrapper.element)
-
-            elementWrapper.properties.className = wrapper.className
-
-            elementWrapper.children = [elementToWrap]
-
-            if (parentElement && index) {
-                parentElement.children[index] = elementWrapper
+            const wrapperElement: Element = {
+                type: 'element',
+                tagName: wrapper,
+                properties: attributes || {},
+                children: [elementToWrap],
             }
+
+            if (parentElement && index) parentElement.children[index] = wrapperElement
         })
     }
 }

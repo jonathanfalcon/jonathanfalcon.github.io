@@ -34,9 +34,10 @@ export default defineConfig({
                 [
                     {
                         selector: 'table',
-                        wrapper: {
-                            element: 'div',
+                        wrapper: 'div',
+                        attributes: {
                             className: 'relative overflow-x-auto',
+                            tabIndex: 0,
                         },
                     },
                 ],

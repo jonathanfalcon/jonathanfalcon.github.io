@@ -1,18 +1,8 @@
 import { shiftHeading } from 'hast-util-shift-heading'
-import { RehypePlugin } from '@astrojs/markdown-remark'
+import type { RehypePlugin } from '@astrojs/markdown-remark'
 
-type Options = {
-    demote: number
-}
-
-const defaultOptions: Options = {
-    demote: 1,
-}
-
-export const rehypeDemoteHeading: RehypePlugin = (options: Options = defaultOptions) => {
-    options = { ...defaultOptions, ...options }
-
+export const rehypeDemoteHeading: RehypePlugin = (demoteBy: number = 1) => {
     return (tree) => {
-        shiftHeading(tree, options.demote)
+        shiftHeading(tree, demoteBy)
     }
 }
