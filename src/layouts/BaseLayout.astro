@@ -2,6 +2,7 @@
 import '@/assets/styles/global.css'
 
 import BreakpointOverlay from '@/utils/BreakpointOverlay.astro'
+import { cn } from '@/utils/cn'
 
 import Header from '@/components/Header/Header.astro'
 import Footer from '@/components/Footer/Footer.astro'
@@ -32,17 +33,19 @@ const isDev = import.meta.env.DEV
 <html lang='en' class='motion-safe:scroll-smooth'>
     <Head seo={seo} />
     <body
-        class={`font-body font-normal flex flex-col min-h-svh
-        ${className ?? 'bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50'}`}
+        class={cn(
+            'font-body flex flex-col min-h-svh',
+            className || 'bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50',
+        )}
     >
         <Header darkHeader={darkHeader} />
         {isDev && <BreakpointOverlay />}
         {
             mainWrapper ? (
                 <main
-                    class={
-                        firstItemPadding ? '[&>:first-child]:pt-24 [&>:first-child]:md:pt-28' : null
-                    }
+                    class={cn(
+                        firstItemPadding && '[&>:first-child]:pt-24 [&>:first-child]:md:pt-28',
+                    )}
                 >
                     <slot />
                 </main>
