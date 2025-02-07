@@ -223,7 +223,15 @@ const buttonStyles = cva({
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & VariantProps<typeof buttonStyles>
 
-const { as: Tag, color, outline, scheme, size, class: className, ...attributes } = Astro.props
+const {
+    as: Tag = 'button',
+    color,
+    outline,
+    scheme,
+    size,
+    class: className,
+    ...attributes
+} = Astro.props
 ---
 
 <Tag class={cn(buttonStyles({ color, outline, size, scheme, className }))} {...attributes}>
