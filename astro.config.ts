@@ -36,7 +36,7 @@ export default defineConfig({
                         selector: 'table',
                         wrapper: 'div',
                         attributes: {
-                            className: 'relative overflow-x-auto',
+                            className: 'relative overflow-x-auto rounded-lg',
                             tabIndex: 0,
                         },
                     },
