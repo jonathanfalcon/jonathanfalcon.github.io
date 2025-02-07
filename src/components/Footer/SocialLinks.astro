@@ -1,5 +1,5 @@
 ---
-import { siteConfig } from '../../config/siteConfig'
+import { siteConfig } from '@/config/siteConfig'
 
 import { Icon } from 'astro-icon/components'
 
@@ -16,13 +16,7 @@ import SpecialLink from '@/components/PageElements/Generic/SpecialLink.astro'
                         aria-label={platform}
                         title={platform}
                         target='_blank'
-                        class={`
-                            flex
-                            p-3
-                            text-slate-50/70 transition-colors duration-200
-                            before:bg-emerald-700 hover:text-slate-50/100
-                            focus:text-slate-50/100 
-                        `}
+                        class='flex p-3 text-slate-50/70 transition-colors duration-200 before:bg-emerald-700 hover:text-slate-50/100 focus:text-slate-50/100'
                     >
                         <Icon name={icon} class='size-8 md:size-9' aria-hidden='true' />
                     </SpecialLink>

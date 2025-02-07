@@ -12,11 +12,7 @@ import { Icon } from 'astro-icon/components'
         <div class='flex flex-col items-center justify-between gap-y-10 sm:flex-row'>
             <SpecialLink
                 href='/'
-                class={`
-                   flex items-center gap-x-3
-                   -my-2 px-3 py-2.5
-                   before:bg-emerald-700
-                `}
+                class='-my-2 flex items-center gap-x-3 px-3 py-2.5 before:bg-emerald-700'
             >
                 <Icon name={siteConfig.icon} class='size-8' aria-hidden='true' />
                 <span class='font-heading text-2xl font-black'>{siteConfig.title}</span>
@@ -26,13 +22,7 @@ import { Icon } from 'astro-icon/components'
                     {
                         siteConfig.links.map(({ path, label }) => (
                             <li>
-                                <SpecialLink
-                                    href={path}
-                                    class={`
-                                        px-3 py-2.5
-                                        before:bg-emerald-700
-                                    `}
-                                >
+                                <SpecialLink href={path} class='px-3 py-2.5 before:bg-emerald-700'>
                                     {label}
                                 </SpecialLink>
                             </li>
