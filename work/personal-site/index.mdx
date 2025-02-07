@@ -63,10 +63,12 @@ Beyond the lines of code and the technical intricacies lies the essence of my pe
 ## Color Palette
 
 <div className='not-prose flex flex-row items-center gap-x-4'>
-    <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-emerald-900 text-center font-heading text-3xl font-black text-emerald-50 md:text-5xl'>
+    <figure
+        className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-emerald-900 text-center font-heading text-3xl font-black text-emerald-50 md:text-5xl'>
         Emerald
     </figure>
-    <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 text-center font-heading text-3xl font-black dark:bg-slate-800 md:text-5xl'>
+    <figure
+        className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 text-center font-heading text-3xl font-black dark:bg-slate-800 md:text-5xl'>
         Slate
     </figure>
 </div>
@@ -76,10 +78,12 @@ The color palette is a harmonious blend of emerald and slate, carefully selected
 ## Typography
 
 <div className='not-prose flex flex-row items-center gap-x-4'>
-    <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 text-center font-heading text-3xl font-black dark:bg-slate-800 md:text-5xl'>
+    <figure
+        className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 text-center font-heading text-3xl font-black dark:bg-slate-800 md:text-5xl'>
         Quincy
     </figure>
-    <figure className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 text-center font-body text-3xl font-medium dark:bg-slate-800 md:text-5xl'>
+    <figure
+        className='flex aspect-video w-1/2 items-center justify-center rounded-lg bg-slate-200 text-center font-body text-3xl font-medium dark:bg-slate-800 md:text-5xl'>
         Inter
     </figure>
 </div>
@@ -88,8 +92,9 @@ Typography is more than just words on a screen; it's a reflection of personality
 
 ## Icon
 
-<figure className='not-prose mx-auto flex aspect-video h-full w-2/3 max-w-[376px] items-center justify-center rounded-lg bg-slate-200 p-10 dark:bg-slate-800'>
-    <Icon name={siteConfig.icon} class='aspect-square size-1/2' />
+<figure
+    className='not-prose mx-auto flex aspect-video h-full w-2/3 max-w-[376px] items-center justify-center rounded-lg bg-slate-200 p-10 dark:bg-slate-800'>
+    <Icon name={siteConfig.icon} class='aspect-square size-1/2'/>
 </figure>
 
 A feather, reminiscent of a falcon, adds a personal touch to the brand.
@@ -145,7 +150,7 @@ The decision to use ThumbHashes as backgrounds is rooted in a concept of visual 
 In the pursuit of providing a personalized and comfortable browsing experience, my personal site not only embraces Dark Mode but extends the choice to users with options for Light, Dark, and System-based modes. This versatile approach goes beyond aesthetics, offering a tailored experience that adapts to individual preferences and the broader system settings. Go ahead and try it out. The same menu exists in the site's footer.
 
 <div className='mx-auto flex aspect-video size-full max-w-[376px] items-center justify-center rounded-lg bg-slate-800'>
-    <ColorMode isExample={true} />
+    <ColorMode isExample />
 </div>
 
 ### Technical Implementation
