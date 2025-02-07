@@ -149,7 +149,7 @@ The decision to use ThumbHashes as backgrounds is rooted in a concept of visual 
 
 In the pursuit of providing a personalized and comfortable browsing experience, my personal site not only embraces Dark Mode but extends the choice to users with options for Light, Dark, and System-based modes. This versatile approach goes beyond aesthetics, offering a tailored experience that adapts to individual preferences and the broader system settings. Go ahead and try it out. The same menu exists in the site's footer.
 
-<div className='mx-auto flex aspect-video size-full max-w-[376px] items-center justify-center rounded-lg bg-slate-800'>
+<div className='mx-auto flex aspect-video size-full max-w-[376px] items-center justify-center rounded-lg bg-slate-800 text-base'>
     <ColorMode isExample />
 </div>
 
@@ -159,16 +159,12 @@ The technical implementation of the multi-mode support is designed for flexibili
 
 #### Tailwind CSS Config
 
-The Tailwind CSS configuration sets up the dark mode to be toggled by adding or removing the dark class on the documentElement.
+The Tailwind CSS configuration sets up the dark mode to be toggled by adding or removing the dark class on the `documentElement`.
 
-```javascript
-const defaultTheme = require('tailwindcss/defaultTheme')
+```css
+@import 'tailwindcss';
 
-/** @type {import('tailwindcss').Config} */
-export default {
-    // The rest of the config
-    darkMode: 'class',
-}
+@custom-variant dark (&:where(.dark, .dark *));
 ```
 
 #### JavaScript Logic
@@ -230,7 +226,7 @@ import { Icon } from 'astro-icon/components'
 
 <div class='flex items-center'>
     <label class='mr-5 text-slate-200' for='color-mode'>Color Mode</label>
-    <div class='relative flex select-none items-center font-medium'>
+    <div class='relative flex items-center font-medium select-none'>
         <Icon
             name='ph:sun-bold'
             class='pointer-events-none absolute left-2.5 inline size-5 text-slate-600 dark:hidden'
@@ -242,12 +238,16 @@ import { Icon } from 'astro-icon/components'
         <select
             onchange='setColorMode(this.value)'
             id='color-mode'
-            class='form-select rounded-lg border-0 bg-slate-50 pl-10 text-slate-800 transition-[outline] focus:outline-4 focus:outline-offset-4 focus:outline-emerald-600 focus:ring-0 dark:bg-slate-950 dark:text-slate-200'
+            class='appearance-none rounded-lg bg-slate-50 px-10 py-2 text-slate-800 dark:bg-slate-950 dark:text-slate-200'
         >
             <option value='light'>Light</option>
             <option value='dark'>Dark</option>
             <option value='system'>System</option>
         </select>
+        <Icon
+            name='ph:caret-down-bold'
+            class='pointer-events-none absolute right-2.5 inline size-4.5 text-slate-600 dark:text-slate-400'
+        />
     </div>
 </div>
 
