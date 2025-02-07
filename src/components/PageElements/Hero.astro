@@ -41,7 +41,7 @@ import Button from './Generic/Button.astro'
         </SectionHeading>
         <div class='mx-auto mt-8 flex flex-col gap-4 max-lg:justify-evenly md:flex-row'>
             <Button
-                element='a'
+                as='a'
                 href={siteConfig.socials.find((social) => social.platform === 'LinkedIn')?.url}
                 color='indigo'
                 size='xl'
@@ -51,10 +51,9 @@ import Button from './Generic/Button.astro'
                 Let's Connect
             </Button>
             <Button
-                element='a'
+                as='a'
                 href='#why-me'
-                color='slate'
-                outline={true}
+                outline
                 size='xl'
                 class='justify-center gap-x-2 font-medium'
             >

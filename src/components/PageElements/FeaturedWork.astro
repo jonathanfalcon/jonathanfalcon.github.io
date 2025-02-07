@@ -21,15 +21,7 @@ const featuredWork = await getCollection('work', ({ data }) => {
 
 <Section fullscreen={true} maxWidth='max-w-7xl' padding='px-4'>
     <SectionHeading heading={title} headingLevel='h2' textAlign='start'>
-        <Button
-            slot='customSubheading'
-            href='/work/'
-            color='slate'
-            outline={true}
-            size='xl'
-            element='a'
-            class='mt-2 flex items-center gap-x-2'
-        >
+        <Button slot='customSubheading' href='/work/' outline size='xl' as='a' class='mt-2 gap-x-2'>
             {subtitle}
             <Icon name='ph:arrow-right-bold' class='size-6' />
         </Button>

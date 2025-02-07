@@ -69,14 +69,7 @@ const shareLinks = [
                         rel='noopener noreferrer'
                         aria-label={text}
                         title={text}
-                        class={`
-                            flex
-                            p-2
-                            text-slate-500 transition-colors
-                            duration-200 before:bg-slate-300 hover:text-slate-800 focus:text-slate-800
-                            dark:text-slate-400 dark:before:bg-slate-700
-                            dark:hover:text-slate-50 dark:focus:text-slate-50
-                        `}
+                        class={`flex p-2 text-slate-500 transition-colors duration-200 before:bg-slate-300 hover:text-slate-800 focus:text-slate-800 dark:text-slate-400 dark:before:bg-slate-700 dark:hover:text-slate-50 dark:focus:text-slate-50`}
                     >
                         <Icon name={icon} class='size-8' aria-hidden='true' />
                     </SpecialLink>
@@ -84,14 +77,8 @@ const shareLinks = [
             ))
         }
     </div>
-    <Button
-        color='slate'
-        outline={true}
-        size='lg'
-        element='a'
-        href='/work/'
-        class='mt-20 flex w-fit items-center gap-x-2 font-medium'
-    >
-        <Icon name='ph:arrow-left-bold' class='size-6' /> More of My Work
+    <Button outline size='lg' as='a' href='/work/' class='mt-20 w-fit gap-x-2 font-medium'>
+        <Icon name='ph:arrow-left-bold' class='size-6' />
+        More of My Work
     </Button>
 </footer>
