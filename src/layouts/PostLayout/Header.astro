@@ -1,9 +1,9 @@
 ---
-import { Work } from '@/types/content/Work'
 import { getThumbHashDataUrl } from '@/utils/thumbhash/thumbhash'
+import { cn } from '@/utils/cn'
 
 export interface Props {
-    image: Work['image']['src']
+    image: string
 }
 
 const { image } = Astro.props
@@ -11,18 +11,20 @@ const { image } = Astro.props
 const sharedStyle = 'pt-24 md:pt-28 pb-12 px-4 w-full'
 ---
 
-{
-    image ? (
-        <header class={`${sharedStyle} relative`}>
-            <slot />
+<header
+    class={cn(
+        'pt-24 md:pt-28 pb-12 px-4 w-full',
+        image ? 'relative' : 'bg-emerald-900 text-slate-50',
+    )}
+>
+    <slot />
+
+    {
+        image && (
             <div
                 style={`background: center / cover url(${await getThumbHashDataUrl(image)});`}
                 class='absolute inset-0 -z-10 opacity-40 dark:opacity-30'
             />
-        </header>
-    ) : (
-        <header class={`${sharedStyle} bg-emerald-900 text-slate-50`}>
-            <slot />
-        </header>
-    )
-}
+        )
+    }
+</header>
