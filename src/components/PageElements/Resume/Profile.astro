@@ -18,7 +18,7 @@ import SpecialLink from '../Generic/SpecialLink.astro'
 
     <div class='text-center'>
         <h2 class='font-heading text-3xl font-black'>{profile.name}</h2>
-        <p class='font-medium leading-tight text-slate-600 dark:text-slate-300'>{profile.title}</p>
+        <p class='leading-tight font-medium text-slate-600 dark:text-slate-300'>{profile.title}</p>
     </div>
 
     <hr class='mt-3 rounded-full border-2 border-slate-300 dark:border-slate-600' />
@@ -33,14 +33,7 @@ import SpecialLink from '../Generic/SpecialLink.astro'
                             aria-label={platform}
                             title={platform}
                             target='_blank'
-                            class={`
-                                flex
-                                p-3
-                                text-slate-500 transition-colors
-                                duration-200 before:bg-slate-300 hover:text-slate-700 focus:text-slate-700
-                                dark:text-slate-400 dark:before:bg-slate-600
-                                dark:hover:text-slate-200 dark:focus:text-slate-200
-                            `}
+                            class={`flex p-3 text-slate-500 transition-colors duration-200 before:bg-slate-300 hover:text-slate-700 focus:text-slate-700 dark:text-slate-400 dark:before:bg-slate-600 dark:hover:text-slate-200 dark:focus:text-slate-200`}
                         >
                             <Icon name={icon} class='size-9' aria-hidden='true' />
                         </SpecialLink>
