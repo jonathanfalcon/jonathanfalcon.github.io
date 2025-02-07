@@ -1,33 +1,63 @@
 ---
 import { HTMLAttributes } from 'astro/types'
+import { cn } from '@/utils/cn'
+import { cva, VariantProps } from 'cva'
 
-type Props = {
-    background?: HTMLAttributes<'section'>['class']
-    fullscreen?: boolean
-    maxWidth?: 'max-w-5xl' | 'max-w-6xl' | 'max-w-7xl'
-    class?: HTMLAttributes<'div'>['class']
-    padding?: HTMLAttributes<'section'>['class']
-    id?: HTMLAttributes<'section'>['id']
+const sectionStyles = cva({
+    base: ['flex items-center justify-center', 'py-24 md:py-28', 'px-6'],
+    variants: {
+        fullscreen: {
+            true: 'min-h-svh',
+            false: null,
+        },
+    },
+    defaultVariants: {
+        fullscreen: false,
+    },
+})
+
+const innerDivStyles = cva({
+    base: ['flex flex-col items-center', 'w-full'],
+    variants: {
+        maxWidth: {
+            '5xl': 'max-w-5xl',
+            '6xl': 'max-w-6xl',
+            '7xl': 'max-w-7xl',
+        },
+    },
+    defaultVariants: {
+        maxWidth: '6xl',
+    },
+})
+
+type SectionAttributes = Omit<HTMLAttributes<'section'>, 'class'> & {
+    outerClass: HTMLAttributes<'section'>['class']
 }
 
-const {
-    class: className,
-    background = '',
-    fullscreen = false,
-    maxWidth = 'max-w-6xl',
-    id,
-    padding = 'px-6',
-} = Astro.props
+type Props = SectionAttributes & {
+    innerClass?: HTMLAttributes<'div'>['class']
+} & VariantProps<typeof sectionStyles> &
+    VariantProps<typeof innerDivStyles>
+
+const { outerClass, innerClass, fullscreen, maxWidth, ...attributes } = Astro.props
 ---
 
 <section
-    class={`flex ${fullscreen && 'min-h-svh'} items-center justify-center ${padding} py-24 md:py-28 ${background}`}
-    id={id}
+    class={cn(
+        sectionStyles({
+            fullscreen,
+            class: outerClass,
+        }),
+    )}
+    {...attributes}
 >
     <div
-        class={className
-            ? className
-            : `flex ${maxWidth} flex-col items-center gap-y-10 lg:gap-y-20 w-full`}
+        class={cn(
+            innerDivStyles({
+                maxWidth,
+                class: innerClass,
+            }),
+        )}
     >
         <slot />
     </div>

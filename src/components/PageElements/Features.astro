@@ -18,7 +18,7 @@ type Props = {
 const { title, subtitle, features } = Astro.props
 ---
 
-<Section background='bg-slate-100 dark:bg-slate-900' id='why-me'>
+<Section innerClass='gap-y-10 lg:gap-y-20' outerClass='bg-slate-100 dark:bg-slate-900' id='why-me'>
     <SectionHeading heading={title} subheading={subtitle} headingLevel='h2' />
 
     <dl class='grid items-start gap-x-24 gap-y-14 md:grid-cols-2'>
@@ -32,10 +32,10 @@ const { title, subtitle, features } = Astro.props
                         <Icon name={icon} class='size-full' />
                     </div>
 
-                    <dt class='text-xl font-bold text-slate-800 dark:text-slate-200 lg:text-2xl'>
+                    <dt class='text-xl font-bold text-slate-800 lg:text-2xl dark:text-slate-200'>
                         {title}
                     </dt>
-                    <dd class='self-start text-lg text-slate-600 dark:text-slate-400 md:col-start-2 lg:text-xl'>
+                    <dd class='self-start text-lg text-slate-600 md:col-start-2 lg:text-xl dark:text-slate-400'>
                         {description}
                     </dd>
                 </div>

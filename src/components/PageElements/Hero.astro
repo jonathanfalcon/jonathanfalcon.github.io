@@ -8,10 +8,10 @@ import Button from './Generic/Button.astro'
 ---
 
 <Section
-    fullscreen={true}
-    class='flex w-full max-w-7xl flex-col items-center gap-x-8 lg:flex-row-reverse'
-    padding='px-6'
-    background='bg-hero bg-cover bg-right'
+    fullscreen
+    maxWidth='7xl'
+    innerClass='gap-x-8 lg:flex-row-reverse'
+    outerClass='bg-hero bg-cover bg-right'
 >
     <ThumbHashPicture
         src='@/assets/images/profile.jpg'

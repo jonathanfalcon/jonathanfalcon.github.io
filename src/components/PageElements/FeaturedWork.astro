@@ -19,7 +19,7 @@ const featuredWork = await getCollection('work', ({ data }) => {
 })
 ---
 
-<Section fullscreen={true} maxWidth='max-w-7xl' padding='px-4'>
+<Section fullscreen maxWidth='7xl' innerClass='gap-y-10 lg:gap-y-20' outerClass='px-4'>
     <SectionHeading heading={title} headingLevel='h2' textAlign='start'>
         <Button slot='customSubheading' href='/work/' outline size='xl' as='a' class='mt-2 gap-x-2'>
             {subtitle}
