@@ -1,7 +1,7 @@
 ---
 import { Work } from '@/types/content/Work'
-import ThumbHashPicture from '@/utils/thumbhash/ThumbHashPicture.astro'
-import { getThumbHashDataUrl } from '@/utils/thumbhash/thumbhash'
+import HashPicture from '@/utils/hash/HashPicture.astro'
+import { getHashDataUrl } from '@/utils/hash/hash'
 import { Icon } from 'astro-icon/components'
 
 type Props = {
@@ -33,15 +33,11 @@ const HeadingTag = headingLevel
     focus-within:after:backdrop-brightness-150 focus-within:after:backdrop-saturate-150
     hover:after:backdrop-brightness-150 hover:after:backdrop-saturate-150`}
     style={frontmatter.image?.src &&
-        `background: center / cover url(${await getThumbHashDataUrl(frontmatter.image.src)});`}
+        `background: center / cover url(${await getHashDataUrl({ src: frontmatter.image.src })});`}
 >
     {
         frontmatter.image?.src && (
-            <ThumbHashPicture
-                src={frontmatter.image}
-                alt={frontmatter.title}
-                class='rounded-t-2xl'
-            />
+            <HashPicture src={frontmatter.image} alt={frontmatter.title} class='rounded-t-2xl' />
         )
     }
 

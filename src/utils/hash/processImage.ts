@@ -1,18 +1,9 @@
+import type { ProcessImageOptions } from '@/types/utils/hash/hash'
+import type { ProcessedImage, ProcessedImageInclusive } from '@/types/utils/hash/processImage'
+import type { RgbaToDataUrlOptions } from '@/types/utils/hash/rgbaToDataUrl'
+
 import path from 'node:path'
 import sharp from 'sharp'
-
-/**
- * Type for processed image data.
- *
- * @property {Uint8ClampedArray} data - Image data
- * @property {number} width - Image width
- * @property {number} height - Image height
- */
-interface ProcessedImage {
-    data: Uint8ClampedArray
-    width: number
-    height: number
-}
 
 /**
  * Resolves the absolute path of an image file using the provided path from an image metadata object's `src` property.
@@ -40,15 +31,16 @@ const resolveAbsolutePath = (pathToResolve: string) => {
  * Processes an image by resizing and saturating it.
  *
  * @param src - Image source
+ * @param method - Hash method
  * @param adjustedDimension - Adjusted dimension of the image
  * @param saturation - Saturation of the image
  * @returns Processed image data or undefined if an error occurred
  */
-export const processImage = async (
-    src: string,
-    adjustedDimension: number = 20,
-    saturation: number = 1.5,
-): Promise<ProcessedImage | undefined> => {
+export const processImage = async ({
+    src,
+    adjustedDimension,
+    saturation,
+}: ProcessImageOptions): Promise<ProcessedImage | undefined> => {
     try {
         const absolutePath = resolveAbsolutePath(src)
 
@@ -58,7 +50,7 @@ export const processImage = async (
 
         if (!baseHeight || !baseWidth) {
             console.error('Image height or width is undefined')
-            return
+            return undefined
         }
 
         const resizeOptions =
@@ -75,41 +67,41 @@ export const processImage = async (
 
         if (!height || !width) {
             console.error('Image height or width is undefined')
-            return
+            return undefined
         }
 
         return {
-            data: new Uint8ClampedArray(imageBuffer),
-            width: width,
-            height: height,
+            data: new Uint8Array(imageBuffer),
+            dataClamped: new Uint8ClampedArray(imageBuffer),
+            width,
+            height,
         }
     } catch (error) {
         if (error instanceof Error) {
             console.error('Error processing image:', { src, error: error })
         }
-        return
+        return undefined
     }
 }
 
-/**
- * Converts a base64 PNG data url to a base64 WebP data url.
- *
- * @param base64Png - Base64 PNG data url
- * @returns Base64 WebP data url or undefined if an error occurred
- */
-export const convertBase64PngToWebp = async (base64Png: string): Promise<string | undefined> => {
-    try {
-        const base64Image = base64Png.split(',')[1]
+export const rgbaToDataUrl = async ({
+    data,
+    width,
+    height,
+    format,
+    outputOptions,
+}: ProcessedImageInclusive & RgbaToDataUrlOptions): Promise<string> => {
+    const buffer = Buffer.from(data)
 
-        const buffer = Buffer.from(base64Image, 'base64')
+    const formattedBuffer = await sharp(buffer, {
+        raw: {
+            width,
+            height,
+            channels: 4,
+        },
+    })
+        .toFormat(format, outputOptions)
+        .toBuffer()
 
-        const webpBuffer = await sharp(buffer).webp({ lossless: true }).toBuffer()
-
-        return `data:image/webp;base64,${webpBuffer.toString('base64')}`
-    } catch (error) {
-        if (error instanceof Error) {
-            console.error('Error converting PNG to WebP:', error.message)
-        }
-        return
-    }
+    return `data:image/${format};base64,${formattedBuffer.toString('base64')}`
 }

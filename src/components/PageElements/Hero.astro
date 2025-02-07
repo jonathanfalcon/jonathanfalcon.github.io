@@ -3,7 +3,7 @@ import { Icon } from 'astro-icon/components'
 import SectionHeading from './Generic/SectionHeading.astro'
 import Section from './Generic/Section.astro'
 import { siteConfig } from '@/config/siteConfig'
-import ThumbHashPicture from '@/utils/thumbhash/ThumbHashPicture.astro'
+import HashPicture from '@/utils/hash/HashPicture.astro'
 import Button from './Generic/Button.astro'
 ---
 
@@ -13,7 +13,7 @@ import Button from './Generic/Button.astro'
     innerClass='gap-x-8 lg:flex-row-reverse'
     outerClass='bg-hero bg-cover bg-right'
 >
-    <ThumbHashPicture
+    <HashPicture
         src='@/assets/images/profile.jpg'
         alt='Jonathan Falcon smiling while looking away from the camera.'
         class='mb-8 aspect-[3/2] w-[80%] max-w-[800px] rounded-3xl object-cover object-[left_50%_top_50%] max-lg:mx-auto md:w-[80%] lg:mb-0 lg:ml-auto lg:aspect-[2/3] lg:w-full lg:max-w-[clamp(300px,80%,400px)] lg:rounded-[4rem]'

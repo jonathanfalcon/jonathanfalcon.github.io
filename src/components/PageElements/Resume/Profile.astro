@@ -1,7 +1,7 @@
 ---
 import { profile } from '@/config/resume'
 import { siteConfig } from '@/config/siteConfig'
-import ThumbHashPicture from '@/utils/thumbhash/ThumbHashPicture.astro'
+import HashPicture from '@/utils/hash/HashPicture.astro'
 import { Icon } from 'astro-icon/components'
 import Card from './Elements/Card.astro'
 
@@ -9,7 +9,7 @@ import SpecialLink from '../Generic/SpecialLink.astro'
 ---
 
 <Card class='flex h-fit flex-col gap-y-2 !p-5 md:sticky md:top-5 md:basis-1/4 lg:top-10'>
-    <ThumbHashPicture
+    <HashPicture
         src='@/assets/images/profile-resume.jpg'
         widths={[300, 400, 800]}
         alt='Jonathan Falcon smiling at the camera.'

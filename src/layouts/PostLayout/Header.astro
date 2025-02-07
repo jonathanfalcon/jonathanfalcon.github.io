@@ -1,5 +1,5 @@
 ---
-import { getThumbHashDataUrl } from '@/utils/thumbhash/thumbhash'
+import { getHashDataUrl } from '@/utils/hash/hash'
 import { cn } from '@/utils/cn'
 
 export interface Props {
@@ -22,7 +22,7 @@ const sharedStyle = 'pt-24 md:pt-28 pb-12 px-4 w-full'
     {
         image && (
             <div
-                style={`background: center / cover url(${await getThumbHashDataUrl(image)});`}
+                style={`background: center / cover url(${await getHashDataUrl({ src: image })});`}
                 class='absolute inset-0 -z-10 opacity-40 dark:opacity-30'
             />
         )
