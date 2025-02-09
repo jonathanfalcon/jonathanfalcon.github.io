@@ -6,6 +6,7 @@ export default {
     jsxSingleQuote: true,
     tabWidth: 4,
     trailingComma: 'all',
+    bracketSpacing: true,
     plugins: ['prettier-plugin-astro', 'prettier-plugin-tailwindcss'],
     overrides: [
         {
