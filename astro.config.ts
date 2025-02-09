@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config'
 import tailwind from '@tailwindcss/vite'
-import tailwindcssCleaner from 'vite-plugin-tailwindcss-cleaner'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 // import react from '@astrojs/react'
@@ -74,6 +73,6 @@ export default defineConfig({
         }),
     ],
     vite: {
-        plugins: [tailwind(), tailwindcssCleaner()],
+        plugins: [tailwind()],
     },
 })

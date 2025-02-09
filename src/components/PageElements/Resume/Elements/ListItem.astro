@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components'
 import { Icon as IconType } from '@/types/content/Resume'
+import { cn } from '@/utils/cn'
 
 type Props = {
     title?: string
@@ -17,14 +18,14 @@ const withIcon = Astro.slots.has('withIcon')
     {
         (
             <>
-                {withIcon && (
+                {withIcon && icon && (
                     <Icon
                         name={icon.name}
-                        class={`h-auto max-h-12 w-12 shrink-0 ${icon.color ?? ''}`}
+                        class={cn('h-auto max-h-12 w-12 shrink-0', icon.color)}
                     />
                 )}
                 <div class='grow'>
-                    <h3 class='mb-1 text-xl font-bold !leading-tight md:text-2xl'>
+                    <h3 class='mb-1 text-xl/tight font-bold md:text-2xl/tight'>
                         {title ? title : <slot name='title' />}
                     </h3>
                     {withIcon ? (

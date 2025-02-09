@@ -13,4 +13,7 @@ export default {
             options: { parser: 'astro' },
         },
     ],
+    tailwindStylesheet: './src/assets/styles/global.css',
+    tailwindFunctions: ['cn', 'cva'],
+    tailwindAttributes: ['innerClass', 'outerClass'],
 }
