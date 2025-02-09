@@ -54,7 +54,7 @@ export default defineConfig({
         }),
         icon(),
         playformCompress({
-            CSS: true,
+            CSS: false,
             HTML: {
                 'html-minifier-terser': {
                     removeComments: true,
