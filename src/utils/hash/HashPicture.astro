@@ -42,7 +42,6 @@ const {
     decoding = 'async',
     formats = ['avif'],
     fallbackFormat = 'webp',
-    deriveAspectRatio = true,
     ...props
 } = Astro.props
 
@@ -58,9 +57,7 @@ const base64DataUrl = await getHashDataUrl({
     methodOptions,
 })
 
-const aspectRatioStyle = `aspect-ratio: ${image.width / image.height};`
-const backgroundStyle = `background: center / cover url(${base64DataUrl});`
-const style = deriveAspectRatio ? `${aspectRatioStyle} ${backgroundStyle}` : backgroundStyle
+const style = `background: center / cover url(${base64DataUrl});`
 ---
 
 <Picture
