@@ -1,43 +1,18 @@
 ---
-import type { HTMLAttributes } from 'astro/types'
-import type { ImageMetadata, ImageInputFormat } from 'astro'
-import type { SpecificHashOptionsMap } from '@/types/utils/hash/hash'
-import type { DataUrlFormats, RgbaToDataUrlOptions } from '@/types/utils/hash/rgbaToDataUrl'
+import type { ComponentProps } from 'astro/types'
+import type { HashOptions } from '@/types/utils/hash/hash'
 
 import { getHashDataUrl } from './hash'
-import { getImage } from '../getImage'
+import { resolveImageMetadata } from './resolveImageMetadata'
 import { Picture } from 'astro:assets'
 
-interface Props {
-    src: string | ImageMetadata
-    method?: 'blurhash' | 'thumbhash'
-    adjustedDimension?: number
-    saturation?: number
-    hashFormat?: DataUrlFormats
-    methodOptions?: SpecificHashOptionsMap
-    outputOptions?: RgbaToDataUrlOptions['outputOptions']
-    width?: number
-    height?: number
-    widths?: number[]
-    sizes?: string
-    alt: string
-    decoding?: HTMLAttributes<'img'>['decoding']
-    loading?: HTMLAttributes<'img'>['loading']
-    formats?: ImageInputFormat[]
-    fallbackFormat?: ImageInputFormat
-    class?: HTMLAttributes<'picture'>['class']
-    pictureAttributes?: HTMLAttributes<'picture'>
-    deriveAspectRatio?: boolean
-}
+type Props = {
+    hashOptions: Omit<HashOptions, 'src'>
+} & ComponentProps<typeof Picture>
 
 const {
-    src: baseSrc,
-    method,
-    adjustedDimension,
-    saturation,
-    hashFormat,
-    methodOptions,
-    outputOptions,
+    src: rawSrc,
+    hashOptions,
     widths = [900, 1400, 2000],
     decoding = 'async',
     formats = ['avif'],
@@ -49,12 +24,7 @@ const image = typeof baseSrc === 'string' ? await getImage(baseSrc) : baseSrc
 
 const base64DataUrl = await getHashDataUrl({
     src: image.src,
-    adjustedDimension,
-    saturation,
-    method,
-    format: hashFormat,
-    outputOptions,
-    methodOptions,
+    ...hashOptions,
 })
 
 const style = `background: center / cover url(${base64DataUrl});`
