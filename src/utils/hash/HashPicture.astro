@@ -20,7 +20,7 @@ const {
     ...props
 } = Astro.props
 
-const image = typeof baseSrc === 'string' ? await getImage(baseSrc) : baseSrc
+const image = await resolveImageMetadata(rawSrc)
 
 const base64DataUrl = await getHashDataUrl({
     src: image.src,
