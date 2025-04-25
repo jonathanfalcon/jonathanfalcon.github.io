@@ -1,14 +1,11 @@
 ---
-import type { ComponentProps } from 'astro/types'
-import type { HashOptions } from '@/types/utils/hash/hash'
+import type { PictureProps } from '@/types/utils/hash/componentProps'
 
 import { getHashDataUrl } from './hash'
 import { resolveImageMetadata } from './resolveImageMetadata'
 import { Picture } from 'astro:assets'
 
-type Props = {
-    hashOptions: Omit<HashOptions, 'src'>
-} & ComponentProps<typeof Picture>
+type Props = PictureProps
 
 const {
     src: rawSrc,
