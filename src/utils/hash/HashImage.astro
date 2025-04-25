@@ -1,0 +1,28 @@
+---
+import type { ImageProps } from '@/types/utils/hash/componentProps'
+
+import { getHashDataUrl } from './hash'
+import { resolveImageMetadata } from './resolveImageMetadata'
+import { Image } from 'astro:assets'
+
+type Props = ImageProps
+
+const {
+    src: rawSrc,
+    hashOptions,
+    widths = [900, 1400, 2000],
+    decoding = 'async',
+    ...props
+} = Astro.props
+
+const image = await resolveImageMetadata(rawSrc)
+
+const base64DataUrl = await getHashDataUrl({
+    src: image.src,
+    ...hashOptions,
+})
+
+const style = `background: center / cover url(${base64DataUrl});`
+---
+
+<Image src={image} widths={widths} decoding={decoding} style={style} {...props} />
