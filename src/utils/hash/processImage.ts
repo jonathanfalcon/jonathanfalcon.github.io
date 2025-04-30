@@ -16,15 +16,15 @@ import sharp from 'sharp'
  * @returns Resolved absolute path
  */
 const resolveAbsolutePath = (pathToResolve: string) => {
-    const baseDirectory = import.meta.env.PROD ? './dist/_astro' : '.'
+    const cwd = process.cwd()
 
-    const relevantPath = pathToResolve.slice(
-        pathToResolve.indexOf('github.io') + 'github.io'.length,
-    )
+    const baseDirectory = path.resolve(cwd, import.meta.env.PROD ? './dist' : '.')
 
-    const joinedPath = path.join(baseDirectory, relevantPath)
+    const relevantPath = import.meta.env.PROD
+        ? pathToResolve
+        : pathToResolve.slice(pathToResolve.indexOf(cwd) + cwd.length).split('?')[0]
 
-    return path.resolve(joinedPath).split('?')[0]
+    return path.join(baseDirectory, relevantPath)
 }
 
 /**
