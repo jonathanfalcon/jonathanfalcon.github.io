@@ -22,7 +22,7 @@ export type ImageProps = {
     widths?: number[]
     sizes?: string
     alt: string
-} & HTMLAttributes<'img'>
+} & Omit<HTMLAttributes<'img'>, 'src'>
 
 /**
  * Type for properties of the `<Picture />` component. Extends the ImageProps type.
